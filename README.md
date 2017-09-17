@@ -1,0 +1,1 @@
+# chrome-shortcutkey2url
