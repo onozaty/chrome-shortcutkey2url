@@ -1,0 +1,15 @@
+#list {
+  white-space: nowrap;
+  column-count: 2;
+}
+
+#list .key {
+  font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
+  font-weight: bold;
+  margin: 5px;
+}
+
+#list .title {
+  margin: 5px;
+  white-space: nowrap;
+}

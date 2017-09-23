@@ -1,7 +1,38 @@
+function render(shortcutKeys) {
+
+  const keyMaxLenght = Math.max.apply(null, shortcutKeys.map((shortcutKey) => {
+    return shortcutKey.key.length;
+  }));
+
+  const listElement = document.getElementById('list');
+  listElement.textContent = null;
+
+  shortcutKeys.forEach((shortcutKey) => {
+    listElement.appendChild(createShortcutKeyElement(shortcutKey));
+  });
+}
+
+function createShortcutKeyElement(shortcutKey, keyMaxLength) {
+
+  const keyElement = document.createElement('span');
+  keyElement.className = 'key';
+  keyElement.textContent = shortcutKey.key.padEnd(keyMaxLength);
+
+  const titleElement = document.createElement('span');
+  titleElement.className = 'title';
+  titleElement.textContent = shortcutKey.title;
+
+  const shortcutKeyElement = document.createElement('div');
+  shortcutKeyElement.appendChild(keyElement);
+  shortcutKeyElement.appendChild(titleElement);
+
+  return shortcutKeyElement;
+}
+
 document.addEventListener('keypress', (e) => {
   console.log(e);
 
-  var message = {
+  const request = {
     name: MessageName.KEY_EVENT,
     value: {
       'charCode': e.charCode,
@@ -13,14 +44,18 @@ document.addEventListener('keypress', (e) => {
     }
   };
 
-  chrome.runtime.sendMessage(message, (result) => {
-    console.log('result: ', result);
+  chrome.runtime.sendMessage(request, (response) => {
+    console.log(response);
 
-    if (result == HandleResult.FINISH) {
+    if (response.result == HandleResult.FINISH) {
       window.close();
+    } else {
+      //render(response.shortcutKeys);
     }
   });
 });
 
 // startup message
-chrome.runtime.sendMessage({name: MessageName.STARTUP}, () => {});
+chrome.runtime.sendMessage({name: MessageName.STARTUP}, (response) => {
+  render(response.shortcutKeys);
+});
