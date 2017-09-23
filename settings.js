@@ -11,17 +11,21 @@ class Settings {
   }
 
   _load() {
-    this.keyLength = 1;
-    this.shortcutkeys = [
-      {key: 'G', url: 'https://mail.google.com/', method: OpenMethod.NEW},
-      {key: 'T', url: 'https://twitter.com/', method: OpenMethod.JUMP},
-      {key: 'E', url: 'http://www.enjoyxstudy.com/', method: OpenMethod.CURRENT}
+    this._shortcutkeys = [
+      {key: 'GS', title: 'Google', url: 'https://www.google.com/', method: OpenMethod.NEW},
+      {key: 'GM', title: 'Gmail', url: 'https://mail.google.com/', method: OpenMethod.JUMP},
+      {key: 'T', title: 'Twitter', url: 'https://twitter.com/', method: OpenMethod.JUMP},
+      {key: 'F', title: 'Facebook', url: 'https://www.facebook.com/', method: OpenMethod.CURRENT}
     ];
   }
 
+  all() {
+    return [].concat(this._shortcutkeys);
+  }
+
   find(key) {
-    return this.shortcutkeys.filter((item) => {
-      return item.key == key;
-    })[0];
+    return this._shortcutkeys.filter((item) => {
+      return item.key.indexOf(key) == 0;
+    });
   }
 }

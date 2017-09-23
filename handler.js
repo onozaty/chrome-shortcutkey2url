@@ -10,41 +10,48 @@ const MessageName = {
 
 class Handler {
   constructor(settings) {
-    this.settings = settings;
+    this._settings = settings;
   }
 
   handle(message) {
     if (message.name == MessageName.STARTUP) {
       this._startup();
-      return HandleResult.CONTINUE;
+      return {
+        result: HandleResult.CONTINUE,
+        shortcutKeys: this._settings.all()
+      };
     } else {
       return this._receiveKey(message.value);
     }
   }
 
   _startup() {
-    this.receivedKeys = [];
+    this.receivedKeys = '';
   }
 
   _receiveKey(keyEvent) {
 
     if (!keyEvent.charCode) {
-      return HandleResult.FINISH;
+      return {result: HandleResult.FINISH};
     }
 
-    var key = String.fromCharCode(keyEvent.charCode).toUpperCase();
-    this.receivedKeys.push(key);
+    const key = String.fromCharCode(keyEvent.charCode).toUpperCase();
+    this.receivedKeys += key;
 
-    if (this.receivedKeys.length < this.settings.keyLength) {
-      return HandleResult.CONTINUE;
+    const matchShortcutKeys = this._settings.find(this.receivedKeys);
+
+    if (matchShortcutKeys.length > 1) {
+      return {
+        result: HandleResult.CONTINUE,
+        shortcutKeys: matchShortcutKeys
+      };
     }
 
-    var shortcutkey = this.settings.find(key);
-    if (shortcutkey) {
-      this._doAction(shortcutkey);
+    if (matchShortcutKeys.length == 1) {
+      this._doAction(matchShortcutKeys[0]);
     }
 
-    return  HandleResult.FINISH;
+    return {result: HandleResult.FINISH};
   }
 
   _doAction(shortcutkey) {
