@@ -13,20 +13,21 @@ class Handler {
     this._settings = settings;
   }
 
-  handle(message) {
+  async handle(message) {
     if (message.name == MessageName.STARTUP) {
-      this._startup();
+      await this._startup();
       return {
         result: HandleResult.CONTINUE,
-        shortcutKeys: this._settings.all()
+        shortcutkeys: this._settings.all()
       };
     } else {
       return this._receiveKey(message.value);
     }
   }
 
-  _startup() {
+  async _startup() {
     this.receivedKeys = '';
+    await this._settings.reload();
   }
 
   _receiveKey(keyEvent) {
@@ -38,48 +39,48 @@ class Handler {
     const key = String.fromCharCode(keyEvent.charCode).toUpperCase();
     this.receivedKeys += key;
 
-    const matchShortcutKeys = this._settings.find(this.receivedKeys);
+    const matchShortcutkeys = this._settings.find(this.receivedKeys);
 
-    if (matchShortcutKeys.length > 1) {
+    if (matchShortcutkeys.length > 1) {
       return {
         result: HandleResult.CONTINUE,
-        shortcutKeys: matchShortcutKeys
+        shortcutkeys: matchShortcutkeys
       };
     }
 
-    if (matchShortcutKeys.length == 1) {
-      this._doAction(matchShortcutKeys[0]);
+    if (matchShortcutkeys.length == 1) {
+      this._doAction(matchShortcutkeys[0]);
     }
 
     return {result: HandleResult.FINISH};
   }
 
   _doAction(shortcutkey) {
-    switch (shortcutkey.method) {
-      case OpenMethod.NEW:
-        chrome.tabs.create({url: shortcutkey.url});
+    switch (shortcutkey.behavior) {
+      case BehaviorId.OEPN_URL_NEW_TAB: 
+        chrome.tabs.create({url: shortcutkey.content});
         break;
 
-      case OpenMethod.CURRENT:
-        chrome.tabs.update({url: shortcutkey.url});
+      case BehaviorId.OPEN_URL_CURRENT_TAB: 
+        chrome.tabs.update({url: shortcutkey.content});
         break;
 
-      case OpenMethod.JUMP:
+      case BehaviorId.JUMP_URL: 
         chrome.tabs.query({lastFocusedWindow: true}, (tabs) => {
           var matchTab = tabs.filter((tab) => {
-            return tab.url.indexOf(shortcutkey.url) == 0;
+            return tab.url.indexOf(shortcutkey.content) == 0;
           })[0];
 
           if (matchTab) {
             chrome.tabs.update(matchTab.id, {active: true});
           } else {
-            chrome.tabs.create({url: shortcutkey.url});
+            chrome.tabs.create({url: shortcutkey.content});
           }
         });
         break;
 
       default:
-        break;
+        throw new RangeError('behaviorId is ' + shortcutkey.behavior);
     }
   }
 }

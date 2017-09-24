@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Shortcutkey2URL</title>
+
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="options.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <!-- Begin page content -->
+    <div class="container">
+      <h1>Shortcutkey2URL</h1>
+      <div id="errorMessage" class="alert alert-danger" style="display:none">
+        <a class="close">×</a>
+        <p>There is an input error. Please check the input contents.</p>
+      </div>
+      <div id="successMessage" class="alert alert-success" style="display:none">
+        <a class="close">×</a> 
+        <p>Settings saved!</p>
+      </div>
+      <div id="shortcutkeys"></div>
+      <button id="addButton" class="btn btn-primary btn-sm" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</button>
+      <div class="pull-right">
+        <button id="saveButton" class="btn btn-success btn-sm" type="button"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Save</button>
+      </div>
+    </div>
+
+    <div id="template" class="panel panel-default" style="display: none">
+      <div class="panel-heading">
+        <div>
+          <span class="summary">New shortcutkey</span>
+          <span class="glyphicon glyphicon-exclamation-sign alert-icon" aria-hidden="true" style="display: none"></span>
+          <div class="pull-right">
+            <button type="button" class="btn btn-xs btn-default remove" aria-label="Remove">
+              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove
+            </button>
+            <button type="button" class="btn btn-xs btn-default close-detail" aria-label="close">
+              &nbsp;<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>&nbsp;
+            </button>
+            <button type="button" class="btn btn-xs btn-default open-detail" aria-label="open" style="display:none">
+              &nbsp;<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>&nbsp;
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <form class="form-horizontal">
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Key</label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" name="key">
+            </div>
+            <div class="col-sm-7">
+              <span class="help-block duplicate-message">beyond one line.</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Behavior</label>
+            <div class="col-sm-6">
+              <select class="form-control" name="behavior">
+                <option value="jump">jump</option>
+                <option value="current">current</option>
+                <option value="new">new</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Title</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="title">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">URL</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="url">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Script</label>
+            <div class="col-sm-10">
+              <textarea type="text" class="form-control" name="script"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../behaviors.js"></script>
+    <script src="../settings.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

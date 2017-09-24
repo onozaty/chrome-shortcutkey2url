@@ -1,0 +1,23 @@
+h1 {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+}
+
+.summary .key {
+  font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.summary .title {
+  white-space: nowrap;
+  margin-right: 10px;
+}
+
+div.alert {
+  margin-bottom: 10px;
+}
+
+.panel-heading .alert-icon {
+  color: #c9302c;
+}

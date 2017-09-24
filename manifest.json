@@ -1,5 +1,5 @@
 {
-  "name": "ShortcutKey2URL",
+  "name": "Shortcutkey2URL",
   "description": "Open URL with the shortcut key.",
   "manifest_version": 2,
   "version": "1.0",
@@ -8,16 +8,22 @@
   },
 
   "background": {
-    "scripts": ["settings.js", "handler.js", "background.js"]
+    "scripts": ["behaviors.js", "settings.js", "handler.js", "background.js"]
   },
 
   "permissions": [
-    "tabs", "activeTab"
+    "tabs", "activeTab", "storage"
   ],
 
   "browser_action": {
-    "default_title": "ShortcutKey2URL",
+    "default_title": "Shortcutkey2URL",
     "default_popup": "popup/popup.html"
+  },
+
+  "options_ui": {
+    "page": "options/options.html",
+    "chrome_style": false,
+    "open_in_tab": true
   },
 
   "commands": {

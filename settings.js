@@ -1,26 +1,27 @@
-const OpenMethod = {
-  NEW: 'new',
-  CURRENT: 'current',
-  JUMP: 'jump'
-};
+const DefaultShortcutkeys = [
+  {key: 'GS', title: 'Google', behavior: BehaviorId.OEPN_URL_NEW_TAB, content: 'https://www.google.com/'},
+  {key: 'GM', title: 'Gmail', behavior: BehaviorId.JUMP_URL, content: 'https://mail.google.com/'},
+  {key: 'T', title: 'Twitter', behavior: BehaviorId.JUMP_URL, content: 'https://twitter.com/'},
+  {key: 'F', title: 'Facebook', behavior: BehaviorId.JUMP_URL, content: 'https://www.facebook.com/'},
+  {key: 'Y', title: 'YouTube', behavior: BehaviorId.JUMP_URL, content: 'https://www.youtube.com/'}
+];
 
 class Settings {
 
-  constructor() {
-    this._load();
-  }
+  static async newAsync() {
 
-  _load() {
-    this._shortcutkeys = [
-      {key: 'GS', title: 'Google', url: 'https://www.google.com/', method: OpenMethod.NEW},
-      {key: 'GM', title: 'Gmail', url: 'https://mail.google.com/', method: OpenMethod.JUMP},
-      {key: 'T', title: 'Twitter', url: 'https://twitter.com/', method: OpenMethod.JUMP},
-      {key: 'F', title: 'Facebook', url: 'https://www.facebook.com/', method: OpenMethod.CURRENT}
-    ];
+    const settings = new Settings();
+    await settings._load();
+    return settings;
   }
 
   all() {
     return [].concat(this._shortcutkeys);
+  }
+
+  async update(shortcutkeys) {
+    this._shortcutkeys = shortcutkeys;
+    await this._save();
   }
 
   find(key) {
@@ -28,4 +29,31 @@ class Settings {
       return item.key.indexOf(key) == 0;
     });
   }
+
+  async reload() {
+    await this._load();
+  }
+
+  async _load() {
+    this._shortcutkeys = await getLocalStorage('settings');
+    this._shortcutkeys = this._shortcutkeys || DefaultShortcutkeys;
+  }
+
+  async _save() {
+    await setLocalStorage({'settings': this._shortcutkeys});
+  }
+}
+
+function setLocalStorage(obj) {
+  return new Promise((resolve) => {
+      chrome.storage.local.set(obj, () => resolve() );
+  });
+}
+
+function getLocalStorage(key) {
+  return new Promise((resolve) => {
+      chrome.storage.local.get(key, (item) => {
+          key ? resolve(item[key]) : resolve(item);
+      });
+  });
 }

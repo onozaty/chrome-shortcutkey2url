@@ -1,10 +1,15 @@
-const settings = new Settings();
-const handler = new Handler(settings);
+Settings.newAsync().then((settings) => {
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.log(message);
+  const handler = new Handler(settings);
 
-  var result = handler.handle(message);
-  console.log(result);
-  sendResponse(result);
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log(message);
+
+    handler.handle(message).then((result) => {
+      console.log(result);
+      sendResponse(result);
+    });
+
+    return true;
+  });
 });

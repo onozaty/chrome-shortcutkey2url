@@ -1,32 +1,32 @@
-function render(shortcutKeys) {
+function render(shortcutkeys) {
 
-  const keyMaxLenght = Math.max.apply(null, shortcutKeys.map((shortcutKey) => {
-    return shortcutKey.key.length;
+  const keyMaxLength = Math.max.apply(null, shortcutkeys.map((shortcutkey) => {
+    return shortcutkey.key.length;
   }));
 
   const listElement = document.getElementById('list');
   listElement.textContent = null;
 
-  shortcutKeys.forEach((shortcutKey) => {
-    listElement.appendChild(createShortcutKeyElement(shortcutKey));
+  shortcutkeys.forEach((shortcutkey) => {
+    listElement.appendChild(createShortcutkeyElement(shortcutkey, keyMaxLength));
   });
 }
 
-function createShortcutKeyElement(shortcutKey, keyMaxLength) {
+function createShortcutkeyElement(shortcutkey, keyMaxLength) {
 
   const keyElement = document.createElement('span');
   keyElement.className = 'key';
-  keyElement.textContent = shortcutKey.key.padEnd(keyMaxLength);
+  keyElement.textContent = shortcutkey.key.padEnd(keyMaxLength);
 
   const titleElement = document.createElement('span');
   titleElement.className = 'title';
-  titleElement.textContent = shortcutKey.title;
+  titleElement.textContent = shortcutkey.title;
 
-  const shortcutKeyElement = document.createElement('div');
-  shortcutKeyElement.appendChild(keyElement);
-  shortcutKeyElement.appendChild(titleElement);
+  const shortcutkeyElement = document.createElement('div');
+  shortcutkeyElement.appendChild(keyElement);
+  shortcutkeyElement.appendChild(titleElement);
 
-  return shortcutKeyElement;
+  return shortcutkeyElement;
 }
 
 document.addEventListener('keypress', (e) => {
@@ -50,12 +50,12 @@ document.addEventListener('keypress', (e) => {
     if (response.result == HandleResult.FINISH) {
       window.close();
     } else {
-      //render(response.shortcutKeys);
+      //render(response.shortcutkeys);
     }
   });
 });
 
 // startup message
 chrome.runtime.sendMessage({name: MessageName.STARTUP}, (response) => {
-  render(response.shortcutKeys);
+  render(response.shortcutkeys);
 });
