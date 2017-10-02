@@ -16,7 +16,7 @@ function createShortcutkeyElement(shortcutkey, keyMaxLength) {
 
   const keyElement = document.createElement('span');
   keyElement.className = 'key';
-  keyElement.textContent = shortcutkey.key.padEnd(keyMaxLength);
+  keyElement.textContent = shortcutkey.key.padEnd(keyMaxLength, '\u00A0');
 
   const titleElement = document.createElement('span');
   titleElement.className = 'title';

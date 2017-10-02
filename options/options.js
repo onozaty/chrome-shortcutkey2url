@@ -5,7 +5,7 @@ class Shortcutkey {
     this.$detail = $target.find('div.panel-body');
 
     this.$alertIcon = $target.find('.alert-icon');
-    this.$dulicateMessage = $target.find('.duplicate-message');
+    this.$duplicateMessage = $target.find('.duplicate-message');
 
     this.$openDetailButton = $target.find('button.open-detail');
     this.$closeDetailButton = $target.find('button.close-detail');
@@ -115,7 +115,7 @@ class Shortcutkey {
   validate(others) {
     this.$target.find('div.has-error').removeClass('has-error');
     this.$alertIcon.hide();
-    this.$dulicateMessage.empty();
+    this.$duplicateMessage.empty();
 
     var hasError = false;
     if (this._validateEmpty(this.$inputKey)) {
@@ -125,13 +125,14 @@ class Shortcutkey {
       const key = this.$inputKey.val();
       const duplicateKeys = others
         .filter((other) => {
-          return (key.indexOf(other.key) == 0 || other.key.indexOf(key) == 0);
+          return (other.key != '')
+                  && (key.indexOf(other.key) == 0 || other.key.indexOf(key) == 0);
         })
         .map((other) => other.key)
         .join(', ');
 
       if (duplicateKeys.length > 0) {
-        this.$dulicateMessage
+        this.$duplicateMessage
           .text('It duplicated with other shortcutkeys(' + duplicateKeys + ').')
           .show();
 
