@@ -8,7 +8,7 @@
   },
 
   "background": {
-    "scripts": ["behaviors.js", "settings.js", "handler.js", "background.js"]
+    "scripts": ["actions.js", "settings.js", "handler.js", "background.js"]
   },
 
   "permissions": [

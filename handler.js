@@ -56,16 +56,16 @@ class Handler {
   }
 
   _doAction(shortcutkey) {
-    switch (shortcutkey.behavior) {
-      case BehaviorId.OEPN_URL_NEW_TAB: 
+    switch (shortcutkey.action) {
+      case ActionId.OEPN_URL_NEW_TAB:
         chrome.tabs.create({url: shortcutkey.content});
         break;
 
-      case BehaviorId.OPEN_URL_CURRENT_TAB: 
+      case ActionId.OPEN_URL_CURRENT_TAB:
         chrome.tabs.update({url: shortcutkey.content});
         break;
 
-      case BehaviorId.JUMP_URL: 
+      case ActionId.JUMP_URL:
         chrome.tabs.query({lastFocusedWindow: true}, (tabs) => {
           var matchTab = tabs.filter((tab) => {
             return tab.url.indexOf(shortcutkey.content) == 0;
@@ -79,8 +79,12 @@ class Handler {
         });
         break;
 
+      case ActionId.EXECUTE_SCRIPT:
+        chrome.tabs.executeScript(null, {code: shortcutkey.content})
+        break;
+        
       default:
-        throw new RangeError('behaviorId is ' + shortcutkey.behavior);
+        throw new RangeError('actionId is ' + shortcutkey.action);
     }
   }
 }

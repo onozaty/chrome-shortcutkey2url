@@ -12,7 +12,7 @@ class Shortcutkey {
     this.$removeButton = $target.find('button.remove');
 
     this.$inputKey = $target.find('input[name="key"]');
-    this.$inputBehavior = $target.find('select[name="behavior"]');
+    this.$inputAction = $target.find('select[name="action"]');
     this.$inputTitle = $target.find('input[name="title"]');
     this.$inputUrl = $target.find('input[name="url"]');
     this.$inputScript = $target.find('textarea[name="script"]');
@@ -35,7 +35,7 @@ class Shortcutkey {
     this.$closeDetailButton.on('click', this.closeDetail.bind(this));
     this.$removeButton.on('click', this._remove.bind(this));
 
-    this.$inputBehavior.on('change', this._switchInputContent.bind(this));
+    this.$inputAction.on('change', this._switchInputContent.bind(this));
     this.$inputKey.on('keyup', this._applySummary.bind(this));
     this.$inputTitle.on('keyup', this._applySummary.bind(this));
 
@@ -45,22 +45,22 @@ class Shortcutkey {
   _apply(data) {
 
     this.$inputKey.val(data.key);
-    this.$inputBehavior.val(data.behavior);
+    this.$inputAction.val(data.action);
     this.$inputTitle.val(data.title);
 
-    switch(data.behavior) {
-      case BehaviorId.JUMP_URL:
-      case BehaviorId.OEPN_URL_NEW_TAB:
-      case BehaviorId.OPEN_URL_CURRENT_TAB:
+    switch(data.action) {
+      case ActionId.JUMP_URL:
+      case ActionId.OEPN_URL_NEW_TAB:
+      case ActionId.OPEN_URL_CURRENT_TAB:
         this.$inputUrl.val(data.content);
         break;
 
-      case BehaviorId.EXECUTE_SCRIPT:
+      case ActionId.EXECUTE_SCRIPT:
         this.$inputScript.val(data.content);
         break;
 
       default:
-        throw new RangeError('behaviorId is ' + data.behavior);
+        throw new RangeError('actionId is ' + data.action);
     }
   }
 
@@ -72,23 +72,23 @@ class Shortcutkey {
   }
 
   _switchInputContent() {
-    const behavior = parseInt(this.$inputBehavior.val(), 10);
+    const action = parseInt(this.$inputAction.val(), 10);
   
-    switch(behavior) {
-      case BehaviorId.JUMP_URL:
-      case BehaviorId.OEPN_URL_NEW_TAB:
-      case BehaviorId.OPEN_URL_CURRENT_TAB:
+    switch(action) {
+      case ActionId.JUMP_URL:
+      case ActionId.OEPN_URL_NEW_TAB:
+      case ActionId.OPEN_URL_CURRENT_TAB:
         this.$inputUrlGroup.show();
         this.$inputScriptGroup.hide();
         break;
 
-      case BehaviorId.EXECUTE_SCRIPT:
+      case ActionId.EXECUTE_SCRIPT:
         this.$inputUrlGroup.hide();
         this.$inputScriptGroup.show();
         break;
 
       default:
-        throw new RangeError('behaviorId is ' + behavior);
+        throw new RangeError('actionId is ' + action);
     }
   }
 
@@ -141,28 +141,28 @@ class Shortcutkey {
       }
     }
 
-    if (this._validateEmpty(this.$inputBehavior)) {
+    if (this._validateEmpty(this.$inputAction)) {
       hasError = true;
     }
     if (this._validateEmpty(this.$inputTitle)) {
       hasError = true;
     }
 
-    const behavior = parseInt(this.$inputBehavior.val(), 10);
+    const action = parseInt(this.$inputAction.val(), 10);
     var $inputContent = null;
-    switch(behavior) {
-      case BehaviorId.JUMP_URL:
-      case BehaviorId.OEPN_URL_NEW_TAB:
-      case BehaviorId.OPEN_URL_CURRENT_TAB:
+    switch(action) {
+      case ActionId.JUMP_URL:
+      case ActionId.OEPN_URL_NEW_TAB:
+      case ActionId.OPEN_URL_CURRENT_TAB:
         $inputContent = this.$inputUrl;
         break;
   
-      case BehaviorId.EXECUTE_SCRIPT:
+      case ActionId.EXECUTE_SCRIPT:
         $inputContent = this.$inputScript;
         break;
   
       default:
-        throw new RangeError('behaviorId is ' + behavior);
+        throw new RangeError('actionId is ' + action);
     }
 
     if (this._validateEmpty($inputContent)) {
@@ -190,23 +190,23 @@ class Shortcutkey {
   data() {
     const data = {
       key: this.$inputKey.val(),
-      behavior: parseInt(this.$inputBehavior.val(), 10),
+      action: parseInt(this.$inputAction.val(), 10),
       title: this.$inputTitle.val(),
     };
 
-    switch(data.behavior) {
-      case BehaviorId.JUMP_URL:
-      case BehaviorId.OEPN_URL_NEW_TAB:
-      case BehaviorId.OPEN_URL_CURRENT_TAB:
+    switch(data.action) {
+      case ActionId.JUMP_URL:
+      case ActionId.OEPN_URL_NEW_TAB:
+      case ActionId.OPEN_URL_CURRENT_TAB:
         data.content = this.$inputUrl.val();
         break;
 
-      case BehaviorId.EXECUTE_SCRIPT:
+      case ActionId.EXECUTE_SCRIPT:
         data.content = this.$inputScript.val();
         break;
 
       default:
-        throw new RangeError('behaviorId is ' + data.behavior);
+        throw new RangeError('actionId is ' + data.action);
     }
 
     return data;
@@ -267,11 +267,11 @@ class Shortcutkeys {
 function startup(settings) {
   const $formTemplate = $('#template');
 
-  const $behaviorTemplate = $formTemplate.find('select[name="behavior"]');
-  $behaviorTemplate.empty();
-  Behaviors.forEach((behavior) => {
-    $option = $('<option>').val(behavior.id).text(behavior.name);
-    $behaviorTemplate.append($option);
+  const $actionTemplate = $formTemplate.find('select[name="action"]');
+  $actionTemplate.empty();
+  Actions.forEach((action) => {
+    $option = $('<option>').val(action.id).text(action.name);
+    $actionTemplate.append($option);
   });
 
   const shortcutkeys = new Shortcutkeys($('#shortcutkeys'), $formTemplate);
