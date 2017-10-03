@@ -1,7 +1,7 @@
 class Shortcutkey {
   constructor($target, data) {
     this.$target = $target;
-    this.$summary = $target.find('div.panel-heading span.summary');
+    this.$summary = $target.find('div.panel-heading a.summary');
     this.$detail = $target.find('div.panel-body');
 
     this.$alertIcon = $target.find('.alert-icon');
@@ -31,6 +31,7 @@ class Shortcutkey {
   }
 
   _registerEvents() {
+    this.$summary.on('click', this._toggleDetail.bind(this));
     this.$openDetailButton.on('click', this.openDetail.bind(this));
     this.$closeDetailButton.on('click', this.closeDetail.bind(this));
     this.$removeButton.on('click', this._remove.bind(this));
@@ -61,6 +62,14 @@ class Shortcutkey {
 
       default:
         throw new RangeError('actionId is ' + data.action);
+    }
+  }
+
+  _toggleDetail() {
+    if (this.$detail.is(':visible')) {
+      this.closeDetail();
+    } else {
+      this.openDetail();
     }
   }
 
@@ -237,6 +246,8 @@ class Shortcutkeys {
 
     this._shortcutkeys.push(shortcutkey);
     this.$target.append($child.show());
+
+    $child[0].scrollIntoView();
   }
 
   validate() {

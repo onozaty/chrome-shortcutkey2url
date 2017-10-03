@@ -3,21 +3,38 @@ h1 {
   margin-bottom: 10px;
 }
 
-.summary .key {
+#shortcutkeys .panel-title {
+  font-size: inherit;
+}
+
+#shortcutkeys .summary .key {
   font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
   font-weight: bold;
   margin-right: 10px;
 }
 
-.summary .title {
+#shortcutkeys .summary .title {
   white-space: nowrap;
   margin-right: 10px;
 }
 
-div.alert {
+#shortcutkeys div.alert {
   margin-bottom: 10px;
 }
 
-.panel-heading .alert-icon {
+#shortcutkeys .panel {
+  margin-bottom: 5px;
+}
+
+#shortcutkeys .panel-heading {
+  background-color: #fbfbfb;
+  padding: 5px 15px;
+}
+
+#shortcutkeys .panel-heading .alert-icon {
   color: #c9302c;
+}
+
+#shortcutkeys .panel-body {
+  padding-bottom: 0;
 }
