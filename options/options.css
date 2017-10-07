@@ -3,6 +3,15 @@ h1 {
   margin-bottom: 10px;
 }
 
+#startupKey {
+  font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
+  background-color: #fbfbfb;
+}
+
+#startupKeyHelp {
+  margin-left: 10px;
+}
+
 #shortcutkeys .panel-title {
   font-size: inherit;
 }

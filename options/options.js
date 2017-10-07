@@ -276,6 +276,8 @@ class Shortcutkeys {
 }
 
 function startup(settings) {
+  $('#startupKey').text(settings._startupCommand.shortcut);
+
   const $formTemplate = $('#template');
 
   const $actionTemplate = $formTemplate.find('select[name="action"]');

@@ -37,6 +37,7 @@ class Settings {
   async _load() {
     this._shortcutkeys = await getLocalStorage('settings');
     this._shortcutkeys = this._shortcutkeys || DefaultShortcutkeys;
+    this._startupCommand = (await getAllCommands())[0];
   }
 
   async _save() {
@@ -46,14 +47,22 @@ class Settings {
 
 function setLocalStorage(obj) {
   return new Promise((resolve) => {
-      chrome.storage.local.set(obj, () => resolve() );
+    chrome.storage.local.set(obj, () => resolve() );
   });
 }
 
 function getLocalStorage(key) {
   return new Promise((resolve) => {
-      chrome.storage.local.get(key, (item) => {
-          key ? resolve(item[key]) : resolve(item);
-      });
+    chrome.storage.local.get(key, (item) => {
+      key ? resolve(item[key]) : resolve(item);
+    });
+  });
+}
+
+function getAllCommands() {
+  return new Promise((resolve) => {
+    chrome.commands.getAll((commands) => {
+      resolve(commands);
+    });
   });
 }
