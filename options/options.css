@@ -47,3 +47,7 @@ h1 {
 #shortcutkeys .panel-body {
   padding-bottom: 0;
 }
+
+#shortcutkeys .panel-body .optional {
+  margin-left: 5px;
+}

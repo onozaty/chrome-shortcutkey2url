@@ -18,7 +18,7 @@ class Shortcutkey {
     this.$inputScript = $target.find('textarea[name="script"]');
 
     this.$inputUrlGroup = this.$inputUrl.parents('div[class="form-group"]');
-    this.$inputScriptGroup = this.$inputScript.parents('div[class="form-group"]');
+    this.$labelScriptOptional = this.$inputScript.parents('div[class="form-group"]').find('label span.optional');
 
     this._registerEvents();
 
@@ -53,11 +53,12 @@ class Shortcutkey {
       case ActionId.JUMP_URL:
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
-        this.$inputUrl.val(data.content);
+        this.$inputUrl.val(data.url);
+        this.$inputScript.val(data.script);
         break;
 
       case ActionId.EXECUTE_SCRIPT:
-        this.$inputScript.val(data.content);
+        this.$inputScript.val(data.script);
         break;
 
       default:
@@ -88,12 +89,12 @@ class Shortcutkey {
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
         this.$inputUrlGroup.show();
-        this.$inputScriptGroup.hide();
+        this.$labelScriptOptional.show();
         break;
 
       case ActionId.EXECUTE_SCRIPT:
         this.$inputUrlGroup.hide();
-        this.$inputScriptGroup.show();
+        this.$labelScriptOptional.hide();
         break;
 
       default:
@@ -158,24 +159,25 @@ class Shortcutkey {
     }
 
     const action = parseInt(this.$inputAction.val(), 10);
-    var $inputContent = null;
     switch(action) {
       case ActionId.JUMP_URL:
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
-        $inputContent = this.$inputUrl;
+
+        if (this._validateEmpty(this.$inputUrl)) {
+          hasError = true;
+        }
         break;
   
       case ActionId.EXECUTE_SCRIPT:
-        $inputContent = this.$inputScript;
+
+        if (this._validateEmpty(this.$inputScript)) {
+          hasError = true;
+        }
         break;
   
       default:
         throw new RangeError('actionId is ' + action);
-    }
-
-    if (this._validateEmpty($inputContent)) {
-      hasError = true;
     }
 
     if (hasError) {
@@ -207,11 +209,12 @@ class Shortcutkey {
       case ActionId.JUMP_URL:
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
-        data.content = this.$inputUrl.val();
+        data.url = this.$inputUrl.val();
+        data.script = this.$inputScript.val();
         break;
 
       case ActionId.EXECUTE_SCRIPT:
-        data.content = this.$inputScript.val();
+        data.script = this.$inputScript.val();
         break;
 
       default:

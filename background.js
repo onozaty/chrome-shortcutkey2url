@@ -41,10 +41,9 @@ Settings.newAsync().then((settings) => {
                   data: {
                     title: tab.title,
                     action: ActionId.JUMP_URL,
-                    content: tab.url
+                    url: tab.url
                   }
-                },
-                () => {});
+                });
               },
               100);
           });

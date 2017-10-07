@@ -12,7 +12,7 @@
   },
 
   "permissions": [
-    "tabs", "activeTab", "storage"
+    "tabs", "activeTab", "storage", "<all_urls>"
   ],
 
   "browser_action": {

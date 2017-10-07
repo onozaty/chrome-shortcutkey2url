@@ -57,33 +57,52 @@ class Handler {
   _doAction(shortcutkey) {
     switch (shortcutkey.action) {
       case ActionId.OEPN_URL_NEW_TAB:
-        chrome.tabs.create({url: shortcutkey.content});
+        chrome.tabs.create({url: shortcutkey.url}, (tab) => {
+          if (shortcutkey.script.trim() != '') {
+            this._executeScript(shortcutkey.script);
+          }
+        });
         break;
 
       case ActionId.OPEN_URL_CURRENT_TAB:
-        chrome.tabs.update({url: shortcutkey.content});
+        chrome.tabs.update({url: shortcutkey.url}, (tab) => {
+          if (shortcutkey.script.trim() != '') {
+            this._executeScript(shortcutkey.script);
+          }
+        });
         break;
 
       case ActionId.JUMP_URL:
         chrome.tabs.query({lastFocusedWindow: true}, (tabs) => {
           var matchTab = tabs.filter((tab) => {
-            return tab.url.indexOf(shortcutkey.content) == 0;
+            return tab.url.indexOf(shortcutkey.url) == 0;
           })[0];
 
           if (matchTab) {
-            chrome.tabs.update(matchTab.id, {active: true});
+            chrome.tabs.update(matchTab.id, {active: true}, (tab) => {
+              this._executeScript(shortcutkey.script);
+            });
+
           } else {
-            chrome.tabs.create({url: shortcutkey.content});
+            chrome.tabs.create({url: shortcutkey.url}, (tab) => {
+              this._executeScript(shortcutkey.script);
+            });
           }
         });
         break;
 
       case ActionId.EXECUTE_SCRIPT:
-        chrome.tabs.executeScript(null, {code: shortcutkey.content})
+        this._executeScript(shortcutkey.script);
         break;
         
       default:
         throw new RangeError('actionId is ' + shortcutkey.action);
+    }
+  }
+
+  _executeScript(script) {
+    if (script && script.trim() != '') {
+      chrome.tabs.executeScript(null, {code: script});
     }
   }
 }

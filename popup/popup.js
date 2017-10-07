@@ -30,11 +30,11 @@ function createShortcutkeyElement(shortcutkey, keyMaxLength) {
 }
 
 document.getElementById('add').addEventListener('click', () => {
-  chrome.runtime.sendMessage({target: 'background-options', name: 'add'}, () => {});
+  chrome.runtime.sendMessage({target: 'background-options', name: 'add'});
 });
 
 document.getElementById('options').addEventListener('click', () => {
-  chrome.runtime.openOptionsPage(() => {});
+  chrome.runtime.openOptionsPage();
 });
 
 document.addEventListener('keypress', (e) => {

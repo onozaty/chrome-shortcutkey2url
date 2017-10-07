@@ -1,9 +1,9 @@
 const DEFAULT_SHORTCUTKEYS = [
-  {key: 'GS', title: 'Google', action: ActionId.OEPN_URL_NEW_TAB, content: 'https://www.google.com/'},
-  {key: 'GM', title: 'Gmail', action: ActionId.JUMP_URL, content: 'https://mail.google.com/'},
-  {key: 'T', title: 'Twitter', action: ActionId.JUMP_URL, content: 'https://twitter.com/'},
-  {key: 'F', title: 'Facebook', action: ActionId.JUMP_URL, content: 'https://www.facebook.com/'},
-  {key: 'Y', title: 'YouTube', action: ActionId.JUMP_URL, content: 'https://www.youtube.com/'}
+  {key: 'GS', title: 'Google', action: ActionId.OEPN_URL_NEW_TAB, url: 'https://www.google.com/'},
+  {key: 'GM', title: 'Gmail', action: ActionId.JUMP_URL, url: 'https://mail.google.com/'},
+  {key: 'T', title: 'Twitter', action: ActionId.JUMP_URL, url: 'https://twitter.com/'},
+  {key: 'F', title: 'Facebook', action: ActionId.JUMP_URL, url: 'https://www.facebook.com/'},
+  {key: 'Y', title: 'YouTube', action: ActionId.JUMP_URL, url: 'https://www.youtube.com/'}
 ];
 
 class Settings {
