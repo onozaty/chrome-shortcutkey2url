@@ -4,7 +4,7 @@ function render(shortcutkeys) {
     return shortcutkey.key.length;
   }));
 
-  const listElement = document.getElementById('list');
+  const listElement = document.getElementById('shortcutkeys');
   listElement.textContent = null;
 
   shortcutkeys.forEach((shortcutkey) => {
@@ -29,10 +29,19 @@ function createShortcutkeyElement(shortcutkey, keyMaxLength) {
   return shortcutkeyElement;
 }
 
+document.getElementById('add').addEventListener('click', () => {
+  chrome.runtime.sendMessage({target: 'background-options', name: 'add'}, () => {});
+});
+
+document.getElementById('options').addEventListener('click', () => {
+  chrome.runtime.openOptionsPage(() => {});
+});
+
 document.addEventListener('keypress', (e) => {
   console.log(e);
 
-  const request = {
+  const message = {
+    target: 'background-handler',
     name: MessageName.KEY_EVENT,
     value: {
       'charCode': e.charCode,
@@ -44,7 +53,7 @@ document.addEventListener('keypress', (e) => {
     }
   };
 
-  chrome.runtime.sendMessage(request, (response) => {
+  chrome.runtime.sendMessage(message, (response) => {
     console.log(response);
 
     if (response.result == HandleResult.FINISH) {
@@ -56,6 +65,6 @@ document.addEventListener('keypress', (e) => {
 });
 
 // startup message
-chrome.runtime.sendMessage({name: MessageName.STARTUP}, (response) => {
+chrome.runtime.sendMessage({target: 'background-handler', name: MessageName.STARTUP}, (response) => {
   render(response.shortcutkeys);
 });

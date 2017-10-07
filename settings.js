@@ -1,4 +1,4 @@
-const DefaultShortcutkeys = [
+const DEFAULT_SHORTCUTKEYS = [
   {key: 'GS', title: 'Google', action: ActionId.OEPN_URL_NEW_TAB, content: 'https://www.google.com/'},
   {key: 'GM', title: 'Gmail', action: ActionId.JUMP_URL, content: 'https://mail.google.com/'},
   {key: 'T', title: 'Twitter', action: ActionId.JUMP_URL, content: 'https://twitter.com/'},
@@ -20,7 +20,7 @@ class Settings {
   }
 
   async update(shortcutkeys) {
-    this._shortcutkeys = shortcutkeys;
+    this._shortcutkeys = shortcutkeys.sort(Settings.shortcutkeyCompare);
     await this._save();
   }
 
@@ -36,12 +36,19 @@ class Settings {
 
   async _load() {
     this._shortcutkeys = await getLocalStorage('settings');
-    this._shortcutkeys = this._shortcutkeys || DefaultShortcutkeys;
+    this._shortcutkeys = (this._shortcutkeys || DEFAULT_SHORTCUTKEYS).sort(Settings.shortcutkeyCompare);
+
     this._startupCommand = (await getAllCommands())[0];
   }
 
   async _save() {
     await setLocalStorage({'settings': this._shortcutkeys});
+  }
+
+  static shortcutkeyCompare(o1, o2) {
+    if (o1.key < o2.key) return -1;
+    if (o1.key > o2.key) return 1;
+    return 0;
   }
 }
 

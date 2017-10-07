@@ -276,7 +276,7 @@ class Shortcutkeys {
 }
 
 function startup(settings) {
-  $('#startupKey').text(settings._startupCommand.shortcut);
+  $('#startupKey').text(settings.startupCommand.shortcut);
 
   const $formTemplate = $('#template');
 
@@ -288,12 +288,7 @@ function startup(settings) {
   });
 
   const shortcutkeys = new Shortcutkeys($('#shortcutkeys'), $formTemplate);
-  settings.all()
-    .sort((o1, o2) => {
-      if (o1.key < o2.key) return -1;
-      if (o1.key > o2.key) return 1;
-      return 0;
-    })
+  settings.shortcutkeys
     .forEach((shortcutkey) => {
       shortcutkeys.append(shortcutkey);
     });
@@ -307,7 +302,12 @@ function startup(settings) {
     $("#errorMessage").hide();
 
     if (!shortcutkeys.validate()) {
-      settings.update(shortcutkeys.data()).then(() => {
+      const request = {
+        target: 'background-settings',
+        name: 'save',
+        shortcutkeys: shortcutkeys.data()
+      };
+      chrome.runtime.sendMessage(request, () => {
         $("#successMessage").show();
       });
     } else {
@@ -319,8 +319,15 @@ function startup(settings) {
     .on('click', (event) => {
       $(event.target).parent().hide();
   });
+
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log(message);
+    if (message.target == 'options') {
+      shortcutkeys.append(message.data, true);
+    }
+  });
 }
 
 $(() => {
-  Settings.newAsync().then(startup);
+  chrome.runtime.sendMessage({target: 'background-settings', name: 'load'}, startup);
 });

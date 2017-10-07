@@ -13,9 +13,9 @@ class Handler {
     this._settings = settings;
   }
 
-  async handle(message) {
+  handle(message) {
     if (message.name == MessageName.STARTUP) {
-      await this._startup();
+      this._startup();
       return {
         result: HandleResult.CONTINUE,
         shortcutkeys: this._settings.all()
@@ -25,9 +25,8 @@ class Handler {
     }
   }
 
-  async _startup() {
+  _startup() {
     this.receivedKeys = '';
-    await this._settings.reload();
   }
 
   _receiveKey(keyEvent) {
