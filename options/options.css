@@ -3,13 +3,42 @@ h1 {
   margin-bottom: 10px;
 }
 
+.panel {
+  margin-bottom: 10px;
+}
+
+.panel-heading {
+  padding: 8px 10px;
+}
+
+.panel-body {
+  padding: 10px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0px;
+}
+
 #startupKey {
   font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
+  width: 200px;
+}
+#startupKey[disabled] {
   background-color: #fbfbfb;
 }
 
-#startupKeyHelp {
-  margin-left: 10px;
+#startupKeyHelp, #columnCountHelp {
+  font-size: 90%;
+  margin-left: 5px;
+  margin-bottom: 0px;
+}
+
+#inputColumnCount {
+  width: 200px;
 }
 
 #shortcutkeys .panel-title {
@@ -32,7 +61,7 @@ h1 {
 }
 
 #shortcutkeys .panel {
-  margin-bottom: 5px;
+  margin-bottom: 1px;
 }
 
 #shortcutkeys .panel-heading {
@@ -42,10 +71,6 @@ h1 {
 
 #shortcutkeys .panel-heading .alert-icon {
   color: #c9302c;
-}
-
-#shortcutkeys .panel-body {
-  padding-bottom: 0;
 }
 
 #shortcutkeys .panel-body .optional {

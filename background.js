@@ -16,13 +16,10 @@ Settings.newAsync().then((settings) => {
       case 'background-settings':
         if (message.name == 'load') {
           // load
-          sendResponse({
-            startupCommand: settings._startupCommand,
-            shortcutkeys: settings.all()
-          });
+          sendResponse(settings.data());
         } else {
           // save
-          settings.update(message.shortcutkeys).then(() => {
+          settings.update(message.settings).then(() => {
             sendResponse();
           })
         }

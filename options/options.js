@@ -279,7 +279,10 @@ class Shortcutkeys {
 }
 
 function startup(settings) {
-  $('#startupKey').text(settings.startupCommand.shortcut);
+  $('#startupKey').val(settings.startupCommand.shortcut);
+
+  const $inputColumnCount = $('#inputColumnCount');
+  $inputColumnCount.val(settings.listColumnCount);
 
   const $formTemplate = $('#template');
 
@@ -308,7 +311,10 @@ function startup(settings) {
       const request = {
         target: 'background-settings',
         name: 'save',
-        shortcutkeys: shortcutkeys.data()
+        settings: {
+          shortcutkeys: shortcutkeys.data(),
+          listColumnCount: parseInt($inputColumnCount.val(), 10)
+        }
       };
       chrome.runtime.sendMessage(request, () => {
         $("#successMessage").show();

@@ -15,10 +15,6 @@
     <!-- Begin page content -->
     <div class="container">
       <h1>Shortcutkey2URL</h1>
-      <h3>Startup key</h3>
-      <pre id="startupKey"></pre>
-      <span id="startupKeyHelp" class="help-block">You can change the startup key at 'Keyboard shortcuts' on the extensions screen (Menu > More tools > Extensions).</span>
-      <h3>Shortcutkeys</h3>
       <div id="errorMessage" class="alert alert-danger" style="display:none">
         <a class="close">×</a>
         <p>There is an input error. Please check the input contents.</p>
@@ -27,8 +23,40 @@
         <a class="close">×</a> 
         <p>Settings saved!</p>
       </div>
-      <div id="shortcutkeys"></div>
-      <button id="addButton" class="btn btn-primary btn-sm" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</button>
+      <div class="panel panel-default">
+        <div class="panel-heading">Settings</div>
+        <div class="panel-body">
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Startup key</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="startupKey" disabled>
+                <span id="startupKeyHelp" class="help-block">You can change the startup key at 'Keyboard shortcuts' on the extensions screen (Menu > More tools > Extensions).</span>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Column count</label>
+              <div class="col-sm-10">
+                <select class="form-control" id="inputColumnCount">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+                <span id="columnCountHelp" class="help-block">The number of columns in the shortcut key list displayed in the popup.</span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">Shortcutkeys</div>
+        <div class="panel-body">
+          <div id="shortcutkeys"></div>
+          <button id="addButton" class="btn btn-primary btn-sm" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</button>
+        </div>
+      </div>
       <div class="pull-right">
         <button id="saveButton" class="btn btn-success btn-sm" type="button"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Save</button>
       </div>

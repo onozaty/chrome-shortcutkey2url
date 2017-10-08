@@ -18,7 +18,8 @@ class Handler {
       this._startup();
       return {
         result: HandleResult.CONTINUE,
-        shortcutkeys: this._settings.all()
+        shortcutkeys: this._settings.all(),
+        listColumnCount: this._settings.listColumnCount()
       };
     } else {
       return this._receiveKey(message.value);

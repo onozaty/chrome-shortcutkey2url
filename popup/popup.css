@@ -1,16 +1,20 @@
-#shortcutkeys {
-  white-space: nowrap;
-  column-count: 2;
-  font-size: 120%;
+#shortcutkeys div.column {
+  break-inside: avoid;
+  break-after: column;
 }
 
-#shortcutkeys .key {
+#shortcutkeys div.item {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#shortcutkeys div.item span.key {
   font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
   font-weight: bold;
   margin: 5px;
 }
 
-#shortcutkeys .title {
+#shortcutkeys div.item span.title {
   margin: 5px;
   white-space: nowrap;
 }
@@ -18,4 +22,5 @@
 #menu {
   white-space: nowrap;
   margin: 10px 5px;
+  text-align: right;
 }

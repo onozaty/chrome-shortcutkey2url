@@ -6,6 +6,8 @@ const DEFAULT_SHORTCUTKEYS = [
   {key: 'Y', title: 'YouTube', action: ActionId.JUMP_URL, url: 'https://www.youtube.com/'}
 ];
 
+const DEFAULT_LIST_COLUMN_COUNT = 3;
+
 class Settings {
 
   static async newAsync() {
@@ -15,12 +17,25 @@ class Settings {
     return settings;
   }
 
-  all() {
-    return [].concat(this._shortcutkeys);
+  data() {
+    return {
+      shortcutkeys: this._shortcutkeys,
+      listColumnCount: this._listColumnCount,
+      startupCommand: this._startupCommand
+    };
   }
 
-  async update(shortcutkeys) {
-    this._shortcutkeys = shortcutkeys.sort(Settings.shortcutkeyCompare);
+  all() {
+    return this._shortcutkeys;
+  }
+
+  listColumnCount() {
+    return this._listColumnCount;
+  }
+
+  async update(settings) {
+    this._shortcutkeys = settings.shortcutkeys.sort(Settings.shortcutkeyCompare);
+    this._listColumnCount = settings.listColumnCount;
     await this._save();
   }
 
@@ -35,14 +50,20 @@ class Settings {
   }
 
   async _load() {
-    this._shortcutkeys = await getLocalStorage('settings');
-    this._shortcutkeys = (this._shortcutkeys || DEFAULT_SHORTCUTKEYS).sort(Settings.shortcutkeyCompare);
-
+    var loaded =  await getLocalStorage('settings');
+    var loaded = loaded || {};
+    this._shortcutkeys = (loaded.shortcutkeys || DEFAULT_SHORTCUTKEYS).sort(Settings.shortcutkeyCompare);
+    this._listColumnCount = loaded.listColumnCount || DEFAULT_LIST_COLUMN_COUNT;
     this._startupCommand = (await getAllCommands())[0];
   }
 
   async _save() {
-    await setLocalStorage({'settings': this._shortcutkeys});
+    await setLocalStorage({
+      settings: {
+        shortcutkeys: this._shortcutkeys,
+        listColumnCount: this._listColumnCount
+      }
+    });
   }
 
   static shortcutkeyCompare(o1, o2) {

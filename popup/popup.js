@@ -1,15 +1,23 @@
-function render(shortcutkeys) {
+function render(shortcutkeys, listColumnCount) {
 
   const keyMaxLength = Math.max.apply(null, shortcutkeys.map((shortcutkey) => {
     return shortcutkey.key.length;
   }));
 
   const listElement = document.getElementById('shortcutkeys');
+  listElement.style.columnCount = listColumnCount;
   listElement.textContent = null;
+  const columns = [];
 
-  shortcutkeys.forEach((shortcutkey) => {
-    listElement.appendChild(createShortcutkeyElement(shortcutkey, keyMaxLength));
-  });
+  for (var i = 0; i < listColumnCount; i++) {
+    const column = listElement.appendChild(document.createElement('div'));
+    column.className = 'column';
+    columns.push(column);
+  }
+
+  for (var i = 0; i < shortcutkeys.length; i++) {
+    columns[i % listColumnCount].appendChild(createShortcutkeyElement(shortcutkeys[i], keyMaxLength));
+  }
 }
 
 function createShortcutkeyElement(shortcutkey, keyMaxLength) {
@@ -23,6 +31,7 @@ function createShortcutkeyElement(shortcutkey, keyMaxLength) {
   titleElement.textContent = shortcutkey.title;
 
   const shortcutkeyElement = document.createElement('div');
+  shortcutkeyElement.className = 'item';
   shortcutkeyElement.appendChild(keyElement);
   shortcutkeyElement.appendChild(titleElement);
 
@@ -66,5 +75,5 @@ document.addEventListener('keypress', (e) => {
 
 // startup message
 chrome.runtime.sendMessage({target: 'background-handler', name: MessageName.STARTUP}, (response) => {
-  render(response.shortcutkeys);
+  render(response.shortcutkeys, response.listColumnCount);
 });
