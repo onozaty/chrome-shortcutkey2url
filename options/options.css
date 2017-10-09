@@ -3,6 +3,11 @@ h1 {
   margin-bottom: 10px;
 }
 
+.alert {
+  padding: 10px 15px;
+  margin-bottom: 10px;
+}
+
 .panel {
   margin-bottom: 10px;
 }

@@ -17,8 +17,8 @@ class Shortcutkey {
     this.$inputUrl = $target.find('input[name="url"]');
     this.$inputScript = $target.find('textarea[name="script"]');
 
-    this.$inputUrlGroup = this.$inputUrl.parents('div[class="form-group"]');
-    this.$labelScriptOptional = this.$inputScript.parents('div[class="form-group"]').find('label span.optional');
+    this.$inputUrlGroup = this.$inputUrl.parents('div.form-group');
+    this.$labelScriptOptional = this.$inputScript.parents('div.form-group').find('label span.optional');
 
     this._registerEvents();
 

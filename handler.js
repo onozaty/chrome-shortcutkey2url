@@ -58,18 +58,16 @@ class Handler {
   _doAction(shortcutkey) {
     switch (shortcutkey.action) {
       case ActionId.OEPN_URL_NEW_TAB:
-        chrome.tabs.create({url: shortcutkey.url}, (tab) => {
-          if (shortcutkey.script.trim() != '') {
-            this._executeScript(shortcutkey.script);
-          }
+        chrome.tabs.create({url: shortcutkey.url}, () => {
+          this._executeScript(shortcutkey.script);
         });
         break;
 
       case ActionId.OPEN_URL_CURRENT_TAB:
-        chrome.tabs.update({url: shortcutkey.url}, (tab) => {
-          if (shortcutkey.script.trim() != '') {
+        chrome.tabs.update({url: shortcutkey.url}, () => {
+          setTimeout(() => {
             this._executeScript(shortcutkey.script);
-          }
+          }, 1000);
         });
         break;
 
@@ -80,12 +78,12 @@ class Handler {
           })[0];
 
           if (matchTab) {
-            chrome.tabs.update(matchTab.id, {active: true}, (tab) => {
+            chrome.tabs.update(matchTab.id, {active: true}, () => {
               this._executeScript(shortcutkey.script);
             });
 
           } else {
-            chrome.tabs.create({url: shortcutkey.url}, (tab) => {
+            chrome.tabs.create({url: shortcutkey.url}, () => {
               this._executeScript(shortcutkey.script);
             });
           }
