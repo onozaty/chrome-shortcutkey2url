@@ -125,7 +125,7 @@ class Shortcutkey {
   validate(others) {
     this.$target.find('div.has-error').removeClass('has-error');
     this.$alertIcon.hide();
-    this.$duplicateMessage.empty();
+    this.$duplicateMessage.hide().empty();
 
     var hasError = false;
     if (this._validateEmpty(this.$inputKey)) {
