@@ -42,7 +42,7 @@ Settings.newAsync().then((settings) => {
                   }
                 });
               },
-              100);
+              500);
           });
         });
         return;
