@@ -1,20 +1,20 @@
-#shortcutkeys div.column {
+#shortcutKeys div.column {
   break-inside: avoid;
   break-after: column;
 }
 
-#shortcutkeys div.item {
+#shortcutKeys div.item {
   white-space: nowrap;
   overflow: hidden;
 }
 
-#shortcutkeys div.item span.key {
+#shortcutKeys div.item span.key {
   font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
   font-weight: bold;
   margin: 5px;
 }
 
-#shortcutkeys div.item span.title {
+#shortcutKeys div.item span.title {
   margin: 5px;
   white-space: nowrap;
 }

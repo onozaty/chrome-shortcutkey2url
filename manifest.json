@@ -1,35 +1,30 @@
 {
-  "name": "Shortcutkey2URL",
-  "description": "Open URL with the shortcut key.",
   "manifest_version": 2,
+  "name": "ShortcutKey2URL",
   "version": "1.0",
+  "description": "ShortcutKey2URL provide a way to easily access frequently visit sites. The first key displays the list of shortcut keys and jumps to that site with the next key.",
   "homepage_url": "https://github.com/onozaty/chrome-shortcutkey2url",
   "icons": {
     "128": "icons/icon128.png"
   },
-
   "background": {
     "scripts": ["actions.js", "settings.js", "handler.js", "background.js"]
   },
-
   "permissions": [
     "tabs", "activeTab", "storage", "<all_urls>"
   ],
-
   "browser_action": {
     "default_icon": {
       "128": "icons/icon128.png"
     },
-    "default_title": "Shortcutkey2URL",
+    "default_title": "ShortcutKey2URL",
     "default_popup": "popup/popup.html"
   },
-
   "options_ui": {
     "page": "options/options.html",
     "chrome_style": false,
     "open_in_tab": true
   },
-
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
@@ -37,5 +32,4 @@
       }
     }
   }
-
 }

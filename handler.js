@@ -18,7 +18,7 @@ class Handler {
       this._startup();
       return {
         result: HandleResult.CONTINUE,
-        shortcutkeys: this._settings.all(),
+        shortcutKeys: this._settings.all(),
         listColumnCount: this._settings.listColumnCount()
       };
     } else {
@@ -39,34 +39,34 @@ class Handler {
     const key = String.fromCharCode(keyEvent.charCode).toUpperCase();
     this.receivedKeys += key;
 
-    const matchShortcutkeys = this._settings.find(this.receivedKeys);
+    const matchShortcutKeys = this._settings.find(this.receivedKeys);
 
-    if (matchShortcutkeys.length > 1) {
+    if (matchShortcutKeys.length > 1) {
       return {
         result: HandleResult.CONTINUE,
-        shortcutkeys: matchShortcutkeys
+        shortcutKeys: matchShortcutKeys
       };
     }
 
-    if (matchShortcutkeys.length == 1) {
-      this._doAction(matchShortcutkeys[0]);
+    if (matchShortcutKeys.length == 1) {
+      this._doAction(matchShortcutKeys[0]);
     }
 
     return {result: HandleResult.FINISH};
   }
 
-  _doAction(shortcutkey) {
-    switch (shortcutkey.action) {
+  _doAction(shortcutKey) {
+    switch (shortcutKey.action) {
       case ActionId.OEPN_URL_NEW_TAB:
-        chrome.tabs.create({url: shortcutkey.url}, () => {
-          this._executeScript(shortcutkey.script);
+        chrome.tabs.create({url: shortcutKey.url}, () => {
+          this._executeScript(shortcutKey.script);
         });
         break;
 
       case ActionId.OPEN_URL_CURRENT_TAB:
-        chrome.tabs.update({url: shortcutkey.url}, () => {
+        chrome.tabs.update({url: shortcutKey.url}, () => {
           setTimeout(() => {
-            this._executeScript(shortcutkey.script);
+            this._executeScript(shortcutKey.script);
           }, 1000);
         });
         break;
@@ -74,28 +74,28 @@ class Handler {
       case ActionId.JUMP_URL:
         chrome.tabs.query({lastFocusedWindow: true}, (tabs) => {
           var matchTab = tabs.filter((tab) => {
-            return tab.url.indexOf(shortcutkey.url) == 0;
+            return tab.url.indexOf(shortcutKey.url) == 0;
           })[0];
 
           if (matchTab) {
             chrome.tabs.update(matchTab.id, {active: true}, () => {
-              this._executeScript(shortcutkey.script);
+              this._executeScript(shortcutKey.script);
             });
 
           } else {
-            chrome.tabs.create({url: shortcutkey.url}, () => {
-              this._executeScript(shortcutkey.script);
+            chrome.tabs.create({url: shortcutKey.url}, () => {
+              this._executeScript(shortcutKey.script);
             });
           }
         });
         break;
 
       case ActionId.EXECUTE_SCRIPT:
-        this._executeScript(shortcutkey.script);
+        this._executeScript(shortcutKey.script);
         break;
         
       default:
-        throw new RangeError('actionId is ' + shortcutkey.action);
+        throw new RangeError('actionId is ' + shortcutKey.action);
     }
   }
 

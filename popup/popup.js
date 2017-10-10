@@ -1,10 +1,10 @@
-function render(shortcutkeys, listColumnCount) {
+function render(shortcutKeys, listColumnCount) {
 
-  const keyMaxLength = Math.max.apply(null, shortcutkeys.map((shortcutkey) => {
-    return shortcutkey.key.length;
+  const keyMaxLength = Math.max.apply(null, shortcutKeys.map((shortcutKey) => {
+    return shortcutKey.key.length;
   }));
 
-  const listElement = document.getElementById('shortcutkeys');
+  const listElement = document.getElementById('shortcutKeys');
   listElement.style.columnCount = listColumnCount;
   listElement.textContent = null;
   const columns = [];
@@ -15,27 +15,27 @@ function render(shortcutkeys, listColumnCount) {
     columns.push(column);
   }
 
-  for (var i = 0; i < shortcutkeys.length; i++) {
-    columns[i % listColumnCount].appendChild(createShortcutkeyElement(shortcutkeys[i], keyMaxLength));
+  for (var i = 0; i < shortcutKeys.length; i++) {
+    columns[i % listColumnCount].appendChild(createShortcutKeyElement(shortcutKeys[i], keyMaxLength));
   }
 }
 
-function createShortcutkeyElement(shortcutkey, keyMaxLength) {
+function createShortcutKeyElement(shortcutKey, keyMaxLength) {
 
   const keyElement = document.createElement('span');
   keyElement.className = 'key';
-  keyElement.textContent = shortcutkey.key.padEnd(keyMaxLength, '\u00A0');
+  keyElement.textContent = shortcutKey.key.padEnd(keyMaxLength, '\u00A0');
 
   const titleElement = document.createElement('span');
   titleElement.className = 'title';
-  titleElement.textContent = shortcutkey.title;
+  titleElement.textContent = shortcutKey.title;
 
-  const shortcutkeyElement = document.createElement('div');
-  shortcutkeyElement.className = 'item';
-  shortcutkeyElement.appendChild(keyElement);
-  shortcutkeyElement.appendChild(titleElement);
+  const shortcutKeyElement = document.createElement('div');
+  shortcutKeyElement.className = 'item';
+  shortcutKeyElement.appendChild(keyElement);
+  shortcutKeyElement.appendChild(titleElement);
 
-  return shortcutkeyElement;
+  return shortcutKeyElement;
 }
 
 document.getElementById('add').addEventListener('click', () => {
@@ -68,12 +68,12 @@ document.addEventListener('keypress', (e) => {
     if (response.result == HandleResult.FINISH) {
       window.close();
     } else {
-      //render(response.shortcutkeys);
+      //render(response.shortcutKeys);
     }
   });
 });
 
 // startup message
 chrome.runtime.sendMessage({target: 'background-handler', name: MessageName.STARTUP}, (response) => {
-  render(response.shortcutkeys, response.listColumnCount);
+  render(response.shortcutKeys, response.listColumnCount);
 });

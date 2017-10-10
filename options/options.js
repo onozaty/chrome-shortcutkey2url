@@ -1,4 +1,4 @@
-class Shortcutkey {
+class ShortcutKey {
   constructor($target, data) {
     this.$target = $target;
     this.$summary = $target.find('div.panel-heading a.summary');
@@ -143,7 +143,7 @@ class Shortcutkey {
 
       if (duplicateKeys.length > 0) {
         this.$duplicateMessage
-          .text('It duplicated with other shortcutkeys(' + duplicateKeys + ').')
+          .text('It duplicated with other shortcut keys(' + duplicateKeys + ').')
           .show();
 
         this.$inputKey.parents('.form-group').addClass('has-error');
@@ -225,29 +225,29 @@ class Shortcutkey {
   }
 }
 
-class Shortcutkeys {
+class ShortcutKeys {
   constructor($target, $childTemplate) {
     this.$target = $target;
     this.$childTemplate = $childTemplate;
-    this._shortcutkeys = [];
+    this._shortcutKeys = [];
   }
 
-  _removeShortcutkey(event, shortcutkey) {
-    const index = this._shortcutkeys.indexOf(shortcutkey);
+  _removeShortcutKey(event, shortcutKey) {
+    const index = this._shortcutKeys.indexOf(shortcutKey);
     if (index != -1) {
-      this._shortcutkeys.splice(index, 1);
+      this._shortcutKeys.splice(index, 1);
     }
   }
 
   append(data, isOpened) {
     const $child = this.$childTemplate.clone(true);
-    const shortcutkey = new Shortcutkey($child, data);
+    const shortcutKey = new ShortcutKey($child, data);
 
-    $child.on('remove', this._removeShortcutkey.bind(this));
+    $child.on('remove', this._removeShortcutKey.bind(this));
 
-    isOpened ? shortcutkey.openDetail() : shortcutkey.closeDetail();
+    isOpened ? shortcutKey.openDetail() : shortcutKey.closeDetail();
 
-    this._shortcutkeys.push(shortcutkey);
+    this._shortcutKeys.push(shortcutKey);
     this.$target.append($child.show());
 
     $child[0].scrollIntoView();
@@ -255,26 +255,26 @@ class Shortcutkeys {
 
   validate() {
 
-    const shortcutkeyAndData = this._shortcutkeys.map((shortcutkey) => {
+    const shortcutKeyAndData = this._shortcutKeys.map((shortcutKey) => {
       return {
-        shortcutkey: shortcutkey,
-        data: shortcutkey.data()
+        shortcutKey: shortcutKey,
+        data: shortcutKey.data()
       };
     });
 
-    return this._shortcutkeys
-      .filter((shortcutkey) => {
-        shortcutkey.closeDetail();
-        const others = shortcutkeyAndData
-          .filter((x) => x.shortcutkey != shortcutkey)
+    return this._shortcutKeys
+      .filter((shortcutKey) => {
+        shortcutKey.closeDetail();
+        const others = shortcutKeyAndData
+          .filter((x) => x.shortcutKey != shortcutKey)
           .map((x) => x.data);
-        return shortcutkey.validate(others);
+        return shortcutKey.validate(others);
       })
       .length > 0;
   }
 
   data() {
-    return this._shortcutkeys.map((shortcutkey) => shortcutkey.data());
+    return this._shortcutKeys.map((shortcutKey) => shortcutKey.data());
   }
 }
 
@@ -293,26 +293,26 @@ function startup(settings) {
     $actionTemplate.append($option);
   });
 
-  const shortcutkeys = new Shortcutkeys($('#shortcutkeys'), $formTemplate);
-  settings.shortcutkeys
-    .forEach((shortcutkey) => {
-      shortcutkeys.append(shortcutkey);
+  const shortcutKeys = new ShortcutKeys($('#shortcutKeys'), $formTemplate);
+  settings.shortcutKeys
+    .forEach((shortcutKey) => {
+      shortcutKeys.append(shortcutKey);
     });
   
   $('#addButton').on('click', () => {
-    shortcutkeys.append(null, true);
+    shortcutKeys.append(null, true);
   });
 
   $('#saveButton').on('click', () => {
     $("#successMessage").hide();
     $("#errorMessage").hide();
 
-    if (!shortcutkeys.validate()) {
+    if (!shortcutKeys.validate()) {
       const request = {
         target: 'background-settings',
         name: 'save',
         settings: {
-          shortcutkeys: shortcutkeys.data(),
+          shortcutKeys: shortcutKeys.data(),
           listColumnCount: parseInt($inputColumnCount.val(), 10)
         }
       };
@@ -332,7 +332,7 @@ function startup(settings) {
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message);
     if (message.target == 'options') {
-      shortcutkeys.append(message.data, true);
+      shortcutKeys.append(message.data, true);
     }
   });
 }

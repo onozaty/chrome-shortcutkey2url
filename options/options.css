@@ -46,38 +46,38 @@ h1 {
   width: 200px;
 }
 
-#shortcutkeys .panel-title {
+#shortcutKeys .panel-title {
   font-size: inherit;
 }
 
-#shortcutkeys .summary .key {
+#shortcutKeys .summary .key {
   font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
   font-weight: bold;
   margin-right: 10px;
 }
 
-#shortcutkeys .summary .title {
+#shortcutKeys .summary .title {
   white-space: nowrap;
   margin-right: 10px;
 }
 
-#shortcutkeys div.alert {
+#shortcutKeys div.alert {
   margin-bottom: 10px;
 }
 
-#shortcutkeys .panel {
+#shortcutKeys .panel {
   margin-bottom: 1px;
 }
 
-#shortcutkeys .panel-heading {
+#shortcutKeys .panel-heading {
   background-color: #fbfbfb;
   padding: 5px 15px;
 }
 
-#shortcutkeys .panel-heading .alert-icon {
+#shortcutKeys .panel-heading .alert-icon {
   color: #c9302c;
 }
 
-#shortcutkeys .panel-body .optional {
+#shortcutKeys .panel-body .optional {
   margin-left: 5px;
 }

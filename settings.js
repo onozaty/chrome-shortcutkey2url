@@ -19,14 +19,14 @@ class Settings {
 
   data() {
     return {
-      shortcutkeys: this._shortcutkeys,
+      shortcutKeys: this._shortcutKeys,
       listColumnCount: this._listColumnCount,
       startupCommand: this._startupCommand
     };
   }
 
   all() {
-    return this._shortcutkeys;
+    return this._shortcutKeys;
   }
 
   listColumnCount() {
@@ -34,13 +34,13 @@ class Settings {
   }
 
   async update(settings) {
-    this._shortcutkeys = settings.shortcutkeys.sort(Settings.shortcutkeyCompare);
+    this._shortcutKeys = settings.shortcutKeys.sort(Settings.shortcutKeyCompare);
     this._listColumnCount = settings.listColumnCount;
     await this._save();
   }
 
   find(key) {
-    return this._shortcutkeys.filter((item) => {
+    return this._shortcutKeys.filter((item) => {
       return item.key.indexOf(key) == 0;
     });
   }
@@ -52,7 +52,7 @@ class Settings {
   async _load() {
     var loaded =  await getLocalStorage('settings');
     var loaded = loaded || {};
-    this._shortcutkeys = (loaded.shortcutkeys || DEFAULT_SHORTCUTKEYS).sort(Settings.shortcutkeyCompare);
+    this._shortcutKeys = (loaded.shortcutKeys || DEFAULT_SHORTCUTKEYS).sort(Settings.shortcutKeyCompare);
     this._listColumnCount = loaded.listColumnCount || DEFAULT_LIST_COLUMN_COUNT;
     this._startupCommand = (await getAllCommands())[0];
   }
@@ -60,13 +60,13 @@ class Settings {
   async _save() {
     await setLocalStorage({
       settings: {
-        shortcutkeys: this._shortcutkeys,
+        shortcutKeys: this._shortcutKeys,
         listColumnCount: this._listColumnCount
       }
     });
   }
 
-  static shortcutkeyCompare(o1, o2) {
+  static shortcutKeyCompare(o1, o2) {
     if (o1.key < o2.key) return -1;
     if (o1.key > o2.key) return 1;
     return 0;
