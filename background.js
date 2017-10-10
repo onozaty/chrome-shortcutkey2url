@@ -16,12 +16,14 @@ Settings.newAsync().then((settings) => {
       case 'background-settings':
         if (message.name == 'load') {
           // load
-          sendResponse(settings.data());
+          settings.reload().then(() => {
+            sendResponse(settings.data());
+          });
         } else {
           // save
           settings.update(message.settings).then(() => {
             sendResponse();
-          })
+          });
         }
         return true;
 
