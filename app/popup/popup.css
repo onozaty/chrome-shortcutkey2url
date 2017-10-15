@@ -1,0 +1,26 @@
+#shortcutKeys div.column {
+  break-inside: avoid;
+  break-after: column;
+}
+
+#shortcutKeys div.item {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+#shortcutKeys div.item span.key {
+  font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
+  font-weight: bold;
+  margin: 5px;
+}
+
+#shortcutKeys div.item span.title {
+  margin: 5px;
+  white-space: nowrap;
+}
+
+#menu {
+  white-space: nowrap;
+  margin: 10px 5px;
+  text-align: right;
+}

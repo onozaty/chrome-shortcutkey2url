@@ -1,0 +1,36 @@
+{
+  "manifest_version": 2,
+  "name": "ShortcutKey2URL for Chrome",
+  "version": "1.0.1",
+  "description": "ShortcutKey2URL provide a way to easily access frequently visit sites.",
+  "homepage_url": "https://github.com/onozaty/chrome-shortcutkey2url",
+  "icons": {
+    "128": "icons/icon128.png"
+  },
+  "background": {
+    "scripts": ["actions.js", "settings.js", "handler.js", "background.js"]
+  },
+  "permissions": [
+    "tabs", "activeTab", "storage", "<all_urls>"
+  ],
+  "browser_action": {
+    "default_icon": {
+      "128": "icons/icon128.png"
+    },
+    "default_title": "ShortcutKey2URL",
+    "default_popup": "popup/popup.html"
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "chrome_style": false,
+    "open_in_tab": true
+  },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+Period",
+        "mac": "Command+Comma"
+      }
+    }
+  }
+}

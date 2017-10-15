@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>ShortcutKey2URL</title>
+
+    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="options.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <!-- Begin page content -->
+    <div class="container">
+      <h1>ShortcutKey2URL</h1>
+      <div id="errorMessage" class="alert alert-danger" style="display:none">
+        <a class="close">×</a>
+        <p>There is an input error. Please check the input contents.</p>
+      </div>
+      <div id="successMessage" class="alert alert-success" style="display:none">
+        <a class="close">×</a> 
+        <p>Settings saved!</p>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">Settings</div>
+        <div class="panel-body">
+          <form class="form-horizontal">
+            <div class="form-group form-group-sm">
+              <label class="col-sm-2 control-label">Startup key</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="startupKey" disabled>
+                <span id="startupKeyHelp" class="help-block">You can change the startup key at 'Keyboard shortcuts' on the extensions screen (Menu > More tools > Extensions).</span>
+              </div>
+            </div>
+            <div class="form-group form-group-sm">
+              <label class="col-sm-2 control-label">Column count</label>
+              <div class="col-sm-10">
+                <select class="form-control" id="inputColumnCount">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+                <span id="columnCountHelp" class="help-block">The number of columns in the shortcut key list displayed in the popup.</span>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="panel panel-default">
+        <div class="panel-heading">Shortcut keys</div>
+        <div class="panel-body">
+          <div id="shortcutKeys"></div>
+          <button id="addButton" class="btn btn-primary btn-sm" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</button>
+        </div>
+      </div>
+      <div class="pull-right">
+        <button id="saveButton" class="btn btn-success btn-sm" type="button"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Save</button>
+      </div>
+    </div>
+    <div id="template" class="panel panel-default" style="display: none">
+      <div class="panel-heading">
+        <div class="panel-title">
+          <a class="summary" role="button">New shortcut key</a>
+          <span class="glyphicon glyphicon-exclamation-sign alert-icon" aria-hidden="true" style="display: none"></span>
+          <div class="pull-right">
+            <button type="button" class="btn btn-xs btn-default remove" aria-label="Remove">
+              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove
+            </button>
+            <button type="button" class="btn btn-xs btn-default close-detail" aria-label="close">
+              &nbsp;<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>&nbsp;
+            </button>
+            <button type="button" class="btn btn-xs btn-default open-detail" aria-label="open" style="display:none">
+              &nbsp;<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>&nbsp;
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="panel-body">
+        <form class="form-horizontal">
+          <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">Key</label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control" name="key">
+            </div>
+            <div class="col-sm-7">
+              <span class="help-block duplicate-message" style="display:none;"></span>
+            </div>
+          </div>
+          <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">Action</label>
+            <div class="col-sm-6">
+              <select class="form-control" name="action">
+                <option value="jump">jump</option>
+                <option value="current">current</option>
+                <option value="new">new</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">Title</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="title">
+            </div>
+          </div>
+          <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">URL</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" name="url">
+            </div>
+          </div>
+          <div class="form-group form-group-sm">
+            <label class="col-sm-2 control-label">Script<span class="optional">(optional)</span></label>
+            <div class="col-sm-10">
+              <textarea type="text" class="form-control" name="script"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="lib/jquery.min.js"></script>
+    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../actions.js"></script>
+    <script src="options.js"></script>
+  </body>
+</html>

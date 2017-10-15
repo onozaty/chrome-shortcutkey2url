@@ -1,0 +1,83 @@
+h1 {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 10px;
+}
+
+.alert {
+  padding: 10px 15px;
+  margin-bottom: 10px;
+}
+
+.panel {
+  margin-bottom: 10px;
+}
+
+.panel-heading {
+  padding: 8px 10px;
+}
+
+.panel-body {
+  padding: 10px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group:last-child {
+  margin-bottom: 0px;
+}
+
+#startupKey {
+  font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
+  width: 200px;
+}
+#startupKey[disabled] {
+  background-color: #fbfbfb;
+}
+
+#startupKeyHelp, #columnCountHelp {
+  font-size: 90%;
+  margin-left: 5px;
+  margin-bottom: 0px;
+}
+
+#inputColumnCount {
+  width: 200px;
+}
+
+#shortcutKeys .panel-title {
+  font-size: inherit;
+}
+
+#shortcutKeys .summary .key {
+  font-family: Consolas, Menlo, 'Liberation Mono', Courier, monospace;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+#shortcutKeys .summary .title {
+  white-space: nowrap;
+  margin-right: 10px;
+}
+
+#shortcutKeys div.alert {
+  margin-bottom: 10px;
+}
+
+#shortcutKeys .panel {
+  margin-bottom: 1px;
+}
+
+#shortcutKeys .panel-heading {
+  background-color: #fbfbfb;
+  padding: 5px 15px;
+}
+
+#shortcutKeys .panel-heading .alert-icon {
+  color: #c9302c;
+}
+
+#shortcutKeys .panel-body .optional {
+  margin-left: 5px;
+}
