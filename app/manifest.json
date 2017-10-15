@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "ShortcutKey2URL",
   "version": "1.0",
-  "description": "ShortcutKey2URL provide a way to easily access frequently visit sites. The first key displays the list of shortcut keys and jumps to that site with the next key.",
+  "description": "ShortcutKey2URL provide a way to easily access frequently visit sites.",
   "homepage_url": "https://github.com/onozaty/chrome-shortcutkey2url",
   "icons": {
     "128": "icons/icon128.png"
