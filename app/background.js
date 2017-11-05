@@ -29,7 +29,8 @@ Settings.newAsync().then((settings) => {
 
       case 'background-options':
 
-        chrome.tabs.getSelected(null, function(tab) {
+        chrome.tabs.query({active: true}, function(tabs) {
+          const tab = tabs[0];
           chrome.runtime.openOptionsPage(() => {
             // It takes time to open the option page
             setTimeout(() => {

@@ -51,7 +51,7 @@ class Settings {
 
   async _load() {
     var loaded =  await getLocalStorage('settings');
-    var loaded = loaded || {};
+    loaded = loaded || {};
     this._shortcutKeys = (loaded.shortcutKeys || DEFAULT_SHORTCUTKEYS).sort(Settings.shortcutKeyCompare);
     this._listColumnCount = loaded.listColumnCount || DEFAULT_LIST_COLUMN_COUNT;
     this._startupCommand = (await getAllCommands())[0];
