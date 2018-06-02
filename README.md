@@ -1,6 +1,6 @@
 # ShortcutKey2URL for Chrome
 
-ShortcutKey2URL for Chrome is an extension for Google Chrome that provides a way to easy access to frequently visit sites with shortcut key.
+ShortcutKey2URL for Chrome is an extension for Google Chrome that allows you to open, and move url using shortcut keys. You can also run JavaScript.
 
 Display the action list with the startup key and execute the action with the next key.
 

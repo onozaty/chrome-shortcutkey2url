@@ -1,6 +1,6 @@
 # ShortcutKey2URL for Chrome
 
-ShortcutKey2URL for Chromeは、頻繁にアクセスするサイトへ簡単にアクセスするための手段(ショートカットキー)を提供するGoogle Chrome向け拡張機能です。
+ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを開いたり、移動したり、JavaScriptを実行できるGoogle Chrome向け拡張機能です。
 
 スタートアップキーであらかじめ設定しておいた動作の一覧を表示し、次のキーでその動作を実行します。
 
