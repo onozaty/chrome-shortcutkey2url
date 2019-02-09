@@ -21,3 +21,40 @@ The items that can be set as actions are as follows.
 Install from the following.
 
 * [ShortcutKey2URL for Chrome - Chrome Web Store](https://chrome.google.com/webstore/detail/shortcutkey2url-for-chrom/hfohmffbfcobmhfgpkbcjjaijmfplcdg "ShortcutKey2URL for Chrome - Chrome Web Store")
+
+## Setting the startup key
+
+You can change the startup key from Keybord shortcuts in Menu > More tools > Extensions.
+
+![Screenshot of change startupkey](screenshots/change_startupkey.png)
+
+## Usage
+
+When you press the startup key, a list of shortcuts is displayed in the popup.
+
+![Screenshot of popup](screenshots/popup.png)
+
+When you enter a key, the corresponding shortcut will be executed.
+
+![Screenshot of running](screenshots/run.gif)
+
+## Shortcut settings
+
+Set the shortcut key on the setting screen.
+
+![Screenshot of option](screenshots/option.png)
+
+Click to `Add current page`, you can easily set the current page as a shortcut key.
+
+![Screenshot of add current page](screenshots/add_current_page.png)
+
+![Screenshot of add current page setting](screenshots/add_current_page_setting.png)
+
+The items that can be selected as `Action` are as follows.
+
+* `Jump to url` Jump to URL. For already opened URL, go to that tab. Open it as a new tab if it is not already open.
+* `Open url in new tab` Open URL in new tab.
+* `Open url in current tab` Open URL in current tab.
+* `Execute script` Execute the JavaScript on the current tab.
+
+By entering `Script (optional)` you can execute arbitrary JavaScript after opening the URL.

@@ -21,3 +21,40 @@ ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを
 下記からインストールします。
 
 * [ShortcutKey2URL for Chrome - Chrome ウェブストア](https://chrome.google.com/webstore/detail/shortcutkey2url-for-chrom/hfohmffbfcobmhfgpkbcjjaijmfplcdg "ShortcutKey2URL for Chrome - Chrome ウェブストア")
+
+## スタートアップキーの設定
+
+スタートアップキーは、 Menu > More tools > Extensions の Keybord shortcuts から変更できます。
+
+![Screenshot of change startupkey](screenshots/change_startupkey.png)
+
+## 操作方法
+
+スタートアップキーを押下すると、ポップアップにてショートカットの一覧が表示されます。
+
+![Screenshot of popup](screenshots/popup.png)
+
+一覧にあるキーを入力すると、対応するショートカットが実行されます。
+
+![Screenshot of running](screenshots/run.gif)
+
+## ショートカットの設定
+
+設定画面でショートカットキーを設定します。
+
+![Screenshot of option](screenshots/option.png)
+
+`Add current page`をクリックすると、現在のページをショートカットキーとして簡単に設定できます。
+
+![Screenshot of add current page](screenshots/add_current_page.png)
+
+![Screenshot of add current page setting](screenshots/add_current_page_setting.png)
+
+`Action`として指定できるものは、下記の通りです。
+
+* `Jump to url` URLへの移動。既に開いているURLの場合は、そのタブへ移動し、開かれていない場合には、新しいタブとして開く。
+* `Open url in new tab` 新規タブとしてURLを開く。
+* `Open url in current tab` 現在のタブにURLを開く。
+* `Execute script` 現在のタブで指定したJavaScriptを実行する。
+
+`Script (optional)`を指定することによって、URLを開いた後に任意のJavaScriptを実行することができます。
