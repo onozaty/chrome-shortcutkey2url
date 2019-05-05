@@ -5,7 +5,8 @@ const HandleResult = {
 
 const MessageName = {
   STARTUP: 'startup',
-  KEY_EVENT: 'key_event'
+  KEY_EVENT: 'key_event',
+  CLICK_EVENT: 'click_event'
 }
 
 class Handler {
@@ -14,15 +15,21 @@ class Handler {
   }
 
   handle(message) {
-    if (message.name == MessageName.STARTUP) {
-      this._startup();
-      return {
-        result: HandleResult.CONTINUE,
-        shortcutKeys: this._settings.all(),
-        listColumnCount: this._settings.listColumnCount()
-      };
-    } else {
-      return this._receiveKey(message.value);
+    switch(message.name) {
+      case MessageName.STARTUP:
+        this._startup();
+        return {
+          result: HandleResult.CONTINUE,
+          shortcutKeys: this._settings.all(),
+          listColumnCount: this._settings.listColumnCount()
+        };
+  
+      case MessageName.KEY_EVENT:
+        return this._receiveKey(message.value);
+
+      case MessageName.CLICK_EVENT:
+        this._doAction(message.value);
+        return {result: HandleResult.FINISH};
     }
   }
 
