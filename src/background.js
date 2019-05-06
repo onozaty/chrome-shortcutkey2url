@@ -35,7 +35,7 @@ Settings.newAsync().then((settings) => {
   });
 
   const addCurrentPage = function() {
-    chrome.tabs.query({active: true}, function(tabs) {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       const tab = tabs[0];
       chrome.runtime.openOptionsPage(() => {
         // It takes time to open the option page
