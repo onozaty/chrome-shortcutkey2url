@@ -28,27 +28,40 @@ Settings.newAsync().then((settings) => {
         return true;
 
       case 'background-options':
-
-        chrome.tabs.query({active: true}, function(tabs) {
-          const tab = tabs[0];
-          chrome.runtime.openOptionsPage(() => {
-            // It takes time to open the option page
-            setTimeout(() => {
-              chrome.runtime.sendMessage(
-                {
-                  target: 'options',
-                  name: 'add',
-                  data: {
-                    title: tab.title,
-                    action: ActionId.JUMP_URL,
-                    url: tab.url
-                  }
-                });
-              },
-              500);
-          });
-        });
+        // Message name is 'add' only
+        addCurrentPage();
         return;
+    }
+  });
+
+  const addCurrentPage = function() {
+    chrome.tabs.query({active: true}, function(tabs) {
+      const tab = tabs[0];
+      chrome.runtime.openOptionsPage(() => {
+        // It takes time to open the option page
+        setTimeout(() => {
+          chrome.runtime.sendMessage(
+            {
+              target: 'options',
+              name: 'add',
+              data: {
+                title: tab.title,
+                action: ActionId.JUMP_URL,
+                url: tab.url
+              }
+            });
+          },
+          500);
+      });
+    });
+  }
+
+  chrome.contextMenus.create({
+    title: 'Add to ShortcutKey2URL',
+    contexts: ['all'],
+    type: 'normal',
+    onclick: () => {
+      addCurrentPage();
     }
   });
 });
