@@ -31,7 +31,13 @@ Settings.newAsync().then((settings) => {
         // Message name is 'add' only
         addCurrentPage();
         return;
-    }
+
+      case 'background-shortcuts':
+        // Message name is 'open' only
+        chrome.tabs.create({url: 'chrome://extensions/shortcuts'});
+        return;
+
+      }
   });
 
   const addCurrentPage = function() {
