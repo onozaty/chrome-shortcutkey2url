@@ -34,6 +34,10 @@ function createShortcutKeyElement(shortcutKey, keyMaxLength) {
   shortcutKeyElement.className = 'item';
   shortcutKeyElement.appendChild(keyElement);
   shortcutKeyElement.appendChild(titleElement);
+  shortcutKeyElement.addEventListener('click', () => {
+    chrome.runtime.sendMessage({target: 'background-handler', name: MessageName.CLICK_EVENT, value: shortcutKey});
+    window.close();
+  })
 
   return shortcutKeyElement;
 }

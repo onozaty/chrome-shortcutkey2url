@@ -337,6 +337,11 @@ function startup(settings) {
     }
   });
 
+  $('#shortcutsButton').on('click', () => {
+    chrome.runtime.sendMessage({target: 'background-shortcuts', name: 'open'});
+    return false;
+  });
+
   $("#errorMessage, #successMessage").find('.close')
     .on('click', (event) => {
       $(event.target).parent().hide();

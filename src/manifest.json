@@ -11,7 +11,7 @@
     "scripts": ["actions.js", "settings.js", "handler.js", "background.js"]
   },
   "permissions": [
-    "tabs", "activeTab", "storage", "<all_urls>"
+    "tabs", "activeTab", "storage", "<all_urls>", "contextMenus"
   ],
   "browser_action": {
     "default_icon": {

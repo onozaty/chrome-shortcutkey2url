@@ -48,6 +48,10 @@ Click to `Add current page`, you can easily set the current page as a shortcut k
 
 ![Screenshot of add current page](screenshots/add_current_page.png)
 
+It is also possible to add from the context menu.
+
+![Screenshot of context menu](screenshots/context_menu.png)
+
 ![Screenshot of add current page setting](screenshots/add_current_page_setting.png)
 
 The items that can be selected as `Action` are as follows.
