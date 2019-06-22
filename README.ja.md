@@ -48,6 +48,10 @@ ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを
 
 ![Screenshot of add current page](screenshots/add_current_page.png)
 
+コンテキストメニューからも追加可能です。
+
+![Screenshot of context menu](screenshots/context_menu.png)
+
 ![Screenshot of add current page setting](screenshots/add_current_page_setting.png)
 
 `Action`として指定できるものは、下記の通りです。
