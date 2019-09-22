@@ -108,6 +108,17 @@ class Handler {
 
   _executeScript(script) {
     if (script && script.trim() != '') {
+
+      if (script.startsWith('javascript:')) {
+        const scriptRemovedScheme = script.substring('javascript:'.length);
+        try {
+          script = decodeURIComponent(scriptRemovedScheme);
+        } catch (e) {
+          console.log(e);
+          script = scriptRemovedScheme;
+        }
+      }
+
       chrome.tabs.executeScript(null, {code: script});
     }
   }
