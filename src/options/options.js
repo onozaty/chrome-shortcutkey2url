@@ -316,6 +316,45 @@ function startup(settings) {
     shortcutKeys.append(null, true);
   });
 
+  $('#importButton').on('click', () => {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.setAttribute('hidden', true);
+  
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+    
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const fileContents = e.target.result;
+
+        try {
+          const importShortcutKeys = JSON.parse(fileContents);
+          importShortcutKeys.forEach((shortcutKey) => shortcutKeys.append(shortcutKey));
+        } catch (error) {
+          console.log(error);
+          alert('Could not import due to invalid format.');
+        }
+      }
+      reader.readAsText(file);
+    }, false);
+    
+    document.body.appendChild(fileInput);
+    fileInput.click();
+    fileInput.remove();
+  });
+
+  $('#exportButton').on('click', () => {
+    const downloadLink = document.createElement('a');
+    downloadLink.download = 'shortcutkeys.json';
+    downloadLink.href = URL.createObjectURL(new Blob([JSON.stringify(shortcutKeys.data(), null, 2)], { 'type' : 'text/plain' }));
+    downloadLink.setAttribute('hidden', true);
+  
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    downloadLink.remove();
+  });
+
   $('#saveButton').on('click', () => {
     $("#successMessage").hide();
     $("#errorMessage").hide();

@@ -1,3 +1,7 @@
+.container {
+  padding-bottom: 15px;
+}
+
 h1 {
   border-bottom: 1px solid #eee;
   margin-bottom: 10px;
