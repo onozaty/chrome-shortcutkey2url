@@ -126,13 +126,13 @@ class ShortcutKey {
     this.$target.remove();
   }
 
-  _validateEmpty($input) {
+  _validateNotEmpty($input) {
     if ($input.val() == '') {
       $input.parents('.form-group').addClass('has-error');
-      return true;
+      return false;
     }
 
-    return false;
+    return true;
   }
 
   validate(others) {
@@ -141,7 +141,7 @@ class ShortcutKey {
     this.$duplicateMessage.hide().empty();
 
     var hasError = false;
-    if (this._validateEmpty(this.$inputKey)) {
+    if (!this._validateNotEmpty(this.$inputKey)) {
       hasError = true;
     } else {
       // Duplicate
@@ -164,10 +164,10 @@ class ShortcutKey {
       }
     }
 
-    if (this._validateEmpty(this.$inputAction)) {
+    if (!this._validateNotEmpty(this.$inputAction)) {
       hasError = true;
     }
-    if (this._validateEmpty(this.$inputTitle)) {
+    if (!this._validateNotEmpty(this.$inputTitle)) {
       hasError = true;
     }
 
@@ -177,14 +177,14 @@ class ShortcutKey {
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
 
-        if (this._validateEmpty(this.$inputUrl)) {
+        if (!this._validateNotEmpty(this.$inputUrl)) {
           hasError = true;
         }
         break;
   
       case ActionId.EXECUTE_SCRIPT:
 
-        if (this._validateEmpty(this.$inputScript)) {
+        if (!this._validateNotEmpty(this.$inputScript)) {
           hasError = true;
         }
         break;
@@ -196,7 +196,7 @@ class ShortcutKey {
     if (hasError) {
       this.$alertIcon.show();
     }
-    return hasError;
+    return !hasError;
   }
 
   openDetail() {
@@ -281,9 +281,9 @@ class ShortcutKeys {
         const others = shortcutKeyAndData
           .filter((x) => x.shortcutKey != shortcutKey)
           .map((x) => x.data);
-        return shortcutKey.validate(others);
+        return !shortcutKey.validate(others);
       })
-      .length > 0;
+      .length == 0;
   }
 
   data() {
@@ -359,7 +359,7 @@ function startup(settings) {
     $("#successMessage").hide();
     $("#errorMessage").hide();
 
-    if (!shortcutKeys.validate()) {
+    if (shortcutKeys.validate()) {
       const request = {
         target: 'background-settings',
         name: 'save',
