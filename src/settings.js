@@ -21,21 +21,15 @@ class Settings {
     return {
       shortcutKeys: this._shortcutKeys,
       listColumnCount: this._listColumnCount,
+      filterOnPopup: this._filterOnPopup,
       startupCommand: this._startupCommand
     };
-  }
-
-  all() {
-    return this._shortcutKeys;
-  }
-
-  listColumnCount() {
-    return this._listColumnCount;
   }
 
   async update(settings) {
     this._shortcutKeys = settings.shortcutKeys.sort(Settings.shortcutKeyCompare);
     this._listColumnCount = settings.listColumnCount;
+    this._filterOnPopup = settings.filterOnPopup;
     await this._save();
   }
 
@@ -54,6 +48,7 @@ class Settings {
     loaded = loaded || {};
     this._shortcutKeys = (loaded.shortcutKeys || DEFAULT_SHORTCUTKEYS).sort(Settings.shortcutKeyCompare);
     this._listColumnCount = loaded.listColumnCount || DEFAULT_LIST_COLUMN_COUNT;
+    this._filterOnPopup = loaded.filterOnPopup || false;
     this._startupCommand = (await getAllCommands())[0];
   }
 
@@ -61,7 +56,8 @@ class Settings {
     await setLocalStorage({
       settings: {
         shortcutKeys: this._shortcutKeys,
-        listColumnCount: this._listColumnCount
+        listColumnCount: this._listColumnCount,
+        filterOnPopup: this._filterOnPopup
       }
     });
   }

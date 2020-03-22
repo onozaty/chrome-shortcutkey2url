@@ -1,4 +1,9 @@
-function render(shortcutKeys, listColumnCount) {
+let settings;
+
+function render(shortcutKeys) {
+
+  shortcutKeys = shortcutKeys || settings.shortcutKeys;
+  const listColumnCount = settings.listColumnCount;
 
   const keyMaxLength = Math.max.apply(null, shortcutKeys.map((shortcutKey) => {
     return shortcutKey.key.length;
@@ -75,12 +80,15 @@ document.addEventListener('keypress', (e) => {
     if (response.result == HandleResult.FINISH) {
       window.close();
     } else {
-      //render(response.shortcutKeys);
+      if (settings.filterOnPopup) {
+        render(response.shortcutKeys);
+      }
     }
   });
 });
 
 // startup message
 chrome.runtime.sendMessage({target: 'background-handler', name: MessageName.STARTUP}, (response) => {
-  render(response.shortcutKeys, response.listColumnCount);
+  settings = response.settings;
+  render();
 });
