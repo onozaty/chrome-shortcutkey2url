@@ -20,8 +20,7 @@ class Handler {
         this._startup();
         return {
           result: HandleResult.CONTINUE,
-          shortcutKeys: this._settings.all(),
-          listColumnCount: this._settings.listColumnCount()
+          settings: this._settings.data()
         };
   
       case MessageName.KEY_EVENT:

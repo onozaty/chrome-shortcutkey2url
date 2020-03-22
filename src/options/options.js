@@ -297,6 +297,9 @@ function startup(settings) {
   const $inputColumnCount = $('#inputColumnCount');
   $inputColumnCount.val(settings.listColumnCount);
 
+  const $inputFilterOnPopup = $('#inputFilterOnPopup');
+  $inputFilterOnPopup.prop('checked', settings.filterOnPopup || false);
+
   const $formTemplate = $('#template');
 
   const $actionTemplate = $formTemplate.find('select[name="action"]');
@@ -365,7 +368,8 @@ function startup(settings) {
         name: 'save',
         settings: {
           shortcutKeys: shortcutKeys.data(),
-          listColumnCount: parseInt($inputColumnCount.val(), 10)
+          listColumnCount: parseInt($inputColumnCount.val(), 10),
+          filterOnPopup: $inputFilterOnPopup.prop('checked') || false
         }
       };
       chrome.runtime.sendMessage(request, () => {
