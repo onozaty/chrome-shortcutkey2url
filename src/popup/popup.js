@@ -20,10 +20,12 @@ function render(shortcutKeys) {
     columns.push(column);
   }
 
-  for (var i = 0; i < shortcutKeys.length; i++) {
+  const visibleShortcutKeys = shortcutKeys.filter(x => !x.hideOnPopup);
 
-    if (!shortcutKeys[i].hideOnPopup) {
-      columns[i % listColumnCount].appendChild(createShortcutKeyElement(shortcutKeys[i], keyMaxLength));
+  for (var i = 0; i < visibleShortcutKeys.length; i++) {
+
+    if (!visibleShortcutKeys[i].hideOnPopup) {
+      columns[i % listColumnCount].appendChild(createShortcutKeyElement(visibleShortcutKeys[i], keyMaxLength));
     }
   }
 }
