@@ -16,7 +16,10 @@ function render(shortcutKeys, listColumnCount) {
   }
 
   for (var i = 0; i < shortcutKeys.length; i++) {
-    columns[i % listColumnCount].appendChild(createShortcutKeyElement(shortcutKeys[i], keyMaxLength));
+
+    if (!shortcutKeys[i].hideOnPopup) {
+      columns[i % listColumnCount].appendChild(createShortcutKeyElement(shortcutKeys[i], keyMaxLength));
+    }
   }
 }
 

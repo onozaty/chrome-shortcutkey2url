@@ -85,3 +85,11 @@ h1 {
 #shortcutKeys .panel-body .optional {
   margin-left: 5px;
 }
+
+#shortcutKeys .ignore-has-error {
+  color: #333;
+}
+
+#shortcutKeys .duplicate-message {
+  white-space: nowrap;
+}
