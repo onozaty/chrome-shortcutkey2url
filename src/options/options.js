@@ -12,6 +12,7 @@ class ShortcutKey {
     this.$removeButton = $target.find('button.remove');
 
     this.$inputKey = $target.find('input[name="key"]');
+    this.$inputHideOnPopup = $target.find('input[name="hideOnPopup"]');
     this.$inputAction = $target.find('select[name="action"]');
     this.$inputTitle = $target.find('input[name="title"]');
     this.$inputUrl = $target.find('input[name="url"]');
@@ -47,6 +48,7 @@ class ShortcutKey {
   _apply(data) {
 
     this.$inputKey.val(data.key);
+    this.$inputHideOnPopup.prop('checked', data.hideOnPopup || false);
     this.$inputAction.val(data.action);
     this.$inputTitle.val(data.title);
 
@@ -214,6 +216,7 @@ class ShortcutKey {
   data() {
     const data = {
       key: this.$inputKey.val(),
+      hideOnPopup: this.$inputHideOnPopup.prop('checked') || false,
       action: parseInt(this.$inputAction.val(), 10),
       title: this.$inputTitle.val(),
     };
