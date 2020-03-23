@@ -2,8 +2,7 @@
 
 ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを開いたり、移動したり、JavaScriptを実行できるGoogle Chrome向け拡張機能です。
 
-スタートアップキーであらかじめ設定しておいた動作の一覧を表示し、次のキーでその動作を実行します。
-
+スタートアップキーであらかじめ設定しておいた動作の一覧を表示し、次のキーでその動作を実行します。  
 スタートアップキーは、デフォルトの状態ではCtrl+.(ピリオド)です。このキーは後から変更できます。(Macでは、Command+,(カンマ))
 
 キーとして使用できる文字は1文字に限定されません。複数文字として設定しておくことが可能です。ShrotcutKey2URLは、キーとして連続して入力された文字から、対象が1つに絞り込まれた時点でその動作を実行します。
@@ -44,6 +43,19 @@ ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを
 
 ![Screenshot of option](screenshots/option.png)
 
+### Settings
+
+`Column count` は、ポップアップで表示するショートカットの列数を指定します。  
+左が`2`を指定した場合、右が`3`を指定した場合です。
+
+![Screenshot of column 2](screenshots/column2.png) ![Screenshot of column 3](screenshots/column3.png)
+
+`Option`の`Interactive filter of shortcut keys on the popup`をチェックすると、ポップアップで表示するショートカットをインタラクティブに絞り込むことができます。
+
+![Screenshot of interactive filter](screenshots/interactive.gif)
+
+### Shortcut Keys
+
 `Add current page`をクリックすると、現在のページをショートカットキーとして簡単に設定できます。
 
 ![Screenshot of add current page](screenshots/add_current_page.png)
@@ -54,7 +66,14 @@ ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを
 
 ![Screenshot of add current page setting](screenshots/add_current_page_setting.png)
 
-`Action`として指定できるものは、下記の通りです。
+`Key`にはショートカットキーとして割り当てるキーを設定します。複数文字とすることも可能です。
+スタートアップキーを押下後、ここで設定したキーを押下することによって、ショートカットが実行されます。
+
+`Hide in shortcut key list displayed in popup`にチェックを付けると、ポップアップで表示されるショートカットの一覧にて非表示とすることができます。  
+非表示となるだけで、ショートカットキーとしては有効です。
+
+`Action`でショートカットキーとしての動作を指定します。  
+指定できるものは、下記の通りです。
 
 * `Jump to url` URLへの移動。既に開いているURLの場合は、そのタブへ移動し、開かれていない場合には、新しいタブとして開く。
 * `Open url in new tab` 新規タブとしてURLを開く。
@@ -62,3 +81,8 @@ ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを
 * `Execute script` 現在のタブで指定したJavaScriptを実行する。
 
 `Script (optional)`を指定することによって、URLを開いた後に任意のJavaScriptを実行することができます。
+
+### Import / Export
+
+ショートカットキーの一覧は、エクスポート / インポートが可能です。  
+これによりバックアップを取ったり、移行を行うことができます。(FirefoxとChrome間での移行など)
