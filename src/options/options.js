@@ -69,6 +69,9 @@ class ShortcutKey {
         this.$inputUrl.val(data.url);
         break;
 
+      case ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE:
+        break;
+
       default:
         throw new RangeError('actionId is ' + data.action);
     }
@@ -119,6 +122,11 @@ class ShortcutKey {
 
       case ActionId.OPEN_URL_PRIVATE_MODE:
         this.$inputUrlGroup.show();
+        this.$inputScriptGroup.hide();
+        break;
+
+      case ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE:
+        this.$inputUrlGroup.hide();
         this.$inputScriptGroup.hide();
         break;
 
@@ -208,6 +216,9 @@ class ShortcutKey {
         }
         break;
 
+      case ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE:
+        break;
+
       default:
         throw new RangeError('actionId is ' + action);
     }
@@ -252,6 +263,9 @@ class ShortcutKey {
 
       case ActionId.OPEN_URL_PRIVATE_MODE:
         data.url = this.$inputUrl.val();
+        break;
+
+      case ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE:
         break;
 
       default:

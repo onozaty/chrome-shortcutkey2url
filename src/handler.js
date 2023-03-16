@@ -104,6 +104,13 @@ class Handler {
         chrome.windows.create({ url: shortcutKey.url, incognito: true });
         break;
 
+      case ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE:
+        chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+          const tab = tabs[0];
+          chrome.windows.create({ url: tab.url, incognito: true });
+        });
+        break;
+
       default:
         throw new RangeError('actionId is ' + shortcutKey.action);
     }

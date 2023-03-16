@@ -3,7 +3,8 @@ const ActionId = {
   OPEN_URL_CURRENT_TAB: 2,
   JUMP_URL: 3,
   EXECUTE_SCRIPT: 4,
-  OPEN_URL_PRIVATE_MODE: 5
+  OPEN_URL_PRIVATE_MODE: 5,
+  OPEN_CURRENT_TAB_PRIVATE_MODE: 6
 };
 
 const Actions = [
@@ -11,7 +12,8 @@ const Actions = [
   { id: ActionId.OEPN_URL_NEW_TAB, name: 'Open url in new tab' },
   { id: ActionId.OPEN_URL_CURRENT_TAB, name: 'Open url in current tab' },
   { id: ActionId.EXECUTE_SCRIPT, name: 'Execute script' },
-  { id: ActionId.OPEN_URL_PRIVATE_MODE, name: 'Open url in incognito window' }
+  { id: ActionId.OPEN_URL_PRIVATE_MODE, name: 'Open url in incognito window' },
+  { id: ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE, name: 'Open current tab in incognito window' }
 ];
 
 class Action {
