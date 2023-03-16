@@ -15,20 +15,20 @@ class Handler {
   }
 
   handle(message) {
-    switch(message.name) {
+    switch (message.name) {
       case MessageName.STARTUP:
         this._startup();
         return {
           result: HandleResult.CONTINUE,
           settings: this._settings.data()
         };
-  
+
       case MessageName.KEY_EVENT:
         return this._receiveKey(message.value);
 
       case MessageName.CLICK_EVENT:
         this._doAction(message.value);
-        return {result: HandleResult.FINISH};
+        return { result: HandleResult.FINISH };
     }
   }
 
@@ -39,7 +39,7 @@ class Handler {
   _receiveKey(keyEvent) {
 
     if (!keyEvent.charCode) {
-      return {result: HandleResult.FINISH};
+      return { result: HandleResult.FINISH };
     }
 
     const key = String.fromCharCode(keyEvent.charCode).toUpperCase();
@@ -58,19 +58,19 @@ class Handler {
       this._doAction(matchShortcutKeys[0]);
     }
 
-    return {result: HandleResult.FINISH};
+    return { result: HandleResult.FINISH };
   }
 
   _doAction(shortcutKey) {
     switch (shortcutKey.action) {
       case ActionId.OEPN_URL_NEW_TAB:
-        chrome.tabs.create({url: shortcutKey.url}, () => {
+        chrome.tabs.create({ url: shortcutKey.url }, () => {
           this._executeScript(shortcutKey.script);
         });
         break;
 
       case ActionId.OPEN_URL_CURRENT_TAB:
-        chrome.tabs.update({url: shortcutKey.url}, () => {
+        chrome.tabs.update({ url: shortcutKey.url }, () => {
           setTimeout(() => {
             this._executeScript(shortcutKey.script);
           }, 1000);
@@ -78,18 +78,18 @@ class Handler {
         break;
 
       case ActionId.JUMP_URL:
-        chrome.tabs.query({lastFocusedWindow: true}, (tabs) => {
+        chrome.tabs.query({ lastFocusedWindow: true }, (tabs) => {
           var matchTab = tabs.filter((tab) => {
             return tab.url.indexOf(shortcutKey.url) == 0;
           })[0];
 
           if (matchTab) {
-            chrome.tabs.update(matchTab.id, {active: true}, () => {
+            chrome.tabs.update(matchTab.id, { active: true }, () => {
               this._executeScript(shortcutKey.script);
             });
 
           } else {
-            chrome.tabs.create({url: shortcutKey.url}, () => {
+            chrome.tabs.create({ url: shortcutKey.url }, () => {
               this._executeScript(shortcutKey.script);
             });
           }
@@ -99,7 +99,11 @@ class Handler {
       case ActionId.EXECUTE_SCRIPT:
         this._executeScript(shortcutKey.script);
         break;
-        
+
+      case ActionId.OPEN_URL_PRIVATE_MODE:
+        chrome.windows.create({ url: shortcutKey.url, incognito: true });
+        break;
+
       default:
         throw new RangeError('actionId is ' + shortcutKey.action);
     }
@@ -118,7 +122,7 @@ class Handler {
         }
       }
 
-      chrome.tabs.executeScript(null, {code: script});
+      chrome.tabs.executeScript(null, { code: script });
     }
   }
 }
