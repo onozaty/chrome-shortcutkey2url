@@ -5,7 +5,7 @@ Settings.newAsync().then((settings) => {
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message);
 
-    switch(message.target) {
+    switch (message.target) {
       case 'background-handler':
         const result = handler.handle(message);
 
@@ -34,14 +34,14 @@ Settings.newAsync().then((settings) => {
 
       case 'background-shortcuts':
         // Message name is 'open' only
-        chrome.tabs.create({url: 'chrome://extensions/shortcuts'});
+        chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
         return;
 
-      }
+    }
   });
 
-  const addCurrentPage = function() {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  const addCurrentPage = function () {
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       const tab = tabs[0];
       chrome.runtime.openOptionsPage(() => {
         // It takes time to open the option page
@@ -56,17 +56,21 @@ Settings.newAsync().then((settings) => {
                 url: tab.url
               }
             });
-          },
+        },
           500);
       });
     });
   }
 
   chrome.contextMenus.create({
+    id: 'add-shortcut',
     title: 'Add to ShortcutKey2URL',
     contexts: ['all'],
     type: 'normal',
-    onclick: () => {
+  });
+
+  chrome.contextMenus.onClicked.addListener(function (info, tab) {
+    if (info.menuItemId == 'add-shortcut') {
       addCurrentPage();
     }
   });

@@ -1,5 +1,5 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "__MSG_extensionName__",
   "version": "1.4.0",
   "description": "__MSG_extensionDescription__",
@@ -8,12 +8,13 @@
     "128": "icons/icon128.png"
   },
   "background": {
-    "scripts": ["actions.js", "settings.js", "handler.js", "background.js"]
+    "service_worker": "background-wrapper.js"
   },
   "permissions": [
-    "tabs", "storage", "<all_urls>", "contextMenus"
+    "tabs", "storage", "contextMenus"
   ],
-  "browser_action": {
+  "host_permissions": ["<all_urls>"],
+  "action": {
     "default_icon": {
       "128": "icons/icon128.png"
     },
@@ -22,11 +23,10 @@
   },
   "options_ui": {
     "page": "options/options.html",
-    "chrome_style": false,
     "open_in_tab": true
   },
   "commands": {
-    "_execute_browser_action": {
+    "_execute_action": {
       "suggested_key": {
         "default": "Ctrl+Period",
         "mac": "Command+Comma"
