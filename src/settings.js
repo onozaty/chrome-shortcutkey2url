@@ -3,7 +3,8 @@ const DEFAULT_SHORTCUTKEYS = [
   {key: 'GM', title: 'Gmail', action: ActionId.JUMP_URL, url: 'https://mail.google.com/'},
   {key: 'T', title: 'Twitter', action: ActionId.JUMP_URL, url: 'https://twitter.com/'},
   {key: 'F', title: 'Facebook', action: ActionId.JUMP_URL, url: 'https://www.facebook.com/'},
-  {key: 'Y', title: 'YouTube', action: ActionId.JUMP_URL, url: 'https://www.youtube.com/'}
+  {key: 'Y', title: 'YouTube', action: ActionId.JUMP_URL, url: 'https://www.youtube.com/'},
+  {key: 'P', title: 'Incognito', action: ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE},
 ];
 
 const DEFAULT_LIST_COLUMN_COUNT = 3;

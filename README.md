@@ -14,6 +14,8 @@ The items that can be set as actions are as follows.
 * Open URL in current tab.
 * Execute the JavaScript on the current tab.
 * Open URL as a new tab and then execute the JavaScript.
+* Open specified URL in incognito window.
+* Open same URL as the current tab in incognito window.
 
 ## Installation
 
@@ -78,7 +80,9 @@ The following can be specified.
 * `Jump to url` Jump to URL. For already opened URL, go to that tab. Open it as a new tab if it is not already open.
 * `Open url in new tab` Open URL in new tab.
 * `Open url in current tab` Open URL in current tab.
-* `Execute script` Execute the JavaScript on the current tab.
+* `Execute script` Execute JavaScript on current tab.
+* `Open url in incognito window` Open URL in incognito window.
+* `Open current tab in incognito window` Open current tab in incognito window.
 
 By entering `Script (optional)` you can execute arbitrary JavaScript after opening the URL.
 

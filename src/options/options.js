@@ -19,6 +19,7 @@ class ShortcutKey {
     this.$inputScript = $target.find('textarea[name="script"]');
 
     this.$inputUrlGroup = this.$inputUrl.parents('div.form-group');
+    this.$inputScriptGroup = this.$inputScript.parents('div.form-group');
     this.$labelScriptOptional = this.$inputScript.parents('div.form-group').find('label span.optional');
 
     this._registerEvents();
@@ -52,7 +53,7 @@ class ShortcutKey {
     this.$inputAction.val(data.action);
     this.$inputTitle.val(data.title);
 
-    switch(data.action) {
+    switch (data.action) {
       case ActionId.JUMP_URL:
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
@@ -62,6 +63,13 @@ class ShortcutKey {
 
       case ActionId.EXECUTE_SCRIPT:
         this.$inputScript.val(data.script);
+        break;
+
+      case ActionId.OPEN_URL_PRIVATE_MODE:
+        this.$inputUrl.val(data.url);
+        break;
+
+      case ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE:
         break;
 
       default:
@@ -98,8 +106,8 @@ class ShortcutKey {
 
   _switchInputContent() {
     const action = parseInt(this.$inputAction.val(), 10);
-  
-    switch(action) {
+
+    switch (action) {
       case ActionId.JUMP_URL:
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
@@ -110,6 +118,16 @@ class ShortcutKey {
       case ActionId.EXECUTE_SCRIPT:
         this.$inputUrlGroup.hide();
         this.$labelScriptOptional.hide();
+        break;
+
+      case ActionId.OPEN_URL_PRIVATE_MODE:
+        this.$inputUrlGroup.show();
+        this.$inputScriptGroup.hide();
+        break;
+
+      case ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE:
+        this.$inputUrlGroup.hide();
+        this.$inputScriptGroup.hide();
         break;
 
       default:
@@ -151,7 +169,7 @@ class ShortcutKey {
       const duplicateKeys = others
         .filter((other) => {
           return (other.key != '')
-                  && (key.indexOf(other.key) == 0 || other.key.indexOf(key) == 0);
+            && (key.indexOf(other.key) == 0 || other.key.indexOf(key) == 0);
         })
         .map((other) => other.key)
         .join(', ');
@@ -174,7 +192,7 @@ class ShortcutKey {
     }
 
     const action = parseInt(this.$inputAction.val(), 10);
-    switch(action) {
+    switch (action) {
       case ActionId.JUMP_URL:
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
@@ -183,14 +201,24 @@ class ShortcutKey {
           hasError = true;
         }
         break;
-  
+
       case ActionId.EXECUTE_SCRIPT:
 
         if (!this._validateNotEmpty(this.$inputScript)) {
           hasError = true;
         }
         break;
-  
+
+      case ActionId.OPEN_URL_PRIVATE_MODE:
+
+        if (!this._validateNotEmpty(this.$inputUrl)) {
+          hasError = true;
+        }
+        break;
+
+      case ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE:
+        break;
+
       default:
         throw new RangeError('actionId is ' + action);
     }
@@ -221,7 +249,7 @@ class ShortcutKey {
       title: this.$inputTitle.val(),
     };
 
-    switch(data.action) {
+    switch (data.action) {
       case ActionId.JUMP_URL:
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
@@ -231,6 +259,13 @@ class ShortcutKey {
 
       case ActionId.EXECUTE_SCRIPT:
         data.script = this.$inputScript.val();
+        break;
+
+      case ActionId.OPEN_URL_PRIVATE_MODE:
+        data.url = this.$inputUrl.val();
+        break;
+
+      case ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE:
         break;
 
       default:
@@ -317,7 +352,7 @@ function startup(settings) {
     .forEach((shortcutKey) => {
       shortcutKeys.append(shortcutKey);
     });
-  
+
   $('#addButton').on('click', () => {
     shortcutKeys.append(null, true);
   });
@@ -326,10 +361,10 @@ function startup(settings) {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
     fileInput.setAttribute('hidden', true);
-  
+
     fileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
-    
+
       const reader = new FileReader();
       reader.onload = (e) => {
         const fileContents = e.target.result;
@@ -344,7 +379,7 @@ function startup(settings) {
       }
       reader.readAsText(file);
     }, false);
-    
+
     document.body.appendChild(fileInput);
     fileInput.click();
     fileInput.remove();
@@ -353,9 +388,9 @@ function startup(settings) {
   $('#exportButton').on('click', () => {
     const downloadLink = document.createElement('a');
     downloadLink.download = 'shortcutkeys.json';
-    downloadLink.href = URL.createObjectURL(new Blob([JSON.stringify(shortcutKeys.data(), null, 2)], { 'type' : 'text/plain' }));
+    downloadLink.href = URL.createObjectURL(new Blob([JSON.stringify(shortcutKeys.data(), null, 2)], { 'type': 'text/plain' }));
     downloadLink.setAttribute('hidden', true);
-  
+
     document.body.appendChild(downloadLink);
     downloadLink.click();
     downloadLink.remove();
@@ -384,14 +419,14 @@ function startup(settings) {
   });
 
   $('#shortcutsButton').on('click', () => {
-    chrome.runtime.sendMessage({target: 'background-shortcuts', name: 'open'});
+    chrome.runtime.sendMessage({ target: 'background-shortcuts', name: 'open' });
     return false;
   });
 
   $("#errorMessage, #successMessage").find('.close')
     .on('click', (event) => {
       $(event.target).parent().hide();
-  });
+    });
 
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message);
@@ -402,5 +437,5 @@ function startup(settings) {
 }
 
 $(() => {
-  chrome.runtime.sendMessage({target: 'background-settings', name: 'load'}, startup);
+  chrome.runtime.sendMessage({ target: 'background-settings', name: 'load' }, startup);
 });

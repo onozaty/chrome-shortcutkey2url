@@ -14,6 +14,8 @@ ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを
 * 現在のタブにURLを開く。
 * 現在のタブで指定したJavaScriptを実行する。
 * 新規タブとしてURLを開いて、その後に指定したJavaScriptを実行する。
+* シークレットウインドウに指定のURLを開く。
+* シークレットウインドウに現在のタブと同じURLを開く。
 
 ## インストール
 
@@ -79,6 +81,8 @@ ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを
 * `Open url in new tab` 新規タブとしてURLを開く。
 * `Open url in current tab` 現在のタブにURLを開く。
 * `Execute script` 現在のタブで指定したJavaScriptを実行する。
+* `Open url in incognito window` シークレットウインドウでURLを開く。
+* `Open current tab in incognito window` シークレットウインドウで現在のタブを開く。
 
 `Script (optional)`を指定することによって、URLを開いた後に任意のJavaScriptを実行することができます。
 
