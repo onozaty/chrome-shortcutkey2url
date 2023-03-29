@@ -112,22 +112,26 @@ class ShortcutKey {
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
         this.$inputUrlGroup.show();
+        this.$inputScriptGroup.show();
         this.$labelScriptOptional.show();
         break;
 
       case ActionId.EXECUTE_SCRIPT:
         this.$inputUrlGroup.hide();
+        this.$inputScriptGroup.show();
         this.$labelScriptOptional.hide();
         break;
 
       case ActionId.OPEN_URL_PRIVATE_MODE:
         this.$inputUrlGroup.show();
         this.$inputScriptGroup.hide();
+        this.$labelScriptOptional.hide();
         break;
 
       case ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE:
         this.$inputUrlGroup.hide();
         this.$inputScriptGroup.hide();
+        this.$labelScriptOptional.hide();
         break;
 
       default:
