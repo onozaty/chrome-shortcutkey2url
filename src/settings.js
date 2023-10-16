@@ -45,7 +45,7 @@ class Settings {
   }
 
   async _load() {
-    var loaded =  await getLocalStorage('settings');
+    var loaded =  await getStorage('settings');
     loaded = loaded || {};
     this._shortcutKeys = (loaded.shortcutKeys || DEFAULT_SHORTCUTKEYS).sort(Settings.shortcutKeyCompare);
     this._listColumnCount = loaded.listColumnCount || DEFAULT_LIST_COLUMN_COUNT;
@@ -54,7 +54,7 @@ class Settings {
   }
 
   async _save() {
-    await setLocalStorage({
+    await setStorage({
       settings: {
         shortcutKeys: this._shortcutKeys,
         listColumnCount: this._listColumnCount,
@@ -70,15 +70,15 @@ class Settings {
   }
 }
 
-function setLocalStorage(obj) {
+function setStorage(obj) {
   return new Promise((resolve) => {
-    chrome.storage.local.set(obj, () => resolve() );
+    chrome.storage.sync.set(obj, () => resolve() );
   });
 }
 
-function getLocalStorage(key) {
+function getStorage(key) {
   return new Promise((resolve) => {
-    chrome.storage.local.get(key, (item) => {
+    chrome.storage.sync.get(key, (item) => {
       key ? resolve(item[key]) : resolve(item);
     });
   });
