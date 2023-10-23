@@ -45,8 +45,19 @@ class Settings {
   }
 
   async _load() {
-    var loaded =  await getLocalStorage('settings');
+    var loaded =  await getStorage('settings');
     loaded = loaded || {};
+    // If loaded is empty, check local storage
+    if (loaded == {}) {
+      var localLoaded = await getLocalStorage('settings');
+      if (localLoaded) {
+        loaded = localLoaded;
+      }
+      // Save to sync storage
+      await setStorage({settings: loaded});
+    }
+    // Clear local storage
+    await setLocalStorage({settings: null});
     this._shortcutKeys = (loaded.shortcutKeys || DEFAULT_SHORTCUTKEYS).sort(Settings.shortcutKeyCompare);
     this._listColumnCount = loaded.listColumnCount || DEFAULT_LIST_COLUMN_COUNT;
     this._filterOnPopup = loaded.filterOnPopup || false;
@@ -54,7 +65,7 @@ class Settings {
   }
 
   async _save() {
-    await setLocalStorage({
+    await setStorage({
       settings: {
         shortcutKeys: this._shortcutKeys,
         listColumnCount: this._listColumnCount,
@@ -70,9 +81,23 @@ class Settings {
   }
 }
 
+function setStorage(obj) {
+  return new Promise((resolve) => {
+    chrome.storage.sync.set(obj, () => resolve() );
+  });
+}
+
 function setLocalStorage(obj) {
   return new Promise((resolve) => {
     chrome.storage.local.set(obj, () => resolve() );
+  });
+}
+
+function getStorage(key) {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(key, (item) => {
+      key ? resolve(item[key]) : resolve(item);
+    });
   });
 }
 
