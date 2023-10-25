@@ -111,6 +111,42 @@ class Handler {
         });
         break;
 
+      case ActionId.JUMP_URL_ALL_WINDOWS:
+
+        // First, search from the current window.
+        chrome.tabs.query({ lastFocusedWindow: true }, (tabs) => {
+          const matchTab = tabs.filter((tab) => {
+            return tab.url.indexOf(shortcutKey.url) == 0;
+          })[0];
+
+          if (matchTab) {
+            chrome.tabs.update(matchTab.id, { active: true }, () => {
+              this._executeScript(shortcutKey.script);
+            });
+
+          } else {
+            // Second, search from all windows.
+            chrome.tabs.query({}, (tabs) => {
+              const matchTab = tabs.filter((tab) => {
+                return tab.url.indexOf(shortcutKey.url) == 0;
+              })[0];
+
+              if (matchTab) {
+                chrome.windows.update(matchTab.windowId, { focused: true });
+                chrome.tabs.update(matchTab.id, { active: true }, () => {
+                  this._executeScript(shortcutKey.script);
+                });
+
+              } else {
+                chrome.tabs.create({ url: shortcutKey.url }, () => {
+                  this._executeScript(shortcutKey.script);
+                });
+              }
+            });
+          }
+        });
+        break;
+
       default:
         throw new RangeError('actionId is ' + shortcutKey.action);
     }
