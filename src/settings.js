@@ -45,19 +45,23 @@ class Settings {
   }
 
   async _load() {
-    var loaded =  await getStorage('settings');
-    loaded = loaded || {};
-    // If loaded is empty, check local storage
-    if (loaded == {}) {
-      var localLoaded = await getLocalStorage('settings');
+    let loaded =  await getStorage('settings');
+
+    if (!loaded) {
+      // If loaded is empty, check local storage
+      // This is a migration for data stored prior to v1.6.0.
+      const localLoaded = await getLocalStorage('settings');
       if (localLoaded) {
         loaded = localLoaded;
+
+        // Save to sync storage
+        await setStorage({settings: loaded});
+        // Clear local storage
+        await setLocalStorage({settings: null});
       }
-      // Save to sync storage
-      await setStorage({settings: loaded});
     }
-    // Clear local storage
-    await setLocalStorage({settings: null});
+
+    loaded = loaded || {};
     this._shortcutKeys = (loaded.shortcutKeys || DEFAULT_SHORTCUTKEYS).sort(Settings.shortcutKeyCompare);
     this._listColumnCount = loaded.listColumnCount || DEFAULT_LIST_COLUMN_COUNT;
     this._filterOnPopup = loaded.filterOnPopup || false;
