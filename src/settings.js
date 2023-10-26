@@ -49,7 +49,7 @@ class Settings {
 
     if (!loaded) {
       // If loaded is empty, check local storage
-      // This is a migration for data stored prior to v1.6.0.
+      // This is a migration of data from the version stored in local storage.
       const localLoaded = await getLocalStorage('settings');
       if (localLoaded) {
         loaded = localLoaded;
