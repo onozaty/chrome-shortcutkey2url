@@ -55,6 +55,7 @@ class ShortcutKey {
 
     switch (data.action) {
       case ActionId.JUMP_URL:
+      case ActionId.JUMP_URL_ALL_WINDOWS:
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
         this.$inputUrl.val(data.url);
@@ -109,6 +110,7 @@ class ShortcutKey {
 
     switch (action) {
       case ActionId.JUMP_URL:
+      case ActionId.JUMP_URL_ALL_WINDOWS:
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
         this.$inputUrlGroup.show();
@@ -198,6 +200,7 @@ class ShortcutKey {
     const action = parseInt(this.$inputAction.val(), 10);
     switch (action) {
       case ActionId.JUMP_URL:
+      case ActionId.JUMP_URL_ALL_WINDOWS:
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
 
@@ -255,6 +258,7 @@ class ShortcutKey {
 
     switch (data.action) {
       case ActionId.JUMP_URL:
+      case ActionId.JUMP_URL_ALL_WINDOWS:
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
         data.url = this.$inputUrl.val();

@@ -1,10 +1,10 @@
 const DEFAULT_SHORTCUTKEYS = [
-  {key: 'GS', title: 'Google', action: ActionId.OEPN_URL_NEW_TAB, url: 'https://www.google.com/'},
-  {key: 'GM', title: 'Gmail', action: ActionId.JUMP_URL, url: 'https://mail.google.com/'},
-  {key: 'T', title: 'Twitter', action: ActionId.JUMP_URL, url: 'https://twitter.com/'},
-  {key: 'F', title: 'Facebook', action: ActionId.JUMP_URL, url: 'https://www.facebook.com/'},
-  {key: 'Y', title: 'YouTube', action: ActionId.JUMP_URL, url: 'https://www.youtube.com/'},
-  {key: 'P', title: 'Incognito', action: ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE},
+  { key: 'GS', title: 'Google', action: ActionId.OEPN_URL_NEW_TAB, url: 'https://www.google.com/' },
+  { key: 'GM', title: 'Gmail', action: ActionId.JUMP_URL, url: 'https://mail.google.com/' },
+  { key: 'T', title: 'Twitter', action: ActionId.JUMP_URL, url: 'https://twitter.com/' },
+  { key: 'F', title: 'Facebook', action: ActionId.JUMP_URL, url: 'https://www.facebook.com/' },
+  { key: 'Y', title: 'YouTube', action: ActionId.JUMP_URL, url: 'https://www.youtube.com/' },
+  { key: 'P', title: 'Incognito', action: ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE },
 ];
 
 const DEFAULT_LIST_COLUMN_COUNT = 3;
@@ -45,7 +45,22 @@ class Settings {
   }
 
   async _load() {
-    var loaded =  await getLocalStorage('settings');
+    let loaded = await getStorage('settings');
+
+    if (!loaded) {
+      // If loaded is empty, check local storage
+      // This is a migration of data from the version stored in local storage.
+      const localLoaded = await getLocalStorage('settings');
+      if (localLoaded) {
+        loaded = localLoaded;
+
+        // Save to sync storage
+        await setStorage({ settings: loaded });
+        // Clear local storage
+        await setLocalStorage({ settings: null });
+      }
+    }
+
     loaded = loaded || {};
     this._shortcutKeys = (loaded.shortcutKeys || DEFAULT_SHORTCUTKEYS).sort(Settings.shortcutKeyCompare);
     this._listColumnCount = loaded.listColumnCount || DEFAULT_LIST_COLUMN_COUNT;
@@ -54,7 +69,7 @@ class Settings {
   }
 
   async _save() {
-    await setLocalStorage({
+    await setStorage({
       settings: {
         shortcutKeys: this._shortcutKeys,
         listColumnCount: this._listColumnCount,
@@ -70,9 +85,23 @@ class Settings {
   }
 }
 
+function setStorage(obj) {
+  return new Promise((resolve) => {
+    chrome.storage.sync.set(obj, () => resolve());
+  });
+}
+
 function setLocalStorage(obj) {
   return new Promise((resolve) => {
-    chrome.storage.local.set(obj, () => resolve() );
+    chrome.storage.local.set(obj, () => resolve());
+  });
+}
+
+function getStorage(key) {
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(key, (item) => {
+      key ? resolve(item[key]) : resolve(item);
+    });
   });
 }
 
