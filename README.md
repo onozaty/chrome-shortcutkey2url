@@ -78,6 +78,7 @@ Specify the action as a shortcut key with `Action`.
 The following can be specified.
 
 * `Jump to url` Jump to URL. For already opened URL, go to that tab. Open it as a new tab if it is not already open.
+* `Jump to url (Including other windows)` Jump to URL. The difference from `Jump to url` is that the target is all windows.
 * `Open url in new tab` Open URL in new tab.
 * `Open url in current tab` Open URL in current tab.
 * `Execute script` Execute JavaScript on current tab.
@@ -85,6 +86,10 @@ The following can be specified.
 * `Open current tab in incognito window` Open current tab in incognito window.
 
 By entering `Script (optional)` you can execute arbitrary JavaScript after opening the URL.
+
+### Sync
+
+Sync is supported, so shortcut keys and other settings are shared among PCs.
 
 ### Import / Export
 

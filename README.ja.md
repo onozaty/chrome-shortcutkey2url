@@ -78,6 +78,7 @@ ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを
 指定できるものは、下記の通りです。
 
 * `Jump to url` URLへの移動。既に開いているURLの場合は、そのタブへ移動し、開かれていない場合には、新しいタブとして開く。
+* `Jump to url (Including other windows)` URLへの移動。`Jump to url`との違いは、対象が全てのウインドウとなることです。
 * `Open url in new tab` 新規タブとしてURLを開く。
 * `Open url in current tab` 現在のタブにURLを開く。
 * `Execute script` 現在のタブで指定したJavaScriptを実行する。
@@ -85,6 +86,10 @@ ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを
 * `Open current tab in incognito window` シークレットウインドウで現在のタブを開く。
 
 `Script (optional)`を指定することによって、URLを開いた後に任意のJavaScriptを実行することができます。
+
+### 同期
+
+同期に対応しているので、ショートカットキーなどの設定がPC間で共有されます。
 
 ### Import / Export
 
