@@ -89,7 +89,8 @@ By entering `Script (optional)` you can execute arbitrary JavaScript after openi
 
 ### Sync
 
-Sync is supported, so shortcut keys and other settings are shared among PCs.
+Sync is supported, so shortcut keys and other settings are shared among PCs.  
+However, if the size of the settings is too large to be saved by synchronization, it will be saved without synchronization because there is a limit to the amount of space that can be saved by synchronization.
 
 ### Import / Export
 
