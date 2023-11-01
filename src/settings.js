@@ -15,6 +15,10 @@ class Settings {
 
     const settings = new Settings();
     await settings._load();
+
+    // Attempt one synchronous save to account for migration.
+    await settings._save();
+
     return settings;
   }
 
@@ -45,20 +49,19 @@ class Settings {
   }
 
   async _load() {
-    let loaded = await getStorage('settings');
+    const synced = await getLocalStorage('synced');
 
-    if (!loaded) {
-      // If loaded is empty, check local storage
-      // This is a migration of data from the version stored in local storage.
-      const localLoaded = await getLocalStorage('settings');
-      if (localLoaded) {
-        loaded = localLoaded;
-
-        // Save to sync storage
-        await setStorage({ settings: loaded });
-        // Clear local storage
-        await setLocalStorage({ settings: null });
+    let loaded;
+    if (synced == null) {
+      // first time
+      loaded = await getSyncStorage('settings');
+      if (!loaded) {
+        loaded = await getLocalStorage('settings');
       }
+    } else if (synced) {
+      loaded = await getSyncStorage('settings');
+    } else {
+      loaded = await getLocalStorage('settings');
     }
 
     loaded = loaded || {};
@@ -69,13 +72,28 @@ class Settings {
   }
 
   async _save() {
-    await setStorage({
+    const saveData = {
       settings: {
         shortcutKeys: this._shortcutKeys,
         listColumnCount: this._listColumnCount,
         filterOnPopup: this._filterOnPopup
       }
-    });
+    };
+
+    // Save also to local in case saving to sync may fail
+    await setLocalStorage(saveData);
+    setSyncStorage(saveData).then(
+      async () => {
+        // sync succeeded
+        await setLocalStorage({ synced: true });
+      },
+      async (err) => {
+        // sync failed
+        console.log('sync.save failed');
+        console.log(err);
+        await setLocalStorage({ synced: false });
+      }
+    );
   }
 
   static shortcutKeyCompare(o1, o2) {
@@ -85,19 +103,31 @@ class Settings {
   }
 }
 
-function setStorage(obj) {
-  return new Promise((resolve) => {
-    chrome.storage.sync.set(obj, () => resolve());
+function setSyncStorage(obj) {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.set(obj, () => {
+      if (!chrome.runtime.lastError) {
+        resolve();
+      } else {
+        reject(chrome.runtime.lastError);
+      }
+    });
   });
 }
 
 function setLocalStorage(obj) {
-  return new Promise((resolve) => {
-    chrome.storage.local.set(obj, () => resolve());
+  return new Promise((resolve, reject) => {
+    chrome.storage.local.set(obj, () => {
+      if (!chrome.runtime.lastError) {
+        resolve();
+      } else {
+        reject(chrome.runtime.lastError);
+      }
+    });
   });
 }
 
-function getStorage(key) {
+function getSyncStorage(key) {
   return new Promise((resolve) => {
     chrome.storage.sync.get(key, (item) => {
       key ? resolve(item[key]) : resolve(item);
