@@ -22,6 +22,10 @@ class ShortcutKey {
     this.$inputUrlGroup = this.$inputUrl.parents('div.form-group');
     this.$inputScriptGroup = this.$inputScript.parents('div.form-group');
     this.$labelScriptOptional = this.$inputScript.parents('div.form-group').find('label span.optional');
+    
+    this.url_active = false;
+    this.script_active = false;
+    this.script_needed = false;
 
     this._registerEvents();
 
@@ -54,31 +58,14 @@ class ShortcutKey {
     this.$inputAction.val(data.action);
     this.$inputTitle.val(data.title);
 
-    // only fill in the form if the action requires it
-    switch (data.action) {
-      case ActionId.JUMP_URL:
-      case ActionId.JUMP_URL_ALL_WINDOWS:
-      case ActionId.OEPN_URL_NEW_TAB:
-      case ActionId.OPEN_URL_CURRENT_TAB:
-        this.$inputUrl.val(data.url);
-        this.$inputScript.val(data.script);
-        break;
+    // check if the data contains a url
+    if (data.url) {
+      this.$inputUrl.val(data.url);
+    }
 
-      case ActionId.EXECUTE_SCRIPT:
-        this.$inputScript.val(data.script);
-        break;
-
-      case ActionId.OPEN_URL_PRIVATE_MODE:
-        this.$inputUrl.val(data.url);
-        break;
-
-      case ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE:
-        break;
-
-      default:
-        // The action id isn't valid.
-        // Maybe a newer version of the extension has new actions.
-        throw new RangeError('actionId is ' + data.action);
+    // check if the data contains a script
+    if (data.script) {
+      this.$inputScript.val(data.script);
     }
   }
 
@@ -109,32 +96,40 @@ class ShortcutKey {
       case ActionId.JUMP_URL_ALL_WINDOWS:
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
-        this.$inputUrlGroup.show();
-        this.$inputScriptGroup.show();
-        this.$labelScriptOptional.show();
+        this.url_active = true;
+        this.script_active = true;
+        this.script_needed = false;
         break;
 
       case ActionId.EXECUTE_SCRIPT:
-        this.$inputUrlGroup.hide();
-        this.$inputScriptGroup.show();
-        this.$labelScriptOptional.hide();
+        this.url_active = false;
+        this.script_active = true;
+        this.script_needed = true;
         break;
 
       case ActionId.OPEN_URL_PRIVATE_MODE:
-        this.$inputUrlGroup.show();
-        this.$inputScriptGroup.hide();
-        this.$labelScriptOptional.hide();
+        this.url_active = true;
+        this.script_active = false;
+        this.script_needed = false;
         break;
 
       case ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE:
         this.$inputUrlGroup.hide();
-        this.$inputScriptGroup.hide();
-        this.$labelScriptOptional.hide();
+        this.url_active = false;
+        this.script_active = false;
+        this.script_needed = false;
         break;
 
       default:
-        throw new RangeError('actionId is ' + action);
+        // default is JUMP_URL
+        this.url_active = true;
+        this.script_active = true;
+        this.script_needed = false;
     }
+
+    this.$inputUrlGroup.toggle(this.url_active);
+    this.$inputScriptGroup.toggle(this.script_active);
+    this.$labelScriptOptional.toggle(!this.script_needed);
   }
 
   // update the summary section
@@ -203,43 +198,35 @@ class ShortcutKey {
       hasError = true;
     }
 
+    // check if the action is part of the list
+    const action = parseInt(this.$inputAction.val(), 10);
+    if (Actions.find((x) => x.id == action) == null) {
+      this.$inputAction.parents('.form-group').addClass('has-error');
+      hasError = true;
+    }
+
     // validate title
     if (!this._validateNotEmpty(this.$inputTitle)) {
       hasError = true;
     }
 
-    // validate url/script depending on the action
-    const action = parseInt(this.$inputAction.val(), 10);
-    switch (action) {
-      case ActionId.JUMP_URL:
-      case ActionId.JUMP_URL_ALL_WINDOWS:
-      case ActionId.OEPN_URL_NEW_TAB:
-      case ActionId.OPEN_URL_CURRENT_TAB:
+    // check if the url field is shown
+    if (this.url_active) {
+      // validate url
+      if (!this._validateNotEmpty(this.$inputUrl)) {
+        hasError = true;
+      }
+    }
 
-        if (!this._validateNotEmpty(this.$inputUrl)) {
-          hasError = true;
-        }
-        break;
-
-      case ActionId.EXECUTE_SCRIPT:
-
+    // check if the script field is shown
+    if (this.script_active) {
+      // check if the script is not optional
+      if (this.script_needed) {
+        // validate script
         if (!this._validateNotEmpty(this.$inputScript)) {
           hasError = true;
         }
-        break;
-
-      case ActionId.OPEN_URL_PRIVATE_MODE:
-
-        if (!this._validateNotEmpty(this.$inputUrl)) {
-          hasError = true;
-        }
-        break;
-
-      case ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE:
-        break;
-
-      default:
-        throw new RangeError('actionId is ' + action);
+      }
     }
 
     // show alert icon if there is an error
@@ -272,28 +259,16 @@ class ShortcutKey {
       title: this.$inputTitle.val(),
     };
 
-    switch (data.action) {
-      case ActionId.JUMP_URL:
-      case ActionId.JUMP_URL_ALL_WINDOWS:
-      case ActionId.OEPN_URL_NEW_TAB:
-      case ActionId.OPEN_URL_CURRENT_TAB:
-        data.url = this.$inputUrl.val();
-        data.script = this.$inputScript.val();
-        break;
+    // check if the url field is shown
+    if (this.url_active) {
+      // add the url to the data
+      data.url = this.$inputUrl.val();
+    }
 
-      case ActionId.EXECUTE_SCRIPT:
-        data.script = this.$inputScript.val();
-        break;
-
-      case ActionId.OPEN_URL_PRIVATE_MODE:
-        data.url = this.$inputUrl.val();
-        break;
-
-      case ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE:
-        break;
-
-      default:
-        throw new RangeError('actionId is ' + data.action);
+    // check if the script field is shown
+    if (this.script_active) {
+      // add the script to the data
+      data.script = this.$inputScript.val();
     }
 
     return data;
