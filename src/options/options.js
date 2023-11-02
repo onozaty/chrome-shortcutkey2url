@@ -44,7 +44,6 @@ class ShortcutKey {
     this.$inputKey.on('keyup', this._applySummary.bind(this));
     this.$inputTitle.on('keyup', this._applySummary.bind(this));
 
-    this.$inputKey.on('keydown', this._keydownInputKey.bind(this));
     this.$inputKey.on('keypress', this._keypressInputKey.bind(this));
   }
 
@@ -89,19 +88,6 @@ class ShortcutKey {
       this.closeDetail();
     } else {
       this.openDetail();
-    }
-  }
-
-  // event handler for the "keydown" event of the key input
-  _keydownInputKey(event) {
-    if (event.keyCode == 46) { // DOM_VK_DELETE
-      event.target.value = '';
-      return false;
-    }
-
-    if (event.keyCode == 8) { // DOM_VK_BACK_SPACE
-      event.target.value = event.target.value.slice(0, -1);
-      return false;
     }
   }
 
