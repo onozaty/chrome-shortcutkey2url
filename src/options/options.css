@@ -7,6 +7,10 @@ h1 {
   margin-bottom: 10px;
 }
 
+.control-label {
+  font-weight: normal;
+}
+
 .alert {
   padding: 10px 15px;
   margin-bottom: 10px;
@@ -40,7 +44,7 @@ h1 {
   background-color: #fbfbfb;
 }
 
-#startupKeyHelp, #columnCountHelp {
+#startupKeyHelp, #columnCountHelp, #disabledSyncHelp {
   font-size: 90%;
   margin-left: 5px;
   margin-bottom: 0px;

@@ -22,7 +22,7 @@ Settings.newAsync().then((settings) => {
         } else {
           // save
           settings.update(message.settings).then(() => {
-            sendResponse();
+            sendResponse(settings.data());
           });
         }
         return true;

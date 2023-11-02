@@ -27,7 +27,8 @@ class Settings {
       shortcutKeys: this._shortcutKeys,
       listColumnCount: this._listColumnCount,
       filterOnPopup: this._filterOnPopup,
-      startupCommand: this._startupCommand
+      startupCommand: this._startupCommand,
+      synced: this._synced
     };
   }
 
@@ -35,6 +36,7 @@ class Settings {
     this._shortcutKeys = settings.shortcutKeys.sort(Settings.shortcutKeyCompare);
     this._listColumnCount = settings.listColumnCount;
     this._filterOnPopup = settings.filterOnPopup;
+    this._synced = settings.synced;
     await this._save();
   }
 
@@ -49,7 +51,7 @@ class Settings {
   }
 
   async _load() {
-    const synced = await getLocalStorage('synced');
+    let synced = await getLocalStorage('synced');
 
     let loaded;
     if (synced == null) {
@@ -58,6 +60,7 @@ class Settings {
       if (!loaded) {
         loaded = await getLocalStorage('settings');
       }
+      synced = true; // default
     } else if (synced) {
       loaded = await getSyncStorage('settings');
     } else {
@@ -69,9 +72,14 @@ class Settings {
     this._listColumnCount = loaded.listColumnCount || DEFAULT_LIST_COLUMN_COUNT;
     this._filterOnPopup = loaded.filterOnPopup || false;
     this._startupCommand = (await getAllCommands())[0];
+    this._synced = synced;
   }
 
   async _save() {
+
+    // synced has locally
+    await setLocalStorage({ synced: this._synced });
+
     const saveData = {
       settings: {
         shortcutKeys: this._shortcutKeys,
@@ -82,18 +90,21 @@ class Settings {
 
     // Save also to local in case saving to sync may fail
     await setLocalStorage(saveData);
-    setSyncStorage(saveData).then(
-      async () => {
-        // sync succeeded
-        await setLocalStorage({ synced: true });
-      },
-      async (err) => {
-        // sync failed
-        console.log('sync.save failed');
-        console.log(err);
-        await setLocalStorage({ synced: false });
-      }
-    );
+
+    if (this._synced) {
+      await setSyncStorage(saveData).then(
+        async () => {
+          // sync succeeded
+        },
+        async (err) => {
+          // sync failed
+          console.log('sync.save failed');
+          console.log(err);
+          await setLocalStorage({ synced: false });
+          this._synced = false;
+        }
+      );
+    }
   }
 
   static shortcutKeyCompare(o1, o2) {
