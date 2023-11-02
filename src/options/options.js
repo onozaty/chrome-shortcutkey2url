@@ -152,7 +152,6 @@ class ShortcutKey {
       $input.parents('.form-group').addClass('has-error');
       return false;
     }
-
     return true;
   }
 
