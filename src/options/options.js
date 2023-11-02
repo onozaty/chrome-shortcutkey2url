@@ -1,3 +1,4 @@
+// represents a single ShortcutKey
 class ShortcutKey {
   constructor($target, data) {
     this.$target = $target;
@@ -32,6 +33,7 @@ class ShortcutKey {
     this._applySummary();
   }
 
+  // binds event handlers to the elements in the ShortcutList
   _registerEvents() {
     this.$summary.on('click', this._toggleDetail.bind(this));
     this.$openDetailButton.on('click', this.openDetail.bind(this));
@@ -46,13 +48,14 @@ class ShortcutKey {
     this.$inputKey.on('keypress', this._keypressInputKey.bind(this));
   }
 
+  // fill the form with saved date
   _apply(data) {
-
     this.$inputKey.val(data.key);
     this.$inputHideOnPopup.prop('checked', data.hideOnPopup || false);
     this.$inputAction.val(data.action);
     this.$inputTitle.val(data.title);
 
+    // only fill in the form if the action requires it
     switch (data.action) {
       case ActionId.JUMP_URL:
       case ActionId.JUMP_URL_ALL_WINDOWS:
@@ -74,10 +77,13 @@ class ShortcutKey {
         break;
 
       default:
+        // The action id isn't valid.
+        // Maybe a newer version of the extension has new actions.
         throw new RangeError('actionId is ' + data.action);
     }
   }
 
+  // toggles the visibility of the detail section
   _toggleDetail() {
     if (this.$detail.is(':visible')) {
       this.closeDetail();
@@ -86,6 +92,7 @@ class ShortcutKey {
     }
   }
 
+  // event handler for the "keydown" event of the key input
   _keydownInputKey(event) {
     if (event.keyCode == 46) { // DOM_VK_DELETE
       event.target.value = '';
@@ -98,6 +105,8 @@ class ShortcutKey {
     }
   }
 
+  // event handler for the "keypress" event of the key input
+  // Uppercase input character
   _keypressInputKey(event) {
     if (event.charCode) {
       event.target.value += String.fromCharCode(event.charCode).toUpperCase();
@@ -105,6 +114,7 @@ class ShortcutKey {
     }
   }
 
+  // switch the visibility of the url/script input depending on the action
   _switchInputContent() {
     const action = parseInt(this.$inputAction.val(), 10);
 
@@ -141,19 +151,23 @@ class ShortcutKey {
     }
   }
 
+  // update the summary section
   _applySummary() {
     this.$summary.empty()
       .append($('<span>').addClass('key').text(this.$inputKey.val()))
       .append($('<span>').addClass('title').text(this.$inputTitle.val()));
   }
 
+  // remove the shortcut key
   _remove() {
     this.$target.trigger('remove', this);
     this.$target.remove();
   }
 
+  // validates if the input is not empty
   _validateNotEmpty($input) {
     if ($input.val() == '') {
+      // Mark the input as invalid
       $input.parents('.form-group').addClass('has-error');
       return false;
     }
@@ -161,16 +175,24 @@ class ShortcutKey {
     return true;
   }
 
+  // validates if the shortcut key is valid
   validate(others) {
+    // remove all error marks
     this.$target.find('div.has-error').removeClass('has-error');
+    // hide alert icon
     this.$alertIcon.hide();
+    // hide duplicate message
     this.$duplicateMessage.hide().empty();
 
+    // error marker
     var hasError = false;
+    
+    // Validate key
+    // check if the key is empty
     if (!this._validateNotEmpty(this.$inputKey)) {
       hasError = true;
     } else {
-      // Duplicate
+      // check if the key is duplicated
       const key = this.$inputKey.val();
       const duplicateKeys = others
         .filter((other) => {
@@ -179,7 +201,7 @@ class ShortcutKey {
         })
         .map((other) => other.key)
         .join(', ');
-
+      // show error key if the key is a duplicate
       if (duplicateKeys.length > 0) {
         this.$duplicateMessage
           .text('It duplicated with other shortcut keys(' + duplicateKeys + ').')
@@ -190,13 +212,17 @@ class ShortcutKey {
       }
     }
 
+    // validate action
     if (!this._validateNotEmpty(this.$inputAction)) {
       hasError = true;
     }
+
+    // validate title
     if (!this._validateNotEmpty(this.$inputTitle)) {
       hasError = true;
     }
 
+    // validate url/script depending on the action
     const action = parseInt(this.$inputAction.val(), 10);
     switch (action) {
       case ActionId.JUMP_URL:
@@ -230,24 +256,28 @@ class ShortcutKey {
         throw new RangeError('actionId is ' + action);
     }
 
+    // show alert icon if there is an error
     if (hasError) {
       this.$alertIcon.show();
     }
     return !hasError;
   }
 
+  // show the detail section
   openDetail() {
     this.$detail.show();
     this.$openDetailButton.hide();
     this.$closeDetailButton.show();
   }
 
+  // hide the detail section
   closeDetail() {
     this.$detail.hide();
     this.$openDetailButton.show();
     this.$closeDetailButton.hide();
   }
 
+  // returns the data of the shortcut key
   data() {
     const data = {
       key: this.$inputKey.val(),
@@ -284,6 +314,7 @@ class ShortcutKey {
   }
 }
 
+// represents the list of all shortcut keys on the option page
 class ShortcutKeys {
   constructor($target, $childTemplate) {
     this.$target = $target;
@@ -291,6 +322,7 @@ class ShortcutKeys {
     this._shortcutKeys = [];
   }
 
+  // event handler for the "remove" event of a ShortcutKey
   _removeShortcutKey(event, shortcutKey) {
     const index = this._shortcutKeys.indexOf(shortcutKey);
     if (index != -1) {
@@ -298,6 +330,7 @@ class ShortcutKeys {
     }
   }
 
+  // add a new ShortcutKey to the list
   append(data, isOpened) {
     const $child = this.$childTemplate.clone(true);
     const shortcutKey = new ShortcutKey($child, data);
@@ -312,8 +345,8 @@ class ShortcutKeys {
     $child[0].scrollIntoView();
   }
 
+  // validates if all ShortcutKeys are valid
   validate() {
-
     const shortcutKeyAndData = this._shortcutKeys.map((shortcutKey) => {
       return {
         shortcutKey: shortcutKey,
@@ -332,39 +365,54 @@ class ShortcutKeys {
       .length == 0;
   }
 
+  // returns the data of all ShortcutKeys
   data() {
     return this._shortcutKeys.map((shortcutKey) => shortcutKey.data());
   }
 }
 
+// event handler for the startup of the option page
 function startup(settings) {
+  // fill the startup key with the save value in the settings
   $('#startupKey').val(settings.startupCommand.shortcut);
 
+  // fill the list column count with the save value in the settings
   const $inputColumnCount = $('#inputColumnCount');
   $inputColumnCount.val(settings.listColumnCount);
 
+  // fill the filter on popup with the save value in the settings
   const $inputFilterOnPopup = $('#inputFilterOnPopup');
   $inputFilterOnPopup.prop('checked', settings.filterOnPopup || false);
 
+  // load the form template
   const $formTemplate = $('#template');
 
+  // fill the action select with the actions
   const $actionTemplate = $formTemplate.find('select[name="action"]');
+  // clear the action select
   $actionTemplate.empty();
+  // load all available actions
   Actions.forEach((action) => {
+    // create a new option element for ever action
     $option = $('<option>').val(action.id).text(action.name);
+    // add the option to the action select
     $actionTemplate.append($option);
   });
 
+  // create the ShortcutKeys list
   const shortcutKeys = new ShortcutKeys($('#shortcutKeys'), $formTemplate);
+  // add all saved shortcut keys to the list
   settings.shortcutKeys
     .forEach((shortcutKey) => {
       shortcutKeys.append(shortcutKey);
     });
 
+  // add a new shortcut key to the list
   $('#addButton').on('click', () => {
     shortcutKeys.append(null, true);
   });
 
+  // create event handler for the import button
   $('#importButton').on('click', () => {
     const fileInput = document.createElement('input');
     fileInput.type = 'file';
@@ -393,6 +441,7 @@ function startup(settings) {
     fileInput.remove();
   });
 
+  // create event handler for the export button
   $('#exportButton').on('click', () => {
     const downloadLink = document.createElement('a');
     downloadLink.download = 'shortcutkeys.json';
@@ -404,6 +453,7 @@ function startup(settings) {
     downloadLink.remove();
   });
 
+  // create event handler for the save button
   $('#saveButton').on('click', () => {
     $("#successMessage").hide();
     $("#errorMessage").hide();
@@ -426,16 +476,19 @@ function startup(settings) {
     }
   });
 
+  // create event handler for the keyboard shortcuts menu button
   $('#shortcutsButton').on('click', () => {
     chrome.runtime.sendMessage({ target: 'background-shortcuts', name: 'open' });
     return false;
   });
 
+  // create event handler for the error and success messages
   $("#errorMessage, #successMessage").find('.close')
     .on('click', (event) => {
       $(event.target).parent().hide();
     });
 
+  // Add listener for the message from background.js
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     console.log(message);
     if (message.target == 'options') {
@@ -444,6 +497,7 @@ function startup(settings) {
   });
 }
 
+// call the startup function when the page is loaded
 $(() => {
   chrome.runtime.sendMessage({ target: 'background-settings', name: 'load' }, startup);
 });
