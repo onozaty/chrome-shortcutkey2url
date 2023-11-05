@@ -56,6 +56,9 @@ ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを
 
 ![Screenshot of interactive filter](screenshots/interactive.gif)
 
+`Disable synchronization of settings`をチェックすると、設定の同期を無効化できます。  
+ブラウザの同期を行っているけれども、ショートカットキーは分けたいといった場合に有用です。
+
 ### Shortcut Keys
 
 `Add current page`をクリックすると、現在のページをショートカットキーとして簡単に設定できます。

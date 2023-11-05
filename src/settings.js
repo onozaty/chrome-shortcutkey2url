@@ -9,6 +9,11 @@ const DEFAULT_SHORTCUTKEYS = [
 
 const DEFAULT_LIST_COLUMN_COUNT = 3;
 
+// The name to be used when saving the shortcutkeys.
+// To meet the capacity limit per item in storage.sync, it is saved in separate item.
+// (shortcutKeys001, shortcutKeys002, ..., shortcutKeys100)
+const SHORTCUT_KEYS_STORED_NAMES = [...Array(100)].map((_, i) => `shortcutKeys${String(i + 1).padStart(3, '0')}`);
+
 class Settings {
 
   static async newAsync() {
@@ -27,7 +32,8 @@ class Settings {
       shortcutKeys: this._shortcutKeys,
       listColumnCount: this._listColumnCount,
       filterOnPopup: this._filterOnPopup,
-      startupCommand: this._startupCommand
+      startupCommand: this._startupCommand,
+      synced: this._synced
     };
   }
 
@@ -35,6 +41,7 @@ class Settings {
     this._shortcutKeys = settings.shortcutKeys.sort(Settings.shortcutKeyCompare);
     this._listColumnCount = settings.listColumnCount;
     this._filterOnPopup = settings.filterOnPopup;
+    this._synced = settings.synced;
     await this._save();
   }
 
@@ -49,51 +56,98 @@ class Settings {
   }
 
   async _load() {
-    const synced = await getLocalStorage('synced');
+    let synced = await getLocalStorage('synced');
 
     let loaded;
     if (synced == null) {
       // first time
-      loaded = await getSyncStorage('settings');
+      loaded = await getSyncStorage();
       if (!loaded) {
-        loaded = await getLocalStorage('settings');
+        loaded = await getLocalStorage();
       }
+      synced = true; // default
     } else if (synced) {
-      loaded = await getSyncStorage('settings');
+      loaded = await getSyncStorage();
     } else {
-      loaded = await getLocalStorage('settings');
+      loaded = await getLocalStorage();
     }
 
     loaded = loaded || {};
-    this._shortcutKeys = (loaded.shortcutKeys || DEFAULT_SHORTCUTKEYS).sort(Settings.shortcutKeyCompare);
-    this._listColumnCount = loaded.listColumnCount || DEFAULT_LIST_COLUMN_COUNT;
-    this._filterOnPopup = loaded.filterOnPopup || false;
+
+    let shortcutKeys = DEFAULT_SHORTCUTKEYS;
+    if (loaded.settings?.shortcutKeys) {
+      // Supports migration from previous version
+      shortcutKeys = loaded.settings.shortcutKeys;
+    } else if (loaded[SHORTCUT_KEYS_STORED_NAMES[0]]) {
+      shortcutKeys = this._mergeStoredShortcutKeys(loaded);
+    }
+    this._shortcutKeys = shortcutKeys.sort(Settings.shortcutKeyCompare);
+
+    this._listColumnCount = loaded.settings?.listColumnCount || DEFAULT_LIST_COLUMN_COUNT;
+    this._filterOnPopup = loaded.settings?.filterOnPopup || false;
     this._startupCommand = (await getAllCommands())[0];
+    this._synced = synced;
   }
 
   async _save() {
+
+    // synced has locally
+    await setLocalStorage({ synced: this._synced });
+
     const saveData = {
       settings: {
-        shortcutKeys: this._shortcutKeys,
         listColumnCount: this._listColumnCount,
         filterOnPopup: this._filterOnPopup
       }
     };
+    Object.assign(saveData, this._splitStoredShortcutKeys(this._shortcutKeys));
 
     // Save also to local in case saving to sync may fail
     await setLocalStorage(saveData);
-    setSyncStorage(saveData).then(
-      async () => {
-        // sync succeeded
-        await setLocalStorage({ synced: true });
-      },
-      async (err) => {
-        // sync failed
-        console.log('sync.save failed');
-        console.log(err);
-        await setLocalStorage({ synced: false });
+
+    if (this._synced) {
+      await setSyncStorage(saveData).then(
+        async () => {
+          // sync succeeded
+        },
+        async (err) => {
+          // sync failed
+          console.log('sync.save failed');
+          console.log(err);
+          await setLocalStorage({ synced: false });
+          this._synced = false;
+        }
+      );
+    }
+  }
+
+  _mergeStoredShortcutKeys(splited) {
+    const mergedShortcutKeys = [];
+
+    for (let i = 0; i < SHORTCUT_KEYS_STORED_NAMES.length; i++) {
+      const shortcutKeys = splited[SHORTCUT_KEYS_STORED_NAMES[i]];
+      if (shortcutKeys) {
+        mergedShortcutKeys.push(...shortcutKeys);
       }
-    );
+    }
+
+    return mergedShortcutKeys;
+  }
+
+  _splitStoredShortcutKeys(merged) {
+
+    // init
+    const splitedShortcutKeys = {};
+    for (let i = 0; i < SHORTCUT_KEYS_STORED_NAMES.length; i++) {
+      splitedShortcutKeys[SHORTCUT_KEYS_STORED_NAMES[i]] = [];
+    }
+
+    for (let i = 0; i < merged.length; i++) {
+      const itemName = SHORTCUT_KEYS_STORED_NAMES[i % SHORTCUT_KEYS_STORED_NAMES.length];
+      splitedShortcutKeys[itemName].push(merged[i]);
+    }
+
+    return splitedShortcutKeys;
   }
 
   static shortcutKeyCompare(o1, o2) {

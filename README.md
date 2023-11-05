@@ -56,6 +56,9 @@ If you check `Interactive filter of shortcut keys on the popup` of `Option`, you
 
 ![Screenshot of interactive filter](screenshots/interactive.gif)
 
+Check `Disable synchronization of settings` to disable synchronization of settings.  
+This is useful if you browser sync enabled but want to keep shortcut keys separate.
+
 ### Shortcut Keys
 
 Click to `Add current page`, you can easily set the current page as a shortcut key.

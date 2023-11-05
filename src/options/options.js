@@ -346,6 +346,9 @@ function startup(settings) {
   const $inputFilterOnPopup = $('#inputFilterOnPopup');
   $inputFilterOnPopup.prop('checked', settings.filterOnPopup || false);
 
+  const $inputDisabledSync = $('#inputDisabledSync');
+  $inputDisabledSync.prop('checked', !settings.synced);
+
   const $formTemplate = $('#template');
 
   const $actionTemplate = $formTemplate.find('select[name="action"]');
@@ -415,21 +418,29 @@ function startup(settings) {
         settings: {
           shortcutKeys: shortcutKeys.data(),
           listColumnCount: parseInt($inputColumnCount.val(), 10),
-          filterOnPopup: $inputFilterOnPopup.prop('checked') || false
+          filterOnPopup: $inputFilterOnPopup.prop('checked') || false,
+          synced: !$inputDisabledSync.prop('checked')
         }
       };
-      chrome.runtime.sendMessage(request, () => {
+      chrome.runtime.sendMessage(request, (settings) => {
         $("#successMessage").show();
+
+        if (request.settings.synced && !settings.synced) {
+          alert('Synchronization was disabled because it could not be saved to sync storage.\nIf there are too many shortcut keys, saving to sync storage will fail.');
+          $('#inputDisabledSync').prop('checked', true);
+        }
       });
     } else {
       $("#errorMessage").show();
     }
   });
 
+  /* Chrome only */
   $('#shortcutsButton').on('click', () => {
     chrome.runtime.sendMessage({ target: 'background-shortcuts', name: 'open' });
     return false;
   });
+  /*-------------*/
 
   $("#errorMessage, #successMessage").find('.close')
     .on('click', (event) => {

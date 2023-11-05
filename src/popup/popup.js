@@ -22,15 +22,19 @@ function render(shortcutKeys) {
 
   const visibleShortcutKeys = shortcutKeys.filter(x => !x.hideOnPopup);
 
-  for (var i = 0; i < visibleShortcutKeys.length; i++) {
+  for (var i = 0, length = Math.ceil(visibleShortcutKeys.length / listColumnCount) * listColumnCount; i < length; i++) {
 
-    if (!visibleShortcutKeys[i].hideOnPopup) {
-      columns[i % listColumnCount].appendChild(createShortcutKeyElement(visibleShortcutKeys[i], keyMaxLength));
-    }
+    columns[i % listColumnCount].appendChild(createShortcutKeyElement(visibleShortcutKeys[i], keyMaxLength));
   }
 }
 
 function createShortcutKeyElement(shortcutKey, keyMaxLength) {
+
+  if (!shortcutKey) {
+    const emptyElement = document.createElement('div');
+    emptyElement.textContent = '\u00A0';
+    return emptyElement;
+  }
 
   const keyElement = document.createElement('span');
   keyElement.className = 'key';
@@ -54,10 +58,12 @@ function createShortcutKeyElement(shortcutKey, keyMaxLength) {
 
 document.getElementById('add').addEventListener('click', () => {
   chrome.runtime.sendMessage({target: 'background-options', name: 'add'});
+  window.close();
 });
 
 document.getElementById('options').addEventListener('click', () => {
   chrome.runtime.openOptionsPage();
+  window.close();
 });
 
 document.addEventListener('keypress', (e) => {
