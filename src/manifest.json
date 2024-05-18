@@ -11,7 +11,7 @@
     "service_worker": "background-wrapper.js"
   },
   "permissions": [
-    "tabs", "storage", "contextMenus"
+    "tabs", "storage", "contextMenus", "scripting"
   ],
   "host_permissions": ["<all_urls>"],
   "action": {
@@ -33,5 +33,18 @@
       }
     }
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["injected-script.js"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "default_locale": "en"
 }

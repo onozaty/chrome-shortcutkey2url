@@ -168,7 +168,21 @@ class Handler {
         }
       }
 
-      chrome.tabs.executeScript(null, { code: script });
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const activeTab = tabs[0];
+        chrome.scripting
+          .executeScript({
+            target: { tabId: activeTab.id },
+            func: (script) => {
+              document.dispatchEvent(new CustomEvent('shortcutkey2url-run-script', {
+                detail: script
+              }));
+            },
+            args: [script]
+          });
+      });
+
     }
   }
 }
+
