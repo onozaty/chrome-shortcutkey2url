@@ -10,21 +10,17 @@ const MessageName = {
 }
 
 class Handler {
-  constructor(settings) {
-    this._settings = settings;
-  }
-
-  handle(message) {
+  handle(message, settings) {
     switch (message.name) {
       case MessageName.STARTUP:
         this._startup();
         return {
           result: HandleResult.CONTINUE,
-          settings: this._settings.data()
+          settings: settings.data()
         };
 
       case MessageName.KEY_EVENT:
-        return this._receiveKey(message.value);
+        return this._receiveKey(message.value, settings);
 
       case MessageName.CLICK_EVENT:
         this._doAction(message.value);
@@ -36,7 +32,7 @@ class Handler {
     this.receivedKeys = '';
   }
 
-  _receiveKey(keyEvent) {
+  _receiveKey(keyEvent, settings) {
 
     if (!keyEvent.charCode) {
       return { result: HandleResult.FINISH };
@@ -45,7 +41,7 @@ class Handler {
     const key = String.fromCharCode(keyEvent.charCode).toUpperCase();
     this.receivedKeys += key;
 
-    const matchShortcutKeys = this._settings.find(this.receivedKeys);
+    const matchShortcutKeys = settings.find(this.receivedKeys);
 
     if (matchShortcutKeys.length > 1) {
       return {
