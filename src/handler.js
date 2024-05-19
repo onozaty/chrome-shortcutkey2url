@@ -60,11 +60,11 @@ class Handler {
   _doAction(shortcutKey) {
     switch (shortcutKey.action) {
       case ActionId.OEPN_URL_NEW_TAB:
-        this._createTab(shortcutKey.url, shortcutKey.scriptName);
+        this._createTab(shortcutKey.url, shortcutKey.scriptId);
         break;
 
       case ActionId.OPEN_URL_CURRENT_TAB:
-        this._updateTab(shortcutKey.url, shortcutKey.scriptName);
+        this._updateTab(shortcutKey.url, shortcutKey.scriptId);
         break;
 
       case ActionId.JUMP_URL:
@@ -74,15 +74,15 @@ class Handler {
           })[0];
 
           if (matchTab) {
-            this._selectTab(matchTab.id, shortcutKey.scriptName);
+            this._selectTab(matchTab.id, shortcutKey.scriptId);
           } else {
-            this._createTab(shortcutKey.url, shortcutKey.scriptName);
+            this._createTab(shortcutKey.url, shortcutKey.scriptId);
           }
         });
         break;
 
       case ActionId.EXECUTE_SCRIPT:
-        this._executeScript(shortcutKey.scriptName);
+        this._executeScript(shortcutKey.scriptId);
         break;
 
       case ActionId.OPEN_URL_PRIVATE_MODE:
@@ -105,7 +105,7 @@ class Handler {
           })[0];
 
           if (matchTab) {
-            this._selectTab(matchTab.id, shortcutKey.scriptName);
+            this._selectTab(matchTab.id, shortcutKey.scriptId);
           } else {
             // Second, search from all windows.
             chrome.tabs.query({}, (tabs) => {
@@ -115,9 +115,9 @@ class Handler {
 
               if (matchTab) {
                 chrome.windows.update(matchTab.windowId, { focused: true });
-                this._selectTab(matchTab.id, shortcutKey.scriptName);
+                this._selectTab(matchTab.id, shortcutKey.scriptId);
               } else {
-                this._createTab(shortcutKey.url, shortcutKey.scriptName);
+                this._createTab(shortcutKey.url, shortcutKey.scriptId);
               }
             });
           }
@@ -129,37 +129,37 @@ class Handler {
     }
   }
 
-  _selectTab(tabId, scriptName) {
+  _selectTab(tabId, scriptId) {
     chrome.tabs.update(tabId, { active: true }, () => {
-      this._executeScript(scriptName);
+      this._executeScript(scriptId);
     });
   }
 
-  _createTab(url, scriptName) {
+  _createTab(url, scriptId) {
     chrome.tabs.create({ url: url }, () => {
       setTimeout(() => {
-        this._executeScript(scriptName);
+        this._executeScript(scriptId);
       }, 1000);
     });
   }
 
-  _updateTab(url, scriptName) {
+  _updateTab(url, scriptId) {
     chrome.tabs.update({ url: url }, () => {
       setTimeout(() => {
-        this._executeScript(scriptName);
+        this._executeScript(scriptId);
       }, 1000);
     });
   }
 
-  _executeScript(scriptName) {
-    if (scriptName && USER_SCRIPTS[scriptName]) {
-
+  _executeScript(scriptId) {
+    const script = USER_SCRIPTS.find(x => x.id == scriptId);
+    if (script) {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         const activeTab = tabs[0];
         chrome.scripting
           .executeScript({
             target: { tabId: activeTab.id },
-            func: USER_SCRIPTS[scriptName].script
+            func: script.func
           });
       });
 
