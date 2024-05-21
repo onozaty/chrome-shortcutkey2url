@@ -112,7 +112,7 @@ Please refer to the following for information on how to locate the extension ins
 
 * [Where does Chrome store extensions? \- Stack Overflow](https://stackoverflow.com/questions/14543896/where-does-chrome-store-extensions/14544700#14544700)
 
-The content defined as `USER_SCRIPT` in `user-script.js` will be displayed as the `Script` choices.
+The content defined as `USER_SCRIPT` in `user-script.js` will be displayed as the `Script` options.
 The `user-script.js` contains an example code in advance.
 
 ```js

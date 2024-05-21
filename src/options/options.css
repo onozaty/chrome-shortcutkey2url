@@ -44,7 +44,7 @@ h1 {
   background-color: #fbfbfb;
 }
 
-#startupKeyHelp, #columnCountHelp, #disabledSyncHelp {
+#startupKeyHelp, #columnCountHelp, #disabledSyncHelp, #scriptHelp {
   font-size: 90%;
   margin-left: 5px;
   margin-bottom: 0px;
