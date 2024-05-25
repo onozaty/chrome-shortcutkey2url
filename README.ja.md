@@ -17,6 +17,10 @@ ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを
 * シークレットウインドウに指定のURLを開く。
 * シークレットウインドウに現在のタブと同じURLを開く。
 
+**Manifest V3 の制限により、文字列としてJavaScriptを指定できなくなりました。**  
+**拡張機能がインストールされたフォルダ配下にある`user-script.js`にて、実行したいJavaScriptをあらかじめ記載しておく必要があります。**
+**詳しくは [Scriptの指定方法](#scriptの設定方法) をご参照ください。**
+
 ## インストール
 
 下記からインストールします。
@@ -99,3 +103,50 @@ ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを
 
 ショートカットキーの一覧は、エクスポート / インポートが可能です。  
 これによりバックアップを取ったり、移行を行うことができます。(FirefoxとChrome間での移行など)
+
+## Scriptの設定方法
+
+`Script`で選択するものは、拡張機能がインストールされたフォルダ配下にある`user-script.js`にて定義しておく必要があります。  
+**これは Manifest V3 の制限により、文字列としてJavaScriptを指定できなくなったためです。** 
+
+拡張機能のインストールフォルダの探し方は、下記を参考にしてください。
+
+* [Where does Chrome store extensions? \- Stack Overflow](https://stackoverflow.com/questions/14543896/where-does-chrome-store-extensions/14544700#14544700)
+
+`user-script.js`の`USER_SCRIPT`として定義した内容が、`Script`の選択肢として表示されます。
+`user-script.js`には、あらかじめ例となるコードが記載されています。
+
+```js
+const USER_SCRIPTS = [
+  {
+    id: 'scroll-to-bottom',
+    title: '(Example) Scroll to bottom',
+    func: () => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  },
+  {
+    id: 'save-to-pinboard',
+    title: '(Example) Save to Pinboard',
+    func: () => {
+      // https://pinboard.in/howto/#saving
+      q = location.href; if (document.getSelection) { d = document.getSelection(); } else { d = ''; }; p = document.title; void (open('https://pinboard.in/add?url=' + encodeURIComponent(q) + '&description=' + encodeURIComponent(d) + '&title=' + encodeURIComponent(p), 'Pinboard', 'toolbar=no,width=700,height=350'));
+    }
+  }
+];
+```
+
+![Screenshot of script](screenshots/script.png)
+
+1つのスクリプトは、下記の3つのプロパティから構成されます。
+
+* `id` : 一意に識別するためのIDです。画面には表示されませんが、設定値としてこの値が保存されます。
+* `title` : 設定画面で選択肢として表示される名前です。
+* `func` : 実際に実行される関数です。
+
+新しいスクリプトを用意する際には、ここに追記してください。
+
+拡張機能のバージョンアップ時に本ファイルはリセットされてしまいますので、バックアップを取っておいたうえで、バージョンアップ後に再度修正するようお願いします。

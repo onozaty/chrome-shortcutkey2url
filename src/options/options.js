@@ -16,7 +16,15 @@ class ShortcutKey {
     this.$inputAction = $target.find('select[name="action"]');
     this.$inputTitle = $target.find('input[name="title"]');
     this.$inputUrl = $target.find('input[name="url"]');
-    this.$inputScript = $target.find('textarea[name="script"]');
+    this.$inputScript = $target.find('select[name="script"]');
+
+    // create select options
+    this.$inputScript.empty();
+    this.$inputScript.append($('<option>'));
+    for (const userScript of USER_SCRIPTS) {
+      const $option = $('<option>').text(userScript.title).val(userScript.id);
+      this.$inputScript.append($option);
+    }
 
     this.$inputUrlGroup = this.$inputUrl.parents('div.form-group');
     this.$inputScriptGroup = this.$inputScript.parents('div.form-group');
@@ -59,11 +67,11 @@ class ShortcutKey {
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
         this.$inputUrl.val(data.url);
-        this.$inputScript.val(data.script);
+        this.$inputScript.val(data.scriptId);
         break;
 
       case ActionId.EXECUTE_SCRIPT:
-        this.$inputScript.val(data.script);
+        this.$inputScript.val(data.scriptId);
         break;
 
       case ActionId.OPEN_URL_PRIVATE_MODE:
@@ -262,11 +270,11 @@ class ShortcutKey {
       case ActionId.OEPN_URL_NEW_TAB:
       case ActionId.OPEN_URL_CURRENT_TAB:
         data.url = this.$inputUrl.val();
-        data.script = this.$inputScript.val();
+        data.scriptId = this.$inputScript.val();
         break;
 
       case ActionId.EXECUTE_SCRIPT:
-        data.script = this.$inputScript.val();
+        data.scriptId = this.$inputScript.val();
         break;
 
       case ActionId.OPEN_URL_PRIVATE_MODE:

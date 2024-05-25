@@ -10,21 +10,17 @@ const MessageName = {
 }
 
 class Handler {
-  constructor(settings) {
-    this._settings = settings;
-  }
-
-  handle(message) {
+  handle(message, settings) {
     switch (message.name) {
       case MessageName.STARTUP:
         this._startup();
         return {
           result: HandleResult.CONTINUE,
-          settings: this._settings.data()
+          settings: settings.data()
         };
 
       case MessageName.KEY_EVENT:
-        return this._receiveKey(message.value);
+        return this._receiveKey(message.value, settings);
 
       case MessageName.CLICK_EVENT:
         this._doAction(message.value);
@@ -36,7 +32,7 @@ class Handler {
     this.receivedKeys = '';
   }
 
-  _receiveKey(keyEvent) {
+  _receiveKey(keyEvent, settings) {
 
     if (!keyEvent.charCode) {
       return { result: HandleResult.FINISH };
@@ -45,7 +41,7 @@ class Handler {
     const key = String.fromCharCode(keyEvent.charCode).toUpperCase();
     this.receivedKeys += key;
 
-    const matchShortcutKeys = this._settings.find(this.receivedKeys);
+    const matchShortcutKeys = settings.find(this.receivedKeys);
 
     if (matchShortcutKeys.length > 1) {
       return {
@@ -64,11 +60,11 @@ class Handler {
   _doAction(shortcutKey) {
     switch (shortcutKey.action) {
       case ActionId.OEPN_URL_NEW_TAB:
-        this._createTab(shortcutKey.url, shortcutKey.script);
+        this._createTab(shortcutKey.url, shortcutKey.scriptId);
         break;
 
       case ActionId.OPEN_URL_CURRENT_TAB:
-        this._updateTab(shortcutKey.url, shortcutKey.script);
+        this._updateTab(shortcutKey.url, shortcutKey.scriptId);
         break;
 
       case ActionId.JUMP_URL:
@@ -78,15 +74,15 @@ class Handler {
           })[0];
 
           if (matchTab) {
-            this._selectTab(matchTab.id, shortcutKey.script);
+            this._selectTab(matchTab.id, shortcutKey.scriptId);
           } else {
-            this._createTab(shortcutKey.url, shortcutKey.script);
+            this._createTab(shortcutKey.url, shortcutKey.scriptId);
           }
         });
         break;
 
       case ActionId.EXECUTE_SCRIPT:
-        this._executeScript(shortcutKey.script);
+        this._executeScript(shortcutKey.scriptId);
         break;
 
       case ActionId.OPEN_URL_PRIVATE_MODE:
@@ -109,7 +105,7 @@ class Handler {
           })[0];
 
           if (matchTab) {
-            this._selectTab(matchTab.id, shortcutKey.script);
+            this._selectTab(matchTab.id, shortcutKey.scriptId);
           } else {
             // Second, search from all windows.
             chrome.tabs.query({}, (tabs) => {
@@ -119,9 +115,9 @@ class Handler {
 
               if (matchTab) {
                 chrome.windows.update(matchTab.windowId, { focused: true });
-                this._selectTab(matchTab.id, shortcutKey.script);
+                this._selectTab(matchTab.id, shortcutKey.scriptId);
               } else {
-                this._createTab(shortcutKey.url, shortcutKey.script);
+                this._createTab(shortcutKey.url, shortcutKey.scriptId);
               }
             });
           }
@@ -133,42 +129,41 @@ class Handler {
     }
   }
 
-  _selectTab(tabId, script) {
+  _selectTab(tabId, scriptId) {
     chrome.tabs.update(tabId, { active: true }, () => {
-      this._executeScript(script);
+      this._executeScript(scriptId);
     });
   }
 
-  _createTab(url, script) {
+  _createTab(url, scriptId) {
     chrome.tabs.create({ url: url }, () => {
       setTimeout(() => {
-        this._executeScript(script);
+        this._executeScript(scriptId);
       }, 1000);
     });
   }
 
-  _updateTab(url, script) {
+  _updateTab(url, scriptId) {
     chrome.tabs.update({ url: url }, () => {
       setTimeout(() => {
-        this._executeScript(script);
+        this._executeScript(scriptId);
       }, 1000);
     });
   }
 
-  _executeScript(script) {
-    if (script && script.trim() != '') {
+  _executeScript(scriptId) {
+    const script = USER_SCRIPTS.find(x => x.id == scriptId);
+    if (script) {
+      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        const activeTab = tabs[0];
+        chrome.scripting
+          .executeScript({
+            target: { tabId: activeTab.id },
+            func: script.func
+          });
+      });
 
-      if (script.startsWith('javascript:')) {
-        const scriptRemovedScheme = script.substring('javascript:'.length);
-        try {
-          script = decodeURIComponent(scriptRemovedScheme);
-        } catch (e) {
-          console.log(e);
-          script = scriptRemovedScheme;
-        }
-      }
-
-      chrome.tabs.executeScript(null, { code: script });
     }
   }
 }
+

@@ -16,7 +16,34 @@ const SHORTCUT_KEYS_STORED_NAMES = [...Array(100)].map((_, i) => `shortcutKeys${
 
 class Settings {
 
-  static async newAsync() {
+  /** @type {({ key: string; title: string; action: number; url?: string; scriptId?: string })[] } */
+  _shortcutKeys;
+  /** @type {number} */
+  _listColumnCount;
+  /** @type {boolean} */
+  _filterOnPopup;
+  /** @type {boolean} */
+  _synced;
+
+  /**
+   * @param {{
+   *   shortcutKeys: { key: string; title: string; action: number; url?: string; scriptId?: string }[] ;
+   *   listColumnCount: number;
+   *   filterOnPopup: boolean;
+   *   startupCommand: any;
+   *   synced: boolean;
+   * }} initialValue 
+   */
+  constructor(initialValue) {
+    if (initialValue) {
+      this._shortcutKeys = initialValue.shortcutKeys;
+      this._listColumnCount = initialValue.listColumnCount;
+      this._filterOnPopup = initialValue.filterOnPopup;
+      this._synced = initialValue.synced;
+    }
+  }
+
+  static async initialize() {
 
     const settings = new Settings();
     await settings._load();
@@ -25,6 +52,12 @@ class Settings {
     await settings._save();
 
     return settings;
+  }
+
+  static async getCache() {
+
+    const cache = await getLocalStorage('cache');
+    return new Settings(cache);
   }
 
   data() {
@@ -87,6 +120,9 @@ class Settings {
     this._filterOnPopup = loaded.settings?.filterOnPopup || false;
     this._startupCommand = (await getAllCommands())[0];
     this._synced = synced;
+
+    // save cache
+    await setLocalStorage({ cache: this.data() });
   }
 
   async _save() {
@@ -119,6 +155,9 @@ class Settings {
         }
       );
     }
+
+    // save cache
+    await setLocalStorage({ cache: this.data() });
   }
 
   _mergeStoredShortcutKeys(splited) {

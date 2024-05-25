@@ -17,6 +17,9 @@ The items that can be set as actions are as follows.
 * Open specified URL in incognito window.
 * Open same URL as the current tab in incognito window.
 
+**Due to a limitation in Manifest V3, it is no longer possible to specify JavaScript as a string.**  
+**You must specify the JavaScript you wish to execute in advance in the `user-script.js` file under the folder where the extension is installed. For details, please refer to [How to Specify Script](#how-to-specify-script).**
+
 ## Installation
 
 Install from the following.
@@ -99,3 +102,50 @@ However, if the size of the settings is too large to be saved by synchronization
 
 The list of shortcut keys can be exported / imported.  
 This allows you to take backups and perform migrations. (E.g. migration between Firefox and Chrome)
+
+## How to Specify Script
+
+The `Script` to be selected must be defined in `user-script.js` under the folder in which the extension is installed.  
+**This is due to a restriction in Manifest V3 that no longer allows JavaScript to be specified as a string.** 
+
+Please refer to the following for information on how to locate the extension installation folder.
+
+* [Where does Chrome store extensions? \- Stack Overflow](https://stackoverflow.com/questions/14543896/where-does-chrome-store-extensions/14544700#14544700)
+
+The content defined as `USER_SCRIPT` in `user-script.js` will be displayed as the `Script` options.
+The `user-script.js` contains an example code in advance.
+
+```js
+const USER_SCRIPTS = [
+  {
+    id: 'scroll-to-bottom',
+    title: '(Example) Scroll to bottom',
+    func: () => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  },
+  {
+    id: 'save-to-pinboard',
+    title: '(Example) Save to Pinboard',
+    func: () => {
+      // https://pinboard.in/howto/#saving
+      q = location.href; if (document.getSelection) { d = document.getSelection(); } else { d = ''; }; p = document.title; void (open('https://pinboard.in/add?url=' + encodeURIComponent(q) + '&description=' + encodeURIComponent(d) + '&title=' + encodeURIComponent(p), 'Pinboard', 'toolbar=no,width=700,height=350'));
+    }
+  }
+];
+```
+
+![Screenshot of script](screenshots/script.png)
+
+A single script consists of the following three properties.
+
+* `id` : ID for unique identification. This value is not displayed on the screen, but is stored as a configuration value.
+* `title` : This is the name that appears as an option on the settings screen.
+* `func` : The function that is actually executed.
+
+When preparing new scripts, please add here.
+
+This file will be reset when the extension is upgraded, so please make a backup and modify it again after the upgrade.
