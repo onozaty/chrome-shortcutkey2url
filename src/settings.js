@@ -57,6 +57,12 @@ class Settings {
   static async getCache() {
 
     const cache = await getLocalStorage('cache');
+    if (cache == null) {
+      const settings = new Settings();
+      await settings._load();
+      return settings;
+    }
+
     return new Settings(cache);
   }
 
