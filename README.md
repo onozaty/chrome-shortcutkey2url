@@ -18,7 +18,7 @@ The items that can be set as actions are as follows.
 * Open same URL as the current tab in incognito window.
 
 **Due to a limitation in Manifest V3, it is no longer possible to specify JavaScript as a string.**  
-**You must specify the JavaScript you wish to execute in advance in the `user-script.js` file under the folder where the extension is installed. For details, please refer to [How to Specify Script](#how-to-specify-script).**
+**If you want to use Script, you must place the extension in a separate folder and then write the JavaScript you want to execute in `user-script.js` in the folder and load it with "Load unpacked". For details, please refer to [How to Specify Script](#how-to-specify-script).**
 
 ## Installation
 
@@ -108,6 +108,9 @@ This allows you to take backups and perform migrations. (E.g. migration between 
 The `Script` to be selected must be defined in `user-script.js` under the folder in which the extension is installed.  
 **This is due to a restriction in Manifest V3 that no longer allows JavaScript to be specified as a string.** 
 
+However, if you edit the file of an extension installed from the Chrome Web Store, it will be considered corrupt and must be placed in a separate folder and then loaded with "Load Unpackaged".
+
+Locate the ShortcutKey2URL folder in the extension's installation folder and copy it to the appropriate folder.  
 Please refer to the following for information on how to locate the extension installation folder.
 
 * [Where does Chrome store extensions? \- Stack Overflow](https://stackoverflow.com/questions/14543896/where-does-chrome-store-extensions/14544700#14544700)
@@ -148,4 +151,14 @@ A single script consists of the following three properties.
 
 When preparing new scripts, please add here.
 
-This file will be reset when the extension is upgraded, so please make a backup and modify it again after the upgrade.
+Once you have added the extension, use the "Load Unpackaged" to load and use it.  
+The procedure for "Load Unpackaged" is as follows
+
+1. Open Chrome Extensions Page
+    * Type `chrome://extensions/` in the Chrome address bar and press Enter.
+2. Enable Developer Mode
+    * In the top right corner of the Extensions page, toggle the "Developer mode" switch to the on position.
+3. Load Unpacked Extension
+    * Click the "Load unpacked" button.
+    * In the file dialog that appears, navigate to the directory containing your extension's files and select it. This folder should include the manifest.json file of your extension.
+
