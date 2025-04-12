@@ -11,7 +11,7 @@
     "service_worker": "background-wrapper.js"
   },
   "permissions": [
-    "tabs", "storage", "contextMenus", "scripting"
+    "tabs", "storage", "contextMenus", "userScripts"
   ],
   "host_permissions": ["<all_urls>"],
   "action": {

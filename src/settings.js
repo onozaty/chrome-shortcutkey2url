@@ -16,7 +16,7 @@ const SHORTCUT_KEYS_STORED_NAMES = [...Array(100)].map((_, i) => `shortcutKeys${
 
 class Settings {
 
-  /** @type {({ key: string; title: string; action: number; url?: string; scriptId?: string })[] } */
+  /** @type {({ key: string; title: string; action: number; url?: string; script?: string })[] } */
   _shortcutKeys;
   /** @type {number} */
   _listColumnCount;
@@ -27,7 +27,7 @@ class Settings {
 
   /**
    * @param {{
-   *   shortcutKeys: { key: string; title: string; action: number; url?: string; scriptId?: string }[] ;
+   *   shortcutKeys: { key: string; title: string; action: number; url?: string; script?: string }[] ;
    *   listColumnCount: number;
    *   filterOnPopup: boolean;
    *   startupCommand: any;
