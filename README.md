@@ -17,6 +17,10 @@ The items that can be set as actions are as follows.
 * Open specified URL in incognito window.
 * Open same URL as the current tab in incognito window.
 
+**The Script setting method has been changed in v1.8.0.**  
+**Since string script execution is now possible with Manifest V3 in Chrome 135, the setting method has reverted to the pre-v1.6.2 way of setting code directly in the Script.**  
+**If you have configured Scripts, please reconfigure them.**
+
 ## Installation
 
 Install from the following.
