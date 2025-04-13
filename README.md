@@ -17,8 +17,9 @@ The items that can be set as actions are as follows.
 * Open specified URL in incognito window.
 * Open same URL as the current tab in incognito window.
 
-**Due to a limitation in Manifest V3, it is no longer possible to specify JavaScript as a string.**  
-**If you want to use Script, you must place the extension in a separate folder and then write the JavaScript you want to execute in `user-script.js` in the folder and load it with "Load unpacked". For details, please refer to [How to Specify Script](#how-to-specify-script).**
+**The Script setting method has been changed in v1.8.0.**  
+**Since string script execution is now possible with Manifest V3 in Chrome 135, the setting method has reverted to the pre-v1.6.2 way of setting code directly in the Script.**  
+**If you have configured Scripts, please reconfigure them.**
 
 ## Installation
 
@@ -102,63 +103,3 @@ However, if the size of the settings is too large to be saved by synchronization
 
 The list of shortcut keys can be exported / imported.  
 This allows you to take backups and perform migrations. (E.g. migration between Firefox and Chrome)
-
-## How to Specify Script
-
-The `Script` to be selected must be defined in `user-script.js` under the folder in which the extension is installed.  
-**This is due to a restriction in Manifest V3 that no longer allows JavaScript to be specified as a string.** 
-
-However, if you edit the file of an extension installed from the Chrome Web Store, it will be considered corrupt and must be placed in a separate folder and then loaded with "Load Unpackaged".
-
-Locate the ShortcutKey2URL folder in the extension's installation folder and copy it to the appropriate folder.  
-Please refer to the following for information on how to locate the extension installation folder.
-
-* [Where does Chrome store extensions? \- Stack Overflow](https://stackoverflow.com/questions/14543896/where-does-chrome-store-extensions/14544700#14544700)
-
-The content defined as `USER_SCRIPT` in `user-script.js` will be displayed as the `Script` options.
-The `user-script.js` contains an example code in advance.
-
-```js
-const USER_SCRIPTS = [
-  {
-    id: 'scroll-to-bottom',
-    title: '(Example) Scroll to bottom',
-    func: () => {
-      window.scrollTo({
-        top: document.body.scrollHeight,
-        behavior: 'smooth'
-      });
-    }
-  },
-  {
-    id: 'save-to-pinboard',
-    title: '(Example) Save to Pinboard',
-    func: () => {
-      // https://pinboard.in/howto/#saving
-      q = location.href; if (document.getSelection) { d = document.getSelection(); } else { d = ''; }; p = document.title; void (open('https://pinboard.in/add?url=' + encodeURIComponent(q) + '&description=' + encodeURIComponent(d) + '&title=' + encodeURIComponent(p), 'Pinboard', 'toolbar=no,width=700,height=350'));
-    }
-  }
-];
-```
-
-![Screenshot of script](screenshots/script.png)
-
-A single script consists of the following three properties.
-
-* `id` : ID for unique identification. This value is not displayed on the screen, but is stored as a configuration value.
-* `title` : This is the name that appears as an option on the settings screen.
-* `func` : The function that is actually executed.
-
-When preparing new scripts, please add here.
-
-Once you have added the extension, use the "Load Unpackaged" to load and use it.  
-The procedure for "Load Unpackaged" is as follows
-
-1. Open Chrome Extensions Page
-    * Type `chrome://extensions/` in the Chrome address bar and press Enter.
-2. Enable Developer Mode
-    * In the top right corner of the Extensions page, toggle the "Developer mode" switch to the on position.
-3. Load Unpacked Extension
-    * Click the "Load unpacked" button.
-    * In the file dialog that appears, navigate to the directory containing your extension's files and select it. This folder should include the manifest.json file of your extension.
-
