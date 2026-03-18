@@ -72,6 +72,11 @@ const handleMessage = (message, sendResponse, handler, settings) => {
       // Message name is 'open' only
       chrome.tabs.create({ url: 'chrome://extensions/shortcuts' });
       return;
+
+    case 'background-extension-settings':
+      // Message name is 'open' only
+      chrome.tabs.create({ url: `chrome://extensions/?id=${chrome.runtime.id}` });
+      return;
   }
 }
 

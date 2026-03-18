@@ -364,6 +364,15 @@ function startup(settings) {
       shortcutKeys.append(shortcutKey);
     });
 
+  const checkUserScriptsDisabled = (shortcutKeyDataList) => {
+    if (typeof chrome.userScripts === 'undefined') {
+      const hasScript = shortcutKeyDataList.some((shortcutKey) => shortcutKey.script && shortcutKey.script.trim() !== '');
+      $('#userScriptsDisabledMessage').toggle(hasScript);
+    }
+  };
+
+  checkUserScriptsDisabled(settings.shortcutKeys);
+
   $('#addButton').on('click', () => {
     shortcutKeys.append(null, true);
   });
@@ -424,6 +433,7 @@ function startup(settings) {
       };
       chrome.runtime.sendMessage(request, (settings) => {
         $("#successMessage").show();
+        checkUserScriptsDisabled(request.settings.shortcutKeys);
 
         if (request.settings.synced && !settings.synced) {
           alert('Synchronization was disabled because it could not be saved to sync storage.\nIf there are too many shortcut keys, saving to sync storage will fail.');
@@ -433,6 +443,11 @@ function startup(settings) {
     } else {
       $("#errorMessage").show();
     }
+  });
+
+  $('#extensionSettingsLink').on('click', () => {
+    chrome.runtime.sendMessage({ target: 'background-extension-settings', name: 'open' });
+    return false;
   });
 
   /* Chrome only */
