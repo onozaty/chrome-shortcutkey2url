@@ -1,6 +1,6 @@
-# ShortcutKey2URL for Chrome
+# ShortcutKey2URL
 
-ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを開いたり、移動したり、JavaScriptを実行できるGoogle Chrome向け拡張機能です。
+ShortcutKey2URLは、ショートカットキーを使用してURLを開いたり、移動したり、JavaScriptを実行できるGoogle Chrome / Microsoft Edge向け拡張機能です。
 
 スタートアップキーであらかじめ設定しておいた動作の一覧を表示し、次のキーでその動作を実行します。  
 スタートアップキーは、デフォルトの状態ではCtrl+.(ピリオド)です。このキーは後から変更できます。(Macでは、Command+,(カンマ))
@@ -25,7 +25,8 @@ ShortcutKey2URL for Chromeは、ショートカットキーを使用してURLを
 
 下記からインストールします。
 
-* [ShortcutKey2URL for Chrome - Chrome ウェブストア](https://chrome.google.com/webstore/detail/shortcutkey2url-for-chrom/hfohmffbfcobmhfgpkbcjjaijmfplcdg "ShortcutKey2URL for Chrome - Chrome ウェブストア")
+* [ShortcutKey2URL - Chrome ウェブストア](https://chrome.google.com/webstore/detail/shortcutkey2url-for-chrom/hfohmffbfcobmhfgpkbcjjaijmfplcdg "ShortcutKey2URL - Chrome ウェブストア")
+* [ShortcutKey2URL - Microsoft Edge アドオン](https://microsoftedge.microsoft.com/addons/detail/shortcutkey2url/obddoibblkojbbjeediodgmbhkfijfpk "ShortcutKey2URL - Microsoft Edge アドオン")
 
 ## スタートアップキーの設定
 

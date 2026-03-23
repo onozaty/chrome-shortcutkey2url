@@ -1,6 +1,6 @@
-# ShortcutKey2URL for Chrome
+# ShortcutKey2URL
 
-ShortcutKey2URL for Chrome is an extension for Google Chrome that allows you to open, and move url using shortcut keys. You can also run JavaScript.
+ShortcutKey2URL is an extension for Google Chrome / Microsoft Edge that allows you to open, and move url using shortcut keys. You can also run JavaScript.
 
 Display the action list with the startup key and execute the action with the next key.  
 The startup key default is Ctrl+Period(on mac, Command+Comma). You can change this key later. 
@@ -25,7 +25,8 @@ The items that can be set as actions are as follows.
 
 Install from the following.
 
-* [ShortcutKey2URL for Chrome - Chrome Web Store](https://chrome.google.com/webstore/detail/shortcutkey2url-for-chrom/hfohmffbfcobmhfgpkbcjjaijmfplcdg "ShortcutKey2URL for Chrome - Chrome Web Store")
+* [ShortcutKey2URL - Chrome Web Store](https://chrome.google.com/webstore/detail/shortcutkey2url-for-chrom/hfohmffbfcobmhfgpkbcjjaijmfplcdg "ShortcutKey2URL - Chrome Web Store")
+* [ShortcutKey2URL - Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/shortcutkey2url/obddoibblkojbbjeediodgmbhkfijfpk "ShortcutKey2URL - Microsoft Edge Add-ons")
 
 ## Setting the startup key
 
