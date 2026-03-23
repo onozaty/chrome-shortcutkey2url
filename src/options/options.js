@@ -373,6 +373,12 @@ function startup(settings) {
 
   checkUserScriptsDisabled(settings.shortcutKeys);
 
+  chrome.action.getUserSettings().then((userSettings) => {
+    if (!userSettings.isOnToolbar) {
+      $('#notPinnedMessage').show();
+    }
+  });
+
   $('#addButton').on('click', () => {
     shortcutKeys.append(null, true);
   });
