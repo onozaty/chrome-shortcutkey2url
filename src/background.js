@@ -1,3 +1,7 @@
+import { ActionId } from './actions.js';
+import { Settings } from './settings.js';
+import { Handler } from './handler.js';
+
 const addCurrentPage = () => {
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     const tab = tabs[0];

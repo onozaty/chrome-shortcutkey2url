@@ -1,4 +1,4 @@
-const ActionId = {
+export const ActionId = {
   OEPN_URL_NEW_TAB: 1,
   OPEN_URL_CURRENT_TAB: 2,
   JUMP_URL: 3,
@@ -8,7 +8,7 @@ const ActionId = {
   JUMP_URL_ALL_WINDOWS: 7
 };
 
-const Actions = [
+export const Actions = [
   { id: ActionId.JUMP_URL, name: 'Jump to url' },
   { id: ActionId.JUMP_URL_ALL_WINDOWS, name: 'Jump to url (Including other windows)' },
   { id: ActionId.OEPN_URL_NEW_TAB, name: 'Open url in new tab' },
@@ -18,7 +18,7 @@ const Actions = [
   { id: ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE, name: 'Open current tab in incognito window' }
 ];
 
-class Action {
+export class Action {
   static fromId(actionId) {
     return Actions.find((action) => action.id == actionId);
   }

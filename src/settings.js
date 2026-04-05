@@ -1,3 +1,5 @@
+import { ActionId } from './actions.js';
+
 const DEFAULT_SHORTCUTKEYS = [
   { key: 'GS', title: 'Google', action: ActionId.OEPN_URL_NEW_TAB, url: 'https://www.google.com/' },
   { key: 'GM', title: 'Gmail', action: ActionId.JUMP_URL, url: 'https://mail.google.com/' },
@@ -14,7 +16,7 @@ const DEFAULT_LIST_COLUMN_COUNT = 3;
 // (shortcutKeys001, shortcutKeys002, ..., shortcutKeys100)
 const SHORTCUT_KEYS_STORED_NAMES = [...Array(100)].map((_, i) => `shortcutKeys${String(i + 1).padStart(3, '0')}`);
 
-class Settings {
+export class Settings {
 
   /** @type {({ key: string; title: string; action: number; url?: string; script?: string })[] } */
   _shortcutKeys;

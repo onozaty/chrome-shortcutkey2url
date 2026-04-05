@@ -1,39 +1,52 @@
-.container {
-  padding-bottom: 15px;
+:root {
+  --bs-body-font-size: 0.875rem;
+  --bs-body-font-family: "Roboto", "Segoe UI", Arial, sans-serif;
+}
+
+.form-control,
+.form-select {
+  font-size: 0.875rem;
+}
+
+.bi {
+  vertical-align: -0.075em;
+}
+
+.card-body {
+  padding: 0.75rem 1rem;
+}
+
+.hidden {
+  display: none !important;
 }
 
 h1 {
-  border-bottom: 1px solid #eee;
-  margin-bottom: 10px;
-}
-
-.control-label {
-  font-weight: normal;
+  font-size: 1.5rem;
 }
 
 .alert {
-  padding: 10px 15px;
-  margin-bottom: 10px;
+  padding: 0.5rem 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
-.panel {
-  margin-bottom: 10px;
+.alert-dismissible {
+  padding-right: 2.5rem;
 }
 
-.panel-heading {
-  padding: 8px 10px;
+.alert-dismissible .btn-close {
+  padding: 0.625rem 0.75rem;
 }
 
-.panel-body {
-  padding: 10px;
+label.form-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  padding-left: 0;
 }
 
-.form-group {
-  margin-bottom: 10px;
-}
-
-.form-group:last-child {
-  margin-bottom: 0px;
+label.form-check .form-check-input {
+  margin: 0;
+  flex-shrink: 0;
 }
 
 #startupKey {
@@ -46,16 +59,31 @@ h1 {
 
 #startupKeyHelp, #columnCountHelp, #disabledSyncHelp {
   font-size: 90%;
-  margin-left: 5px;
-  margin-bottom: 0px;
+}
+
+#startupKeyHelp .btn,
+#userScriptsDisabledMessage .btn {
+  padding: 1px 6px;
+  font-size: inherit;
+  line-height: inherit;
+  vertical-align: baseline;
 }
 
 #inputColumnCount {
   width: 200px;
 }
 
-#shortcutKeys .panel-title {
-  font-size: inherit;
+#shortcutKeys .shortcut-entry .card-header {
+  background-color: #fbfbfb;
+}
+
+#shortcutKeys .shortcut-entry:has(.entry-body.hidden) .card-header {
+  border-bottom: none;
+  border-radius: var(--bs-card-border-radius);
+}
+
+#shortcutKeys .summary {
+  cursor: pointer;
 }
 
 #shortcutKeys .summary .key {
@@ -69,25 +97,8 @@ h1 {
   margin-right: 10px;
 }
 
-#shortcutKeys div.alert {
-  margin-bottom: 10px;
-}
-
-#shortcutKeys .panel {
-  margin-bottom: 1px;
-}
-
-#shortcutKeys .panel-heading {
-  background-color: #fbfbfb;
-  padding: 5px 15px;
-}
-
-#shortcutKeys .panel-heading .alert-icon {
+#shortcutKeys .alert-icon {
   color: #c9302c;
-}
-
-#shortcutKeys .panel-body .optional {
-  margin-left: 5px;
 }
 
 #shortcutKeys .ignore-has-error {
@@ -96,4 +107,9 @@ h1 {
 
 #shortcutKeys .duplicate-message {
   white-space: nowrap;
+}
+
+.form-row.has-error .form-control,
+.form-row.has-error .form-select {
+  border-color: #dc3545;
 }

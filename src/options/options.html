@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta charset="utf-8">
@@ -6,164 +6,146 @@
 
     <title>ShortcutKey2URL</title>
 
-    <link href="lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/bootstrap.min.css" rel="stylesheet">
+    <link href="lib/bootstrap-icons.min.css" rel="stylesheet">
     <link href="options.css" rel="stylesheet">
   </head>
 
   <body>
 
     <!-- Begin page content -->
-    <div class="container">
-      <h1>ShortcutKey2URL</h1>
-      <div id="notPinnedMessage" class="alert alert-warning" style="display:none">
-        <p>The extension is not pinned to the toolbar. For better popup response, pin it by clicking the extensions icon in the toolbar.</p>
+    <div class="container py-2">
+      <h1 class="border-bottom pb-2 mb-3">ShortcutKey2URL</h1>
+
+      <div id="notPinnedMessage" class="alert alert-warning hidden">
+        <p class="mb-0">The extension is not pinned to the toolbar. For better popup response, pin it by clicking the extensions icon in the toolbar.</p>
       </div>
-      <div id="userScriptsDisabledMessage" class="alert alert-warning" style="display:none">
-        <p>To use Script, enable <strong>Allow user scripts</strong> in the <button id="extensionSettingsLink" class="btn btn-default btn-xs" type="button">extension settings</button>.</p>
+      <div id="userScriptsDisabledMessage" class="alert alert-warning hidden">
+        <p class="mb-0">To use Script, enable <strong>Allow user scripts</strong> in the <button id="extensionSettingsLink" class="btn btn-sm btn-outline-secondary" type="button">extension settings</button>.</p>
       </div>
-      <div id="errorMessage" class="alert alert-danger" style="display:none">
-        <a class="close">×</a>
-        <p>There is an input error. Please check the input contents.</p>
+      <div id="errorMessage" class="alert alert-danger alert-dismissible hidden">
+        <button class="close btn-close" type="button" aria-label="Close"></button>
+        <p class="mb-0">There is an input error. Please check the input contents.</p>
       </div>
-      <div id="successMessage" class="alert alert-success" style="display:none">
-        <a class="close">×</a> 
-        <p>Settings saved!</p>
+      <div id="successMessage" class="alert alert-success alert-dismissible hidden">
+        <button class="close btn-close" type="button" aria-label="Close"></button>
+        <p class="mb-0">Settings saved!</p>
       </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">Settings</div>
-        <div class="panel-body">
-          <form class="form-horizontal">
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Startup key</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="startupKey" disabled>
-                <!-- For Chrome -->
-                <span id="startupKeyHelp" class="help-block">You can change the startup key at <button id="shortcutsButton" class="btn btn-default btn-xs" type="button">Keyboard shortcuts</button> on the extensions screen (Menu > More tools > Extensions).</span>
-                <!---------------->
-              </div>
+
+      <div id="settingsCard" class="card mb-3">
+        <div class="card-header">Settings</div>
+        <div class="card-body">
+          <div class="row mb-2 align-items-baseline">
+            <label class="col-sm-3 col-form-label">Startup key</label>
+            <div class="col-sm-9">
+              <input type="text" id="startupKey" class="form-control" disabled>
+              <!-- For Chrome -->
+              <small id="startupKeyHelp" class="form-text ms-1 mb-0">You can change the startup key at <button id="shortcutsButton" class="btn btn-sm btn-outline-secondary" type="button">Keyboard shortcuts</button> on the extensions screen (Menu &gt; More tools &gt; Extensions).</small>
+              <!---------------->
             </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Column count</label>
-              <div class="col-sm-10">
-                <select class="form-control" id="inputColumnCount">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                </select>
-                <span id="columnCountHelp" class="help-block">The number of columns in the shortcut key list displayed on the popup.</span>
-              </div>
+          </div>
+          <div class="row mb-2 align-items-baseline">
+            <label for="inputColumnCount" class="col-sm-3 col-form-label">Column count</label>
+            <div class="col-sm-9">
+              <select id="inputColumnCount" class="form-select">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+              <small id="columnCountHelp" class="form-text ms-1 mb-0">The number of columns in the shortcut key list displayed on the popup.</small>
             </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Option</label>
-              <div class="col-sm-10">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" id="inputFilterOnPopup">Interactive filter of shortcut keys on the popup
-                  </label>
-                </div>
-              </div>
-              <div class="col-sm-offset-2 col-sm-10">
-                <div class="checkbox">
-                  <label>
-                    <input type="checkbox" id="inputDisabledSync">Disable synchronization of settings
-                    <span id="disabledSyncHelp" class="help-block">Regardless of this option, if browser sync is disabled, it will not be synchronized.</span>
-                  </label>
-                </div>
-              </div>
+          </div>
+          <div class="row align-items-baseline">
+            <label class="col-sm-3 col-form-label">Option</label>
+            <div class="col-sm-9">
+              <label class="form-check">
+                <input type="checkbox" id="inputFilterOnPopup" class="form-check-input">
+                Interactive filter of shortcut keys on the popup
+              </label>
+              <label class="form-check mb-0">
+                <input type="checkbox" id="inputDisabledSync" class="form-check-input">
+                Disable synchronization of settings
+              </label>
+              <small id="disabledSyncHelp" class="form-text d-block ms-4 mt-0 mb-0">Regardless of this option, if browser sync is disabled, it will not be synchronized.</small>
             </div>
-          </form>
-        </div>
-      </div>
-      <div class="panel panel-default">
-        <div class="panel-heading">Shortcut keys</div>
-        <div class="panel-body">
-          <div id="shortcutKeys"></div>
-          <div class="pull-right">
-            <button id="importButton" class="btn btn-info btn-sm" type="button"><span class="glyphicon glyphicon-import" aria-hidden="true"></span> Import</button>
-            <button id="exportButton" class="btn btn-info btn-sm" type="button"><span class="glyphicon glyphicon-export" aria-hidden="true"></span> Export</button>
-            &nbsp;
-            <button id="addButton" class="btn btn-info btn-sm" type="button"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add</button>
           </div>
         </div>
       </div>
-      <div class="pull-right">
-        <button id="saveButton" class="btn btn-primary" type="button"><span class="glyphicon glyphicon-save" aria-hidden="true"></span> Save</button>
+
+      <div id="shortcutKeysCard" class="card mb-3">
+        <div class="card-header">Shortcut keys</div>
+        <div class="card-body">
+          <div id="shortcutKeys"></div>
+          <div class="d-flex justify-content-end gap-2 mt-2">
+            <button id="importButton" class="btn btn-outline-secondary btn-sm" type="button"><i class="bi bi-upload"></i> Import</button>
+            <button id="exportButton" class="btn btn-outline-secondary btn-sm" type="button"><i class="bi bi-download"></i> Export</button>
+            <button id="addButton" class="btn btn-outline-secondary btn-sm" type="button"><i class="bi bi-plus-lg"></i> Add</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end">
+        <button id="saveButton" class="btn btn-primary" type="button"><i class="bi bi-save"></i> Save</button>
       </div>
     </div>
-    <div id="template" class="panel panel-default" style="display: none">
-      <div class="panel-heading">
-        <div class="panel-title">
-          <a class="summary" role="button">New shortcut key</a>
-          <span class="glyphicon glyphicon-exclamation-sign alert-icon" aria-hidden="true" style="display: none"></span>
-          <div class="pull-right">
-            <button type="button" class="btn btn-xs btn-default remove" aria-label="Remove">
-              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Remove
-            </button>
-            <button type="button" class="btn btn-xs btn-default close-detail" aria-label="close">
-              &nbsp;<span class="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>&nbsp;
-            </button>
-            <button type="button" class="btn btn-xs btn-default open-detail" aria-label="open" style="display:none">
-              &nbsp;<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>&nbsp;
-            </button>
+
+    <template id="entry-template">
+      <div class="card shortcut-entry mb-1">
+        <div class="card-header entry-header d-flex align-items-center gap-2 py-1 px-3">
+          <div class="summary d-flex align-items-center flex-grow-1 gap-1">
+            <span class="summary-text">New shortcut key</span>
+            <span class="alert-icon hidden text-danger" aria-hidden="true"><i class="bi bi-exclamation-circle-fill"></i></span>
+          </div>
+          <div class="entry-actions d-flex gap-1">
+            <button type="button" class="btn btn-outline-secondary btn-sm remove"><i class="bi bi-trash"></i> Remove</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm close-detail"><i class="bi bi-chevron-up"></i></button>
+            <button type="button" class="btn btn-outline-secondary btn-sm open-detail hidden"><i class="bi bi-chevron-down"></i></button>
           </div>
         </div>
-      </div>
-      <div class="panel-body">
-        <form class="form-horizontal">
-          <div class="form-group form-group-sm">
-            <label class="col-sm-2 control-label">Key</label>
-            <div class="col-sm-3">
+        <div class="card-body entry-body">
+          <div class="row mb-2 align-items-baseline form-row">
+            <label class="col-sm-2 col-form-label">Key</label>
+            <div class="col-sm-4">
               <input type="text" class="form-control" name="key">
-              <span class="help-block duplicate-message" style="display:none;"></span>
+              <small class="duplicate-message hidden text-danger"></small>
             </div>
-            <div class="col-sm-7">
-              <div class="checkbox">
-                <label class="ignore-has-error">
-                  <input type="checkbox" name="hideOnPopup">Hide in shortcut key list displayed in popup
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="form-group form-group-sm">
-            <label class="col-sm-2 control-label">Action</label>
             <div class="col-sm-6">
-              <select class="form-control" name="action">
-                <option value="jump">jump</option>
-                <option value="current">current</option>
-                <option value="new">new</option>
-              </select>
+              <label class="form-check ignore-has-error">
+                <input type="checkbox" name="hideOnPopup" class="form-check-input ignore-has-error">
+                Hide in shortcut key list displayed in popup
+              </label>
             </div>
           </div>
-          <div class="form-group form-group-sm">
-            <label class="col-sm-2 control-label">Title</label>
+          <div class="row mb-2 align-items-baseline form-row">
+            <label class="col-sm-2 col-form-label">Action</label>
+            <div class="col-sm-10">
+              <select class="form-select" name="action"></select>
+            </div>
+          </div>
+          <div class="row mb-2 align-items-baseline form-row">
+            <label class="col-sm-2 col-form-label">Title</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" name="title">
             </div>
           </div>
-          <div class="form-group form-group-sm">
-            <label class="col-sm-2 control-label">URL</label>
+          <div class="row mb-2 align-items-baseline form-row" data-field="url">
+            <label class="col-sm-2 col-form-label">URL</label>
             <div class="col-sm-10">
               <input type="text" class="form-control" name="url">
             </div>
           </div>
-          <div class="form-group form-group-sm">
-            <label class="col-sm-2 control-label">Script<span class="optional">(optional)</span></label>
+          <div class="row mb-0 align-items-baseline form-row" data-field="script">
+            <label class="col-sm-2 col-form-label">Script<small class="optional hidden ms-1 fw-normal">(optional)</small></label>
             <div class="col-sm-10">
-              <textarea type="text" class="form-control" name="script"></textarea>
+              <textarea class="form-control" name="script"></textarea>
             </div>
           </div>
-        </form>
+        </div>
       </div>
-    </div>
+    </template>
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="lib/jquery.min.js"></script>
-    <script src="lib/bootstrap/js/bootstrap.min.js"></script>
-    <script src="../actions.js"></script>
-    <script src="options.js"></script>
+    <script type="module" src="options.js"></script>
   </body>
 </html>

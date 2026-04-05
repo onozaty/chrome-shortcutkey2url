@@ -1,0 +1,14 @@
+{
+  "name": "chrome-shortcutkey2url-tests",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:slow": "cross-env SLOW_MO=200 vitest run"
+  },
+  "devDependencies": {
+    "cross-env": "^10.1.0",
+    "puppeteer": "^24.0.0",
+    "vitest": "^4.1.2"
+  }
+}

@@ -8,7 +8,8 @@
     "128": "icons/icon128.png"
   },
   "background": {
-    "service_worker": "background-wrapper.js"
+    "service_worker": "background-wrapper.js",
+    "type": "module"
   },
   "permissions": [
     "tabs", "storage", "contextMenus", "userScripts"
