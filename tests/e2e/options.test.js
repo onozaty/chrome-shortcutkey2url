@@ -301,3 +301,105 @@ describe('Export', () => {
     expect(parsed[0]).toHaveProperty('title');
   });
 });
+
+describe('ソートモード', () => {
+  test('Sort mode セレクタが存在しデフォルト値が key である', async () => {
+    const value = await page.$eval('#inputSortMode', (el) => el.value);
+    expect(value).toBe('key');
+  });
+
+  test('custom モードに切り替えると up/down ボタンが表示される', async () => {
+    await page.select('#inputSortMode', 'custom');
+    const moveUpHidden = await page.$eval(
+      '#shortcutKeys .shortcut-entry:first-child .move-up',
+      (el) => el.classList.contains('hidden')
+    );
+    expect(moveUpHidden).toBe(false);
+  });
+
+  test('key モードに戻すと up/down ボタンが非表示になる', async () => {
+    await page.select('#inputSortMode', 'custom');
+    await page.select('#inputSortMode', 'key');
+    const moveUpHidden = await page.$eval(
+      '#shortcutKeys .shortcut-entry:first-child .move-up',
+      (el) => el.classList.contains('hidden')
+    );
+    expect(moveUpHidden).toBe(true);
+  });
+
+  test('move-up ボタンでエントリが1つ上に移動する', async () => {
+    await page.select('#inputSortMode', 'custom');
+
+    const keyAt = (nth) =>
+      page.$eval(
+        `#shortcutKeys .shortcut-entry:nth-child(${nth}) .summary .key`,
+        (el) => el.textContent
+      );
+
+    const key1Before = await keyAt(1);
+    const key2Before = await keyAt(2);
+
+    await page.click('#shortcutKeys .shortcut-entry:nth-child(2) .move-up');
+
+    const key1After = await keyAt(1);
+    const key2After = await keyAt(2);
+
+    expect(key1After).toBe(key2Before);
+    expect(key2After).toBe(key1Before);
+  });
+
+  test('最初のエントリで move-up を押しても順序が変わらない', async () => {
+    await page.select('#inputSortMode', 'custom');
+    const keyBefore = await page.$eval(
+      '#shortcutKeys .shortcut-entry:first-child .summary .key',
+      (el) => el.textContent
+    );
+    await page.click('#shortcutKeys .shortcut-entry:first-child .move-up');
+    const keyAfter = await page.$eval(
+      '#shortcutKeys .shortcut-entry:first-child .summary .key',
+      (el) => el.textContent
+    );
+    expect(keyAfter).toBe(keyBefore);
+  });
+
+  test('title モードに切り替えるとエントリがタイトル順に並び替わる', async () => {
+    await page.select('#inputSortMode', 'title');
+    const firstTitle = await page.$eval(
+      '#shortcutKeys .shortcut-entry:first-child .summary .title',
+      (el) => el.textContent
+    );
+    // デフォルトデータのタイトル順では ChatGPT が最初
+    expect(firstTitle).toBe('ChatGPT');
+  });
+
+  test('title モードで保存・リロード後もエントリがタイトル順に表示される', async () => {
+    await page.select('#inputSortMode', 'title');
+    await page.click('#saveButton');
+    await page.waitForFunction(
+      () => !document.getElementById('successMessage').classList.contains('hidden')
+    );
+
+    await page.reload({ waitUntil: 'networkidle0' });
+    await page.waitForSelector('#shortcutKeys .shortcut-entry');
+
+    const firstTitle = await page.$eval(
+      '#shortcutKeys .shortcut-entry:first-child .summary .title',
+      (el) => el.textContent
+    );
+    expect(firstTitle).toBe('ChatGPT');
+  });
+
+  test('custom モードで保存・リロードすると custom が選択されている', async () => {
+    await page.select('#inputSortMode', 'custom');
+    await page.click('#saveButton');
+    await page.waitForFunction(
+      () => !document.getElementById('successMessage').classList.contains('hidden')
+    );
+
+    await page.reload({ waitUntil: 'networkidle0' });
+    await page.waitForSelector('#shortcutKeys .shortcut-entry');
+
+    const sortMode = await page.$eval('#inputSortMode', (el) => el.value);
+    expect(sortMode).toBe('custom');
+  });
+});

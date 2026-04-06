@@ -57,6 +57,17 @@
               <small id="columnCountHelp" class="form-text ms-1 mb-0">The number of columns in the shortcut key list displayed on the popup.</small>
             </div>
           </div>
+          <div class="row mb-2 align-items-baseline">
+            <label for="inputSortMode" class="col-sm-3 col-form-label">Sort mode</label>
+            <div class="col-sm-9">
+              <select id="inputSortMode" class="form-select">
+                <option value="key">Key</option>
+                <option value="title">Title</option>
+                <option value="custom">Custom</option>
+              </select>
+              <small id="sortModeHelp" class="form-text ms-1 mb-0">Custom allows reordering with up/down buttons on each entry.</small>
+            </div>
+          </div>
           <div class="row align-items-baseline">
             <label class="col-sm-3 col-form-label">Option</label>
             <div class="col-sm-9">
@@ -99,6 +110,8 @@
             <span class="alert-icon hidden text-danger" aria-hidden="true"><i class="bi bi-exclamation-circle-fill"></i></span>
           </div>
           <div class="entry-actions d-flex gap-1">
+            <button type="button" class="btn btn-outline-secondary btn-sm move-up hidden"><i class="bi bi-arrow-up"></i></button>
+            <button type="button" class="btn btn-outline-secondary btn-sm move-down hidden"><i class="bi bi-arrow-down"></i></button>
             <button type="button" class="btn btn-outline-secondary btn-sm remove"><i class="bi bi-trash"></i> Remove</button>
             <button type="button" class="btn btn-outline-secondary btn-sm close-detail"><i class="bi bi-chevron-up"></i></button>
             <button type="button" class="btn btn-outline-secondary btn-sm open-detail hidden"><i class="bi bi-chevron-down"></i></button>
@@ -120,7 +133,7 @@
           </div>
           <div class="row mb-2 align-items-baseline form-row">
             <label class="col-sm-2 col-form-label">Action</label>
-            <div class="col-sm-10">
+            <div class="col-sm-6">
               <select class="form-select" name="action"></select>
             </div>
           </div>
