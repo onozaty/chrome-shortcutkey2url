@@ -1,15 +1,17 @@
-const HandleResult = {
+import { ActionId } from './actions.js';
+
+export const HandleResult = {
   CONTINUE: 'continue',
   FINISH: 'finish'
 }
 
-const MessageName = {
+export const MessageName = {
   STARTUP: 'startup',
   KEY_EVENT: 'key_event',
   CLICK_EVENT: 'click_event'
 }
 
-class Handler {
+export class Handler {
   handle(message, settings) {
     switch (message.name) {
       case MessageName.STARTUP:

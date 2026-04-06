@@ -1,3 +1,5 @@
+import { HandleResult, MessageName } from '../handler.js';
+
 let settings;
 
 function render(shortcutKeys) {
