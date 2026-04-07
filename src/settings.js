@@ -7,7 +7,7 @@ const DEFAULT_SHORTCUTKEYS = [
   { key: 'C', title: 'ChatGPT', action: ActionId.JUMP_URL, url: 'https://chatgpt.com/' },
   { key: 'Y', title: 'YouTube', action: ActionId.JUMP_URL, url: 'https://www.youtube.com/' },
   { key: 'P', title: 'Incognito', action: ActionId.OPEN_CURRENT_TAB_PRIVATE_MODE },
-];
+].sort((a, b) => a.key < b.key ? -1 : a.key > b.key ? 1 : 0);
 
 const DEFAULT_LIST_COLUMN_COUNT = 3;
 const DEFAULT_LIST_SORT_MODE = 'key';
