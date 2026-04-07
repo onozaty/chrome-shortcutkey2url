@@ -57,6 +57,12 @@ The left is when `2` is specified, and the right is when `3` is specified.
 
 ![Screenshot of column 2](screenshots/column2.png) ![Screenshot of column 3](screenshots/column3.png)
 
+`Sort mode` specifies the order in which shortcut keys are displayed in the popup.
+
+* `Key` Sort by key. (default)
+* `Title` Sort by title.
+* `Custom` Display in the order set on the settings screen. You can reorder entries with the up/down buttons.
+
 If you check `Interactive filter of shortcut keys on the popup` of `Option`, you can interactively narrow down the shortcuts displayed in the popup.
 
 ![Screenshot of interactive filter](screenshots/interactive.gif)

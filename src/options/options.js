@@ -1,5 +1,19 @@
 import { ActionId, Actions } from '../actions.js';
 
+function sortShortcutKeys(shortcutKeys, sortMode) {
+  const sorted = [...shortcutKeys];
+  if (sortMode === 'key') {
+    sorted.sort((a, b) => a.key < b.key ? -1 : a.key > b.key ? 1 : 0);
+  } else if (sortMode === 'title') {
+    sorted.sort((a, b) => {
+      const t1 = (a.title || '').toLowerCase();
+      const t2 = (b.title || '').toLowerCase();
+      return t1 < t2 ? -1 : t1 > t2 ? 1 : 0;
+    });
+  }
+  return sorted;
+}
+
 export class ShortcutKey {
   constructor(target, data) {
     this.target = target;
@@ -12,6 +26,8 @@ export class ShortcutKey {
 
     this.openDetailButton = target.querySelector('button.open-detail');
     this.closeDetailButton = target.querySelector('button.close-detail');
+    this.moveUpButton = target.querySelector('button.move-up');
+    this.moveDownButton = target.querySelector('button.move-down');
     this.removeButton = target.querySelector('button.remove');
 
     this.inputKey = target.querySelector('input[name="key"]');
@@ -39,6 +55,12 @@ export class ShortcutKey {
     this.summary.addEventListener('click', this._toggleDetail.bind(this));
     this.openDetailButton.addEventListener('click', this.openDetail.bind(this));
     this.closeDetailButton.addEventListener('click', this.closeDetail.bind(this));
+    this.moveUpButton.addEventListener('click', () => {
+      this.target.dispatchEvent(new CustomEvent('entry-move-up', { detail: this, bubbles: true }));
+    });
+    this.moveDownButton.addEventListener('click', () => {
+      this.target.dispatchEvent(new CustomEvent('entry-move-down', { detail: this, bubbles: true }));
+    });
     this.removeButton.addEventListener('click', this._remove.bind(this));
 
     this.inputAction.addEventListener('change', this._switchInputContent.bind(this));
@@ -250,6 +272,11 @@ export class ShortcutKey {
     this.closeDetailButton.classList.add('hidden');
   }
 
+  setMovable(visible) {
+    this.moveUpButton.classList.toggle('hidden', !visible);
+    this.moveDownButton.classList.toggle('hidden', !visible);
+  }
+
   data() {
     const data = {
       key: this.inputKey.value,
@@ -298,6 +325,50 @@ export class ShortcutKeys {
         this._shortcutKeys.splice(index, 1);
       }
     });
+
+    this.target.addEventListener('entry-move-up', (event) => {
+      const index = this._shortcutKeys.indexOf(event.detail);
+      if (index > 0) {
+        [this._shortcutKeys[index - 1], this._shortcutKeys[index]] =
+          [this._shortcutKeys[index], this._shortcutKeys[index - 1]];
+        const prev = event.detail.target.previousElementSibling;
+        if (prev) {
+          this.target.insertBefore(event.detail.target, prev);
+        }
+      }
+    });
+
+    this.target.addEventListener('entry-move-down', (event) => {
+      const index = this._shortcutKeys.indexOf(event.detail);
+      if (index < this._shortcutKeys.length - 1) {
+        [this._shortcutKeys[index], this._shortcutKeys[index + 1]] =
+          [this._shortcutKeys[index + 1], this._shortcutKeys[index]];
+        const next = event.detail.target.nextElementSibling;
+        if (next) {
+          this.target.insertBefore(next, event.detail.target);
+        }
+      }
+    });
+  }
+
+  setCustomMode(isCustom) {
+    this._shortcutKeys.forEach((sk) => sk.setMovable(isCustom));
+  }
+
+  reorder(sortMode) {
+    if (sortMode === 'custom') return;
+    const sorted = [...this._shortcutKeys].sort((a, b) => {
+      const da = a.data();
+      const db = b.data();
+      if (sortMode === 'title') {
+        const t1 = (da.title || '').toLowerCase();
+        const t2 = (db.title || '').toLowerCase();
+        return t1 < t2 ? -1 : t1 > t2 ? 1 : 0;
+      }
+      return da.key < db.key ? -1 : da.key > db.key ? 1 : 0;
+    });
+    sorted.forEach((sk) => this.target.appendChild(sk.target));
+    this._shortcutKeys = sorted;
   }
 
   append(data, isOpened) {
@@ -340,6 +411,9 @@ export function startup(settings) {
   const inputColumnCount = document.getElementById('inputColumnCount');
   inputColumnCount.value = settings.listColumnCount;
 
+  const inputSortMode = document.getElementById('inputSortMode');
+  inputSortMode.value = settings.listSortMode || 'key';
+
   const inputFilterOnPopup = document.getElementById('inputFilterOnPopup');
   inputFilterOnPopup.checked = settings.filterOnPopup || false;
 
@@ -360,6 +434,13 @@ export function startup(settings) {
     shortcutKeys.append(shortcutKey);
   });
 
+  shortcutKeys.setCustomMode(inputSortMode.value === 'custom');
+
+  inputSortMode.addEventListener('change', () => {
+    shortcutKeys.reorder(inputSortMode.value);
+    shortcutKeys.setCustomMode(inputSortMode.value === 'custom');
+  });
+
   const checkUserScriptsDisabled = (shortcutKeyDataList) => {
     if (typeof chrome.userScripts === 'undefined') {
       const hasScript = shortcutKeyDataList.some((shortcutKey) => shortcutKey.script && shortcutKey.script.trim() !== '');
@@ -377,6 +458,7 @@ export function startup(settings) {
 
   document.getElementById('addButton').addEventListener('click', () => {
     shortcutKeys.append(null, true);
+    shortcutKeys.setCustomMode(inputSortMode.value === 'custom');
   });
 
   document.getElementById('importButton').addEventListener('click', () => {
@@ -424,13 +506,15 @@ export function startup(settings) {
         target: 'background-settings',
         name: 'save',
         settings: {
-          shortcutKeys: shortcutKeys.data(),
+          shortcutKeys: sortShortcutKeys(shortcutKeys.data(), inputSortMode.value),
           listColumnCount: parseInt(inputColumnCount.value, 10),
           filterOnPopup: inputFilterOnPopup.checked || false,
+          listSortMode: inputSortMode.value,
           synced: !inputDisabledSync.checked
         }
       };
       chrome.runtime.sendMessage(request, (settings) => {
+        shortcutKeys.reorder(inputSortMode.value);
         document.getElementById('successMessage').classList.remove('hidden');
         checkUserScriptsDisabled(request.settings.shortcutKeys);
         window.scrollTo(0, 0);

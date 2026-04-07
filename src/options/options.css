@@ -42,6 +42,7 @@ label.form-check {
   align-items: center;
   gap: 0.5em;
   padding-left: 0;
+  width: fit-content;
 }
 
 label.form-check .form-check-input {
@@ -57,7 +58,7 @@ label.form-check .form-check-input {
   background-color: #fbfbfb;
 }
 
-#startupKeyHelp, #columnCountHelp, #disabledSyncHelp {
+#startupKeyHelp, #columnCountHelp, #sortModeHelp, #disabledSyncHelp {
   font-size: 90%;
 }
 
@@ -70,6 +71,10 @@ label.form-check .form-check-input {
 }
 
 #inputColumnCount {
+  width: 200px;
+}
+
+#inputSortMode {
   width: 200px;
 }
 

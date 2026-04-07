@@ -10,6 +10,7 @@ const DEFAULT_SHORTCUTKEYS = [
 ];
 
 const DEFAULT_LIST_COLUMN_COUNT = 3;
+const DEFAULT_LIST_SORT_MODE = 'key';
 
 // The name to be used when saving the shortcutkeys.
 // To meet the capacity limit per item in storage.sync, it is saved in separate item.
@@ -26,21 +27,25 @@ export class Settings {
   _filterOnPopup;
   /** @type {boolean} */
   _synced;
+  /** @type {'key' | 'title' | 'custom'} */
+  _listSortMode;
 
   /**
    * @param {{
    *   shortcutKeys: { key: string; title: string; action: number; url?: string; script?: string }[] ;
    *   listColumnCount: number;
    *   filterOnPopup: boolean;
+   *   listSortMode: string;
    *   startupCommand: any;
    *   synced: boolean;
-   * }} initialValue 
+   * }} initialValue
    */
   constructor(initialValue) {
     if (initialValue) {
       this._shortcutKeys = initialValue.shortcutKeys;
       this._listColumnCount = initialValue.listColumnCount;
       this._filterOnPopup = initialValue.filterOnPopup;
+      this._listSortMode = initialValue.listSortMode;
       this._synced = initialValue.synced;
     }
   }
@@ -73,15 +78,17 @@ export class Settings {
       shortcutKeys: this._shortcutKeys,
       listColumnCount: this._listColumnCount,
       filterOnPopup: this._filterOnPopup,
+      listSortMode: this._listSortMode,
       startupCommand: this._startupCommand,
       synced: this._synced
     };
   }
 
   async update(settings) {
-    this._shortcutKeys = settings.shortcutKeys.sort(Settings.shortcutKeyCompare);
+    this._shortcutKeys = settings.shortcutKeys;
     this._listColumnCount = settings.listColumnCount;
     this._filterOnPopup = settings.filterOnPopup;
+    this._listSortMode = settings.listSortMode || DEFAULT_LIST_SORT_MODE;
     this._synced = settings.synced;
     await this._save();
   }
@@ -122,10 +129,11 @@ export class Settings {
     } else if (loaded[SHORTCUT_KEYS_STORED_NAMES[0]]) {
       shortcutKeys = this._mergeStoredShortcutKeys(loaded);
     }
-    this._shortcutKeys = shortcutKeys.sort(Settings.shortcutKeyCompare);
+    this._shortcutKeys = shortcutKeys;
 
     this._listColumnCount = loaded.settings?.listColumnCount || DEFAULT_LIST_COLUMN_COUNT;
     this._filterOnPopup = loaded.settings?.filterOnPopup || false;
+    this._listSortMode = loaded.settings?.listSortMode || DEFAULT_LIST_SORT_MODE;
     this._startupCommand = (await getAllCommands())[0];
     this._synced = synced;
 
@@ -141,7 +149,8 @@ export class Settings {
     const saveData = {
       settings: {
         listColumnCount: this._listColumnCount,
-        filterOnPopup: this._filterOnPopup
+        filterOnPopup: this._filterOnPopup,
+        listSortMode: this._listSortMode
       }
     };
     Object.assign(saveData, this._splitStoredShortcutKeys(this._shortcutKeys));
@@ -197,12 +206,8 @@ export class Settings {
     return splitedShortcutKeys;
   }
 
-  static shortcutKeyCompare(o1, o2) {
-    if (o1.key < o2.key) return -1;
-    if (o1.key > o2.key) return 1;
-    return 0;
-  }
 }
+
 
 function setSyncStorage(obj) {
   return new Promise((resolve, reject) => {

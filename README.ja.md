@@ -57,6 +57,12 @@ ShortcutKey2URLは、ショートカットキーを使用してURLを開いた�
 
 ![Screenshot of column 2](screenshots/column2.png) ![Screenshot of column 3](screenshots/column3.png)
 
+`Sort mode` は、ポップアップで表示するショートカットキーの並び順を指定します。
+
+* `Key` キー順に並べます。(デフォルト)
+* `Title` タイトル順に並べます。
+* `Custom` 設定画面で設定した順に表示します。上下ボタンで並び順を変更できます。
+
 `Option`の`Interactive filter of shortcut keys on the popup`をチェックすると、ポップアップで表示するショートカットをインタラクティブに絞り込むことができます。
 
 ![Screenshot of interactive filter](screenshots/interactive.gif)
